@@ -1,0 +1,24 @@
+{
+  "distinct_pairs_labelled": 3730,
+  "errors": [],
+  "ingested_now": 220,
+  "label_distribution": {
+    "A": 1338,
+    "B": 1481,
+    "both_poor": 771,
+    "tie": 553
+  },
+  "labels_by_reviewer": {
+    "agent-1": 368,
+    "agent-2": 571,
+    "agent-3": 641,
+    "agent-4": 666,
+    "agent-5": 1237,
+    "agent-r3-1": 220,
+    "agent-r3-2": 220,
+    "agent-r3-4": 220
+  },
+  "note": "Agent labels are stored separately from the human `label` field. \u00a718.6's human-preference export stays gated on human review.",
+  "stage": "ingest_agent_labels",
+  "total_agent_labels": 4143
+}

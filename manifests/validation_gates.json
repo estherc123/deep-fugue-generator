@@ -1,0 +1,153 @@
+{
+  "failures": [],
+  "gates": [
+    {
+      "checked": 1029,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "source_provenance",
+      "passed": true,
+      "spec": "\u00a721 missing source provenance"
+    },
+    {
+      "checked": 1029,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "source_revision",
+      "passed": true,
+      "spec": "\u00a721 unexpected source revision"
+    },
+    {
+      "checked": 28,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "checksums",
+      "passed": true,
+      "spec": "\u00a721 checksum mismatch"
+    },
+    {
+      "checked": 191,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "canonical_schema",
+      "passed": true,
+      "spec": "\u00a721 schema failure"
+    },
+    {
+      "checked": 191,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "structural_duration",
+      "passed": true,
+      "spec": "\u00a721 invalid or zero structural duration"
+    },
+    {
+      "checked": 191,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "canonical_event_hash_stable",
+      "passed": true,
+      "spec": "\u00a721 canonical event hash changing unexpectedly"
+    },
+    {
+      "checked": 804,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "annotation_bounds",
+      "passed": true,
+      "spec": "\u00a721 annotation outside piece bounds"
+    },
+    {
+      "checked": 804,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "annotation_voice",
+      "passed": true,
+      "spec": "\u00a721 unresolved annotation voice"
+    },
+    {
+      "checked": 6,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "duplicate_group_split",
+      "passed": true,
+      "spec": "\u00a721 duplicate group crossing splits"
+    },
+    {
+      "checked": 10000,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "derivative_split_inheritance",
+      "passed": true,
+      "spec": "\u00a721 derivative crossing parent split"
+    },
+    {
+      "checked": 258,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "excerpt_split_inheritance",
+      "passed": true,
+      "spec": "\u00a713.5 no excerpt crosses its parent split"
+    },
+    {
+      "checked": 10000,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "synthetic_positive_valid",
+      "passed": true,
+      "spec": "\u00a721 synthetic positive with a hard violation"
+    },
+    {
+      "checked": 10000,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "controlled_negative_single_violation",
+      "passed": true,
+      "spec": "\u00a721 controlled negative with zero or multiple unintended hard violations"
+    },
+    {
+      "checked": 7123,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "preference_prompt_identity",
+      "passed": true,
+      "spec": "\u00a721 preference pair with mismatched prompt conditions"
+    },
+    {
+      "checked": 7381,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "pending_review_not_exported",
+      "passed": true,
+      "spec": "\u00a721 `pending` review included as reviewed"
+    },
+    {
+      "checked": 1,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "tokenizer_version",
+      "passed": true,
+      "spec": "\u00a721 unknown tokenizer version"
+    },
+    {
+      "checked": 782189,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "tokens_in_vocabulary",
+      "passed": true,
+      "spec": "\u00a719.4 emitted token outside the declared vocabulary"
+    },
+    {
+      "checked": 10000,
+      "failure_count": 0,
+      "failures": [],
+      "gate": "ruleset_profile_hash",
+      "passed": true,
+      "spec": "\u00a721 unknown rule-profile hash"
+    }
+  ],
+  "gates_failed": 0,
+  "gates_passed": 18,
+  "gates_total": 18,
+  "stage": "validate"
+}

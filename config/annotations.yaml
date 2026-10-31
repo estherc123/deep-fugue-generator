@@ -1,0 +1,134 @@
+# Algomus / Dezrann annotation alignment configuration (Spec §11).
+#
+# The Algomus reference files use a richer analytical vocabulary (22 raw label
+# types, 90+ distinct tags) than the canonical annotation enum of Spec §11.2
+# (subject | answer | countersubject | cadence | pedal | episode | other).
+# This file is the auditable mapping between them. It is versioned because
+# changing it changes annotation semantics downstream (§25.3).
+annotation_map_version: "1.0.0"
+
+source:
+  name: algomus
+  # Structural analyses live here, named NN-bwvXXX-{ref,computed}.dez.
+  relative_dir: fugues/bach-wtc-i
+  # Human reference analyses are the default corpus. The `computed` files are
+  # output of the Algomus fugue-analysis system: they are ingested as clearly
+  # marked algorithmic alternatives, never as human-verified data (Spec §27).
+  annotators:
+    ref: reference_human
+    computed: computed_algorithmic
+  # OFF by default. The `-ref.dez` human analyses map cleanly onto the canonical
+  # vocabulary (804/804 labels, zero unmapped). The `-computed.dez` files are a
+  # *different analytical layer* emitted by the Algomus analysis engine in its
+  # internal vocabulary -- `h`, `deg`, `seq`/`seqnext`, `pm`, `struct=`, `ext:top`
+  # -- of which 388 of 505 labels have no documented meaning to map onto §11.2
+  # types. They stay acquired and checksummed, but ingesting them would mean
+  # guessing at undocumented codes, so it is opt-in and reports every label it
+  # could not map rather than silently coercing it to `other`.
+  include_computed: false
+
+# Dezrann `start`/`duration` are quarter-note units measured from the start of
+# the piece, the same time base as canonical `onset_q`. Verified: for all 23
+# reference files the maximum label extent is <= the canonical piece length.
+time_base:
+  units: quarter_notes
+  origin: piece_start
+
+# Dezrann `staff` is a *voice* index numbered top-down (1 = highest), not a
+# keyboard staff: values run 1..voice_count, reaching 5 in exactly the two
+# 5-voice fugues (BWV 849, BWV 867). It therefore maps to canonical `voice_N`,
+# which is also ordered highest-first. Verified empirically over all 542
+# voice-attributed reference labels: mean note coverage 0.969 under this
+# mapping vs 0.786 under the reversed mapping, winning in all 23 fugues with
+# no label below 0.5. See `min_voice_note_coverage` below.
+voice_mapping:
+  strategy: staff_index_top_down   # staff N -> voice_N
+  min_voice_note_coverage: 0.5     # hard gate per voice-attributed annotation
+
+# Raw Dezrann `type` -> canonical §11.2 type, plus the analytical transformations
+# the raw type encodes. The raw type and tag are always preserved verbatim on the
+# annotation record, so nothing in the source vocabulary is lost.
+label_types:
+  S:          {type: subject,        transformations: []}
+  S2:         {type: subject,        transformations: [], subject_index: 2}
+  S3:         {type: subject,        transformations: [], subject_index: 3}
+  S-inc:      {type: subject,        transformations: [incomplete]}
+  S-inv:      {type: subject,        transformations: [inverted]}
+  S-invinc:   {type: subject,        transformations: [inverted, incomplete]}
+  S-invinccc: {type: subject,        transformations: [inverted, incomplete]}
+  S-var:      {type: subject,        transformations: [varied]}
+  S-aug:      {type: subject,        transformations: [augmented]}
+  CS1:        {type: countersubject, transformations: [], countersubject_index: 1}
+  CS1a:       {type: countersubject, transformations: [], countersubject_index: 1, segment: a}
+  CS1b:       {type: countersubject, transformations: [], countersubject_index: 1, segment: b}
+  CS1-inc:    {type: countersubject, transformations: [incomplete], countersubject_index: 1}
+  CS1-in-episode:
+              {type: countersubject, transformations: [in_episode], countersubject_index: 1}
+  CS2:        {type: countersubject, transformations: [], countersubject_index: 2}
+  CS2-inc:    {type: countersubject, transformations: [incomplete], countersubject_index: 2}
+  CS3:        {type: countersubject, transformations: [], countersubject_index: 3}
+  Cadence:    {type: cadence,        transformations: []}
+  "cad:PAC ?": {type: cadence,       transformations: [], uncertain: true}
+  Pedal:      {type: pedal,          transformations: []}
+  # `Structure` is disambiguated by its tag (episode / codetta) at parse time.
+  Structure:  {type: other,          transformations: []}
+  # `ignore` marks a span the analyst explicitly considered and rejected as an
+  # entry (fragmentary, varied past recognition, or a subject shape drifting
+  # through an episode). These are retained as `rejected_candidate` annotations
+  # -- they record where the analyst drew the boundary of the concept, which is
+  # exactly the near-miss supervision §15.6 needs -- but they never count toward
+  # accepted annotation totals and are excluded from default exports.
+  ignore:     {type: other,          transformations: [], analytical_status: rejected_candidate}
+
+# `Structure` tag -> canonical type.
+structure_tags:
+  episode: episode
+  codetta: other
+
+# Tag suffixes that carry an additional transformation, applied on top of the
+# type mapping above (e.g. type "CS1", tag "CS1 varied" -> [varied]).
+tag_transformations:
+  varied: varied
+  varied-end: varied
+  varied-start: varied
+  varied-fragmented: [varied, fragmented]
+  varied-consolidated: [varied, consolidated]
+  varied_without_start: [varied, incomplete]
+  inverted: inverted
+  inverted_starta: [inverted, segment_a]
+  inverted_startb: [inverted, segment_b]
+  fragmented: fragmented
+  "augmented+rhythmicvar": [augmented, varied]
+
+# Derived (not annotated) subject/answer classification, Spec §11.2 `answer`.
+# Algomus labels every entry `S` and does not distinguish subject from answer,
+# so tonal function is *computed* from the transposition of each entry against
+# the first entry of the piece and recorded in `entry_function` with
+# `entry_function_derivation` set, never in the source-given `type` field.
+entry_function:
+  enabled: true
+  # Diatonic step interval (mod 7) of an entry's head against the first entry.
+  # 0 => subject (tonic level); 4 (up a fifth) or -3 (down a fourth) => answer.
+  compare_head_notes: 4
+  answer_diatonic_intervals: [4, -3]
+  subject_diatonic_intervals: [0, 7, -7]
+
+# Types that are point events rather than spans: a cadence is an arrival, not a
+# duration. All 101 well-formed cadence labels omit `duration` entirely; exactly
+# one (fugue 08, the mistyped `cad:PAC ?`) writes `duration: 0` instead. For
+# these types a zero duration is read as "point event" and stored as null rather
+# than dropped as a non-positive span -- recorded as a warning, with the source
+# value preserved verbatim in `raw.duration` (Spec §27: no silent repair).
+point_event_types: [cadence]
+
+# Acceptance gates (Spec §11.4).
+acceptance:
+  expected_ref_fugues: 24
+  overrides:
+    ref_fugue_coverage:
+      accepted_value: 23
+      spec_expected: 24
+      reason: >-
+        At pinned Algomus commit a1801b5b, fugue 11 (BWV 856) ships only an
+        audio-synchro JSON, no -ref.dez structural analysis. Same documented
+        upstream gap already recorded for acquisition in config/pipeline.yaml.

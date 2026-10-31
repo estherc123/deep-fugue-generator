@@ -1,0 +1,94 @@
+{
+  "corpora": {
+    "bcfb": {
+      "pieces_by_split": {
+        "test": 15,
+        "train": 114,
+        "validation": 14
+      },
+      "split_units": 137,
+      "strata": 13,
+      "stratify_by": [
+        "mode",
+        "meter",
+        "length_bucket"
+      ],
+      "targets": {
+        "test": 14,
+        "train": 111,
+        "validation": 14
+      },
+      "works_by_split": {
+        "test": 14,
+        "train": 111,
+        "validation": 14
+      }
+    },
+    "wtc": {
+      "pieces_by_split": {
+        "test": 6,
+        "train": 36,
+        "validation": 6
+      },
+      "split_units": 48,
+      "strata": 38,
+      "stratify_by": [
+        "book",
+        "mode",
+        "voice_count",
+        "meter",
+        "length_bucket"
+      ],
+      "targets": {
+        "test": 6,
+        "train": 36,
+        "validation": 6
+      },
+      "works_by_split": {
+        "test": 6,
+        "train": 36,
+        "validation": 6
+      }
+    }
+  },
+  "duplicate_groups": 6,
+  "duplicate_level_census": {
+    "canonical_event_hash": {
+      "blocking": true,
+      "match_groups": 4,
+      "pieces_involved": 8
+    },
+    "per_voice_melody_hash": {
+      "blocking": false,
+      "match_groups": 4,
+      "pieces_involved": 8
+    },
+    "rhythm_hash": {
+      "blocking": false,
+      "match_groups": 5,
+      "pieces_involved": 10
+    },
+    "source_checksum": {
+      "blocking": true,
+      "match_groups": 1,
+      "pieces_involved": 2
+    },
+    "transposition_melodic_hash": {
+      "blocking": true,
+      "match_groups": 4,
+      "pieces_involved": 8
+    },
+    "work_identity": {
+      "blocking": true,
+      "match_groups": 4,
+      "pieces_involved": 8
+    }
+  },
+  "failures": [],
+  "leakage_errors": [],
+  "split_seed": 20260728,
+  "splits_version": "1.0.0",
+  "stage": "split",
+  "total_pieces": 191,
+  "total_split_units": 185
+}

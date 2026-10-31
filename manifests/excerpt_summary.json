@@ -1,0 +1,35 @@
+{
+  "auto_rejected": 619,
+  "candidates_proposed": 258,
+  "excerpts_version": "1.0.0",
+  "failures": [],
+  "generated_at_utc": "2026-10-11T22:23:11Z",
+  "midi_previews": 258,
+  "pieces_covered": 49,
+  "rejection_census": {
+    "begins_inside_tie": 323,
+    "cuts_subject_entry": 298,
+    "ends_on_unresolved_suspension": 140,
+    "parser_warnings:parts_excluded": 83,
+    "too_few_notes": 2,
+    "voice_identity_not_preserved": 5
+  },
+  "rendered": 258,
+  "review_status_census": {
+    "pending": 258
+  },
+  "stage": "propose_excerpts",
+  "target_count": 300,
+  "trigger_census": {
+    "cadence_arrival": 30,
+    "countersubject_combination": 41,
+    "exposition_boundary": 6,
+    "pedal_point": 8,
+    "sequence": 53,
+    "short_episode": 3,
+    "stretto": 11,
+    "subject_entry": 53,
+    "texture_change": 107
+  },
+  "windows_examined": 872
+}

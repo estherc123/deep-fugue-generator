@@ -1,0 +1,81 @@
+{
+  "generated_at_utc": "2026-08-03T06:24:18Z",
+  "overrides": {
+    "algomus_wtc1_coverage": {
+      "accepted_value": 23,
+      "reason": "At pinned commit a1801b5b, the Algomus repo ships human reference (.dez) structural annotations for 23 of 24 WTC I fugues. Fugue 11 (BWV 856) has only an audio-synchro JSON, no -ref.dez structural analysis. Documented upstream gap; the missing fugue is reported, not fabricated.",
+      "spec_expected": 24
+    }
+  },
+  "sources": {
+    "algomus": {
+      "repository_commit": "a1801b5b42a4f8d99783e1e52b3dc2e7407cd5ef",
+      "repository_url": "https://gitlab.com/algomus.fr/algomus-data.git",
+      "retrieved_at_utc": "2026-07-31T00:15:41Z"
+    },
+    "bcfb": {
+      "repository_commit": "431c5c019aeea198c0128a05dd1d2a7364c2d786",
+      "repository_url": "https://github.com/juyaolongpaul/Bach_chorale_FB.git",
+      "retrieved_at_utc": "2026-07-31T00:15:43Z"
+    },
+    "humdrum-wtc": {
+      "repository_commit": "0b4f4d84b90b254615e7ac09730ec473c9611cb6",
+      "repository_url": "https://github.com/humdrum-tools/bach-wtc.git",
+      "retrieved_at_utc": "2026-07-31T00:15:41Z"
+    }
+  },
+  "stage": "acquisition",
+  "summaries": {
+    "algomus": {
+      "computed_annotation_fugues": 5,
+      "dez_files": 60,
+      "files_by_format": {
+        "csv": 1,
+        "json": 124,
+        "other": 47
+      },
+      "ref_annotation_fugues": 23,
+      "source_name": "algomus",
+      "total_files": 172,
+      "wtc1_fugues_missing_ref": [
+        "bach_wtc1_fugue_11"
+      ],
+      "wtc1_fugues_with_any_annotation": 23
+    },
+    "bcfb": {
+      "canonical_variants": 143,
+      "files_by_format": {
+        "csv": 1,
+        "kern": 146,
+        "mei": 146,
+        "musicxml": 251,
+        "other": 213
+      },
+      "kern_secondary_files": 143,
+      "mei_secondary_files": 143,
+      "musicxml_master_files": 143,
+      "retained_non_default_files": 614,
+      "source_name": "bcfb",
+      "total_files": 757,
+      "unique_chorales": 139
+    },
+    "humdrum-wtc": {
+      "files_by_format": {
+        "kern": 96,
+        "other": 4
+      },
+      "preludes": 48,
+      "source_name": "humdrum-wtc",
+      "total_files": 100,
+      "wtc1_fugues": 24,
+      "wtc2_fugues": 24
+    }
+  },
+  "totals": {
+    "algomus_ref_fugues": 23,
+    "bcfb_unique_chorales": 139,
+    "bcfb_variants": 143,
+    "unique_real_bach_movements": 187,
+    "wtc_fugues": 48
+  }
+}

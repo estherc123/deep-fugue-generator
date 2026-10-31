@@ -1,0 +1,87 @@
+{
+  "accepted": 10000,
+  "coverage": {
+    "cadence_target": {
+      "none": 6312,
+      "tonic": 3688
+    },
+    "countersubject": {
+      "False": 5004,
+      "True": 4996
+    },
+    "entry_order": {
+      "bottom_up": 3070,
+      "middle_out": 3333,
+      "top_down": 3597
+    },
+    "length_bars": {
+      "2": 2820,
+      "3": 3422,
+      "4": 3758
+    },
+    "meter": {
+      "3/4": 3747,
+      "4/4": 4361,
+      "6/8": 1892
+    },
+    "mode": {
+      "major": 5544,
+      "minor": 4456
+    },
+    "register": {
+      "high": 3295,
+      "low": 3375,
+      "middle": 3330
+    },
+    "rhythmic_density": {
+      "dense": 4597,
+      "medium": 2687,
+      "sparse": 2716
+    },
+    "subject_length_notes": {
+      "4": 3757,
+      "5": 3287,
+      "6": 2956
+    },
+    "subject_voice": {
+      "bass": 3310,
+      "middle": 3319,
+      "upper": 3371
+    },
+    "tonic_pc": {
+      "0": 1356,
+      "10": 1560,
+      "2": 1346,
+      "3": 1370,
+      "5": 1560,
+      "7": 1317,
+      "9": 1491
+    },
+    "voice_count": {
+      "2": 2047,
+      "3": 3970,
+      "4": 3983
+    }
+  },
+  "elapsed_s": 3452.2,
+  "failures": [],
+  "generation_version": "1.0.0",
+  "reject_reasons": {},
+  "requests_consumed": 22290,
+  "rule_profile": "high_baroque_conservative",
+  "ruleset_hash": "1c1e465f9cd6c8f8631b3d5de5d8676d1a5bd58079bc15b7d7b33b0e02ea0ae6",
+  "seed": 20260728,
+  "split_counts": {
+    "test": 1008,
+    "train": 7978,
+    "validation": 1014
+  },
+  "stage": "generate_valid",
+  "stats": {
+    "duplicates": 0,
+    "no_solution": 12290,
+    "rejected": 0,
+    "solved": 10000
+  },
+  "target": 10000
+}

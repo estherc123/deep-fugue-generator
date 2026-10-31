@@ -1,0 +1,380 @@
+{
+  "corpora": {
+    "bcfb": {
+      "pieces_by_split": {
+        "test": 15,
+        "train": 114,
+        "validation": 14
+      },
+      "split_units": 137,
+      "strata": 13,
+      "stratify_by": [
+        "mode",
+        "meter",
+        "length_bucket"
+      ],
+      "targets": {
+        "test": 14,
+        "train": 111,
+        "validation": 14
+      },
+      "works_by_split": {
+        "test": 14,
+        "train": 111,
+        "validation": 14
+      }
+    },
+    "wtc": {
+      "pieces_by_split": {
+        "test": 6,
+        "train": 36,
+        "validation": 6
+      },
+      "split_units": 48,
+      "strata": 38,
+      "stratify_by": [
+        "book",
+        "mode",
+        "voice_count",
+        "meter",
+        "length_bucket"
+      ],
+      "targets": {
+        "test": 6,
+        "train": 36,
+        "validation": 6
+      },
+      "works_by_split": {
+        "test": 6,
+        "train": 36,
+        "validation": 6
+      }
+    }
+  },
+  "duplicate_groups": [
+    {
+      "duplicate_group_id": "dup:0001",
+      "matched_levels": [
+        "rhythm_hash",
+        "work_identity"
+      ],
+      "members": [
+        "bach_chorale_bwv10.07a",
+        "bach_chorale_bwv10.07b"
+      ],
+      "preferred_piece_id": "bach_chorale_bwv10.07a",
+      "work_group_ids": [
+        "BWV10.07"
+      ]
+    },
+    {
+      "duplicate_group_id": "dup:0013",
+      "matched_levels": [
+        "canonical_event_hash",
+        "per_voice_melody_hash",
+        "rhythm_hash",
+        "source_checksum",
+        "transposition_melodic_hash"
+      ],
+      "members": [
+        "bach_chorale_bwv117.04",
+        "bach_chorale_bwv117.09"
+      ],
+      "preferred_piece_id": "bach_chorale_bwv117.04",
+      "work_group_ids": [
+        "BWV117.04",
+        "BWV117.09"
+      ]
+    },
+    {
+      "duplicate_group_id": "dup:0016",
+      "matched_levels": [
+        "canonical_event_hash",
+        "per_voice_melody_hash",
+        "rhythm_hash",
+        "transposition_melodic_hash"
+      ],
+      "members": [
+        "bach_chorale_bwv125.06",
+        "bach_chorale_bwv72.06"
+      ],
+      "preferred_piece_id": "bach_chorale_bwv125.06",
+      "work_group_ids": [
+        "BWV125.06",
+        "BWV72.06"
+      ]
+    },
+    {
+      "duplicate_group_id": "dup:0037",
+      "matched_levels": [
+        "work_identity"
+      ],
+      "members": [
+        "bach_chorale_bwv161.06a",
+        "bach_chorale_bwv161.06b"
+      ],
+      "preferred_piece_id": "bach_chorale_bwv161.06a",
+      "work_group_ids": [
+        "BWV161.06"
+      ]
+    },
+    {
+      "duplicate_group_id": "dup:0044",
+      "matched_levels": [
+        "canonical_event_hash",
+        "per_voice_melody_hash",
+        "rhythm_hash",
+        "transposition_melodic_hash",
+        "work_identity"
+      ],
+      "members": [
+        "bach_chorale_bwv177.05a",
+        "bach_chorale_bwv177.05b"
+      ],
+      "preferred_piece_id": "bach_chorale_bwv177.05a",
+      "work_group_ids": [
+        "BWV177.05"
+      ]
+    },
+    {
+      "duplicate_group_id": "dup:0100",
+      "matched_levels": [
+        "canonical_event_hash",
+        "per_voice_melody_hash",
+        "rhythm_hash",
+        "transposition_melodic_hash",
+        "work_identity"
+      ],
+      "members": [
+        "bach_chorale_bwv38.06a",
+        "bach_chorale_bwv38.06b"
+      ],
+      "preferred_piece_id": "bach_chorale_bwv38.06a",
+      "work_group_ids": [
+        "BWV38.06"
+      ]
+    }
+  ],
+  "duplicate_level_census": {
+    "canonical_event_hash": {
+      "blocking": true,
+      "match_groups": 4,
+      "pieces_involved": 8
+    },
+    "per_voice_melody_hash": {
+      "blocking": false,
+      "match_groups": 4,
+      "pieces_involved": 8
+    },
+    "rhythm_hash": {
+      "blocking": false,
+      "match_groups": 5,
+      "pieces_involved": 10
+    },
+    "source_checksum": {
+      "blocking": true,
+      "match_groups": 1,
+      "pieces_involved": 2
+    },
+    "transposition_melodic_hash": {
+      "blocking": true,
+      "match_groups": 4,
+      "pieces_involved": 8
+    },
+    "work_identity": {
+      "blocking": true,
+      "match_groups": 4,
+      "pieces_involved": 8
+    }
+  },
+  "generated_at_utc": "2026-08-30T07:40:26Z",
+  "leakage_errors": [],
+  "leakage_gates_pass": true,
+  "split_seed": 20260728,
+  "splits_version": "1.0.0",
+  "stage": "split",
+  "stratification_balance": {
+    "bcfb": {
+      "length_bucket": {
+        "long": {
+          "test": 6,
+          "train": 30,
+          "validation": 1
+        },
+        "medium": {
+          "test": 4,
+          "train": 43,
+          "validation": 2
+        },
+        "short": {
+          "test": 5,
+          "train": 41,
+          "validation": 11
+        }
+      },
+      "meter": {
+        "12/8": {
+          "test": 1,
+          "train": 0,
+          "validation": 0
+        },
+        "2/2": {
+          "test": 0,
+          "train": 1,
+          "validation": 0
+        },
+        "3/4": {
+          "test": 3,
+          "train": 12,
+          "validation": 1
+        },
+        "4/4": {
+          "test": 11,
+          "train": 101,
+          "validation": 13
+        }
+      },
+      "mode": {
+        "major": {
+          "test": 9,
+          "train": 62,
+          "validation": 4
+        },
+        "minor": {
+          "test": 6,
+          "train": 52,
+          "validation": 10
+        }
+      }
+    },
+    "wtc": {
+      "book": {
+        "1": {
+          "test": 2,
+          "train": 19,
+          "validation": 3
+        },
+        "2": {
+          "test": 4,
+          "train": 17,
+          "validation": 3
+        }
+      },
+      "length_bucket": {
+        "long": {
+          "test": 2,
+          "train": 10,
+          "validation": 3
+        },
+        "medium": {
+          "test": 2,
+          "train": 12,
+          "validation": 2
+        },
+        "short": {
+          "test": 2,
+          "train": 14,
+          "validation": 1
+        }
+      },
+      "meter": {
+        "12/16": {
+          "test": 0,
+          "train": 1,
+          "validation": 0
+        },
+        "2/2": {
+          "test": 0,
+          "train": 6,
+          "validation": 1
+        },
+        "2/4": {
+          "test": 1,
+          "train": 1,
+          "validation": 0
+        },
+        "3/2": {
+          "test": 1,
+          "train": 0,
+          "validation": 0
+        },
+        "3/4": {
+          "test": 0,
+          "train": 5,
+          "validation": 0
+        },
+        "3/8": {
+          "test": 0,
+          "train": 2,
+          "validation": 1
+        },
+        "4/2": {
+          "test": 0,
+          "train": 0,
+          "validation": 1
+        },
+        "4/4": {
+          "test": 4,
+          "train": 17,
+          "validation": 2
+        },
+        "6/16": {
+          "test": 0,
+          "train": 1,
+          "validation": 0
+        },
+        "6/4": {
+          "test": 0,
+          "train": 1,
+          "validation": 0
+        },
+        "6/8": {
+          "test": 0,
+          "train": 1,
+          "validation": 1
+        },
+        "9/8": {
+          "test": 0,
+          "train": 1,
+          "validation": 0
+        }
+      },
+      "mode": {
+        "major": {
+          "test": 4,
+          "train": 17,
+          "validation": 3
+        },
+        "minor": {
+          "test": 2,
+          "train": 19,
+          "validation": 3
+        }
+      },
+      "voice_count": {
+        "2": {
+          "test": 0,
+          "train": 1,
+          "validation": 0
+        },
+        "3": {
+          "test": 4,
+          "train": 18,
+          "validation": 4
+        },
+        "4": {
+          "test": 2,
+          "train": 15,
+          "validation": 2
+        },
+        "5": {
+          "test": 0,
+          "train": 2,
+          "validation": 0
+        }
+      }
+    }
+  },
+  "total_pieces": 191,
+  "total_split_units": 185
+}

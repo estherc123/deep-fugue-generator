@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://deepfugue/schemas/generation_request.schema.json",
+  "title": "Generation Request",
+  "description": "One request for a hard-valid synthetic fragment (Spec Section 16.2).",
+  "type": "object",
+  "required": ["request_id", "seed", "rule_profile", "voice_count", "meter", "key",
+               "length_bars", "subject", "entry_plan", "allowed_rhythmic_values",
+               "range_profile", "texture_profile"],
+  "properties": {
+    "request_id": {"type": "string"},
+    "seed": {"type": "integer"},
+    "rule_profile": {"type": "string",
+      "enum": ["species_strict", "high_baroque_conservative", "bach_empirical"]},
+    "voice_count": {"type": "integer", "enum": [2, 3, 4]},
+    "meter": {
+      "type": "object", "required": ["numerator", "denominator"],
+      "properties": {"numerator": {"type": "integer"}, "denominator": {"type": "integer"}}
+    },
+    "key": {
+      "type": "object", "required": ["tonic_pc", "mode"],
+      "properties": {"tonic_pc": {"type": "integer", "minimum": 0, "maximum": 11},
+                     "mode": {"type": "string", "enum": ["major", "minor"]},
+                     "fifths": {"type": "integer"}}
+    },
+    "length_bars": {"type": "integer", "minimum": 2, "maximum": 8},
+    "subject": {
+      "type": "object", "required": ["subject_id", "intervals", "rhythm_q"],
+      "properties": {
+        "subject_id": {"type": "string"},
+        "intervals": {"type": "array", "items": {"type": "integer"}},
+        "rhythm_q": {"type": "array", "items": {"type": "string"}},
+        "parent_piece_id": {"type": ["string", "null"]},
+        "length_q": {"type": ["string", "number", "null"]}
+      }
+    },
+    "entry_plan": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["voice_id", "onset_q", "role"],
+        "properties": {
+          "voice_id": {"type": "string"},
+          "onset_q": {"type": "string"},
+          "role": {"type": "string", "enum": ["subject", "answer"]},
+          "transpose": {"type": "integer"}
+        }
+      }
+    },
+    "cadence_target": {"type": ["object", "null"]},
+    "allowed_rhythmic_values": {"type": "array", "items": {"type": "string"}},
+    "range_profile": {"type": "string"},
+    "texture_profile": {"type": "string"}
+  }
+}

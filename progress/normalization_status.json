@@ -1,0 +1,35 @@
+{
+  "chorales": {
+    "canonical_variant_files": 143,
+    "cross_format_discrepancies": 0,
+    "expected_unique": 139,
+    "expected_variants": 143,
+    "failed": 0,
+    "total_bars": 2888,
+    "total_notes": 39344,
+    "unique_work_groups": 139,
+    "validation_failures": 0,
+    "voice_count_distribution": {
+      "4": 143
+    }
+  },
+  "corpus_total_bars": 5843,
+  "corpus_total_notes": 93584,
+  "corpus_total_pieces_normalized": 191,
+  "fugues": {
+    "canonical_files": 48,
+    "expected": 48,
+    "failed": 0,
+    "total_bars": 2955,
+    "total_notes": 54240,
+    "validation_failures": 0,
+    "voice_count_distribution": {
+      "2": 1,
+      "3": 26,
+      "4": 19,
+      "5": 2
+    }
+  },
+  "generated_at_utc": "2026-08-03T06:24:18Z",
+  "stage": "normalization"
+}

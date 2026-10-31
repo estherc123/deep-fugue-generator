@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://deepfugue/schemas/preference_pair.schema.json",
+  "title": "Preference Pair",
+  "description": "Two hard-valid candidates for the same prompt, awaiting a human label (Spec Section 18.4).",
+  "type": "object",
+  "required": ["pair_id", "prompt_id", "candidate_a_id", "candidate_b_id",
+               "shared_conditions_hash", "diagnostics_a", "diagnostics_b",
+               "label", "review_status", "split"],
+  "properties": {
+    "pair_id": {"type": "string"},
+    "prompt_id": {"type": "string"},
+    "candidate_a_id": {"type": "string"},
+    "candidate_b_id": {"type": "string"},
+    "shared_conditions_hash": {"type": "string"},
+    "diagnostics_a": {"type": "object"},
+    "diagnostics_b": {"type": "object"},
+    "label": {"type": ["string", "null"], "enum": ["A", "B", "tie", "both_poor", "cant_tell", null]},
+    "review_status": {"type": "string", "enum": ["pending", "reviewed", "rejected"]},
+    "reviewer": {"type": ["string", "null"]},
+    "review_comment": {"type": ["string", "null"]},
+    "reviewed_at_utc": {"type": ["string", "null"]},
+    "split": {"type": "string", "enum": ["train", "validation"]},
+    "selection_reason": {"type": ["string", "null"]},
+    "is_consistency_repeat": {"type": "boolean"},
+    "presentation_seed": {"type": ["integer", "null"]}
+  }
+}

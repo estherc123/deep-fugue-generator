@@ -1,0 +1,66 @@
+# Rule profile: bach_empirical (Spec §15.2).
+#
+# Calibrated against the normalized corpus. Only rules that survive
+# empirical validation on held-out Bach stay hard; everything Bach is
+# measured to do stays diagnostic (§15.6).
+# Empirical calibration (§15.6): calibrated. Zero hard rules fire on the 41
+# held-out real Bach pieces. Every rule that Bach is measured to break is
+# diagnostic or soft here; only rules with a measured 0.00 false-positive rate
+# are hard.
+profile: bach_empirical
+ruleset_version: "1.0.0"
+
+# Range profiles in MIDI numbers, highest voice first (§15.5). A fragment
+# selects one by `range_profile`; keyboard fugues are not SATB voices, so
+# applying a vocal tessitura to the WTC would flag Bach himself.
+range_profiles:
+  satb:
+    voice_1: [60, 84]
+    voice_2: [53, 79]
+    voice_3: [48, 72]
+    voice_4: [36, 64]
+    voice_5: [36, 64]
+    default: [36, 84]
+  keyboard:
+    voice_1: [36, 96]
+    voice_2: [33, 93]
+    voice_3: [29, 88]
+    voice_4: [24, 84]
+    voice_5: [24, 81]
+    default: [24, 96]
+default_range_profile: keyboard
+
+parameters:
+  parallel_requires_metric_onset: true
+  max_leap_semitones: 16
+  voice_spacing_max_semitones: 24
+  min_voice_participation: 0.1
+  max_dead_air_q: 8
+  allow_octave_leap: True
+
+# severity: off | diagnostic | soft | hard (§15.3)
+severities:
+  timing_nonnegative_onset: "hard"
+  timing_positive_duration: "hard"
+  timing_within_bounds: "hard"
+  voice_monophonic: "diagnostic"
+  voice_range: "hard"
+  voice_spacing: "diagnostic"
+  voice_overlap: "diagnostic"
+  voice_crossing: "off"
+  parallel_fifths: "hard"
+  parallel_octaves: "hard"
+  direct_fifths_outer: "diagnostic"
+  melodic_leap_limit: "diagnostic"
+  augmented_interval_melodic: "diagnostic"
+  leap_recovery: "diagnostic"
+  leading_tone_resolution: "diagnostic"
+  suspension_resolution: "soft"
+  dissonance_treatment: "diagnostic"
+  subject_entry_identity: "hard"
+  answer_transformation: "soft"
+  cadence_target_completion: "hard"
+  voice_participation: "hard"
+  max_dead_air: "hard"
+  section_length_limit: "hard"
+  structural_target_reachable: "hard"

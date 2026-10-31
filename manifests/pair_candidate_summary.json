@@ -1,0 +1,19 @@
+{
+  "accepted": 13434,
+  "append": true,
+  "candidates_per_prompt": 6,
+  "candidates_preserved": 10086,
+  "candidates_total": 13521,
+  "candidates_written": 3435,
+  "elapsed_s": 13708.5,
+  "failures": [],
+  "identical_rejected": 424,
+  "motifs": 150,
+  "motifs_fugue_derived": 10,
+  "prompts_attempted": 1389,
+  "prompts_target": 600,
+  "prompts_with_alternatives": 600,
+  "solves": 13850,
+  "stage": "generate_pair_candidates",
+  "use_prior_motifs": true
+}

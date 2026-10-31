@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://deepfugue/schemas/split_manifest.schema.json",
+  "title": "Split Manifest Row",
+  "description": "One row per piece recording its complete-work split assignment (Spec Section 13.4).",
+  "type": "object",
+  "required": [
+    "piece_id",
+    "work_group_id",
+    "corpus",
+    "split",
+    "split_seed",
+    "split_unit_id",
+    "stratification_fields",
+    "assignment_hash"
+  ],
+  "properties": {
+    "piece_id": {"type": "string"},
+    "work_group_id": {"type": ["string", "null"]},
+    "corpus": {"type": "string", "enum": ["wtc", "bcfb"]},
+    "split": {"type": "string", "enum": ["train", "validation", "test"]},
+    "split_seed": {"type": "integer"},
+    "split_unit_id": {
+      "type": "string",
+      "description": "Atom of assignment: a duplicate group, else a single work."
+    },
+    "split_unit_weight": {"type": "integer", "minimum": 1},
+    "stratification_fields": {"type": "object"},
+    "mode_source": {
+      "type": ["string", "null"],
+      "description": "How `mode` was obtained. The corpus records no mode, so it is derived and labelled as such."
+    },
+    "assignment_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

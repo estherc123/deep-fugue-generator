@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://deepfugue/schemas/canonical_score.schema.json",
+  "title": "Canonical Score",
+  "description": "Archival normalized symbolic representation of one movement (Spec Section 8). Musical time is exact rational strings in quarter-note units; floats are never used for canonical time.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "piece_id",
+    "work_group_id",
+    "composer_id",
+    "movement_type",
+    "source_file_ids",
+    "voice_count",
+    "voices",
+    "meter_map",
+    "key_signature_map",
+    "normalization"
+  ],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "piece_id": {"type": "string"},
+    "work_group_id": {"type": ["string", "null"]},
+    "composer_id": {"type": "string"},
+    "movement_type": {"type": "string", "enum": ["fugue", "prelude", "chorale", "other"]},
+    "source_file_ids": {"type": "array", "items": {"type": "string"}},
+    "voice_count": {"type": "integer", "minimum": 1},
+    "staff_count": {"type": ["integer", "null"]},
+    "voices": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/voice"}
+    },
+    "meter_map": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["onset_q", "numerator", "denominator"],
+        "properties": {
+          "onset_q": {"$ref": "#/definitions/rational"},
+          "numerator": {"type": "integer"},
+          "denominator": {"type": "integer"}
+        }
+      }
+    },
+    "key_signature_map": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["onset_q", "fifths"],
+        "properties": {
+          "onset_q": {"$ref": "#/definitions/rational"},
+          "fifths": {"type": "integer"},
+          "mode_if_known": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "tempo_map": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["onset_q"],
+        "properties": {
+          "onset_q": {"$ref": "#/definitions/rational"},
+          "bpm_if_known": {"type": ["number", "null"]}
+        }
+      }
+    },
+    "annotations": {"type": "array"},
+    "quarter_length_total": {"$ref": "#/definitions/rational"},
+    "measure_count": {"type": ["integer", "null"]},
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {"type": "string"},
+          "message": {"type": "string"},
+          "voice_id": {"type": ["string", "null"]},
+          "onset_q": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "normalization": {
+      "type": "object",
+      "required": ["software_version", "config_hash", "event_hash"],
+      "properties": {
+        "software_version": {"type": "string"},
+        "music21_version": {"type": ["string", "null"]},
+        "config_hash": {"type": "string"},
+        "event_hash": {"type": "string"},
+        "core_event_hash": {"type": "string"},
+        "rhythm_hash": {"type": "string"},
+        "transposition_melodic_hash": {"type": "string"},
+        "per_voice_hashes": {"type": "object"},
+        "repeats_expanded": {"type": "boolean"}
+      }
+    }
+  },
+  "definitions": {
+    "rational": {
+      "type": "string",
+      "description": "Exact rational in quarter-note units, e.g. \"3/8\" or \"0\".",
+      "pattern": "^-?\\d+(/\\d+)?$"
+    },
+    "voice": {
+      "type": "object",
+      "required": ["voice_id", "staff", "notes"],
+      "properties": {
+        "voice_id": {"type": "string"},
+        "staff": {"type": ["string", "integer", "null"]},
+        "mean_midi": {"type": ["number", "null"]},
+        "notes": {"type": "array", "items": {"$ref": "#/definitions/note"}}
+      }
+    },
+    "note": {
+      "type": "object",
+      "required": ["note_id", "voice_id", "onset_q", "duration_q", "midi", "step", "octave"],
+      "properties": {
+        "note_id": {"type": "string"},
+        "voice_id": {"type": "string"},
+        "onset_q": {"$ref": "#/definitions/rational"},
+        "duration_q": {"$ref": "#/definitions/rational"},
+        "measure_number": {"type": ["string", "null"]},
+        "measure_index_unfolded": {"type": ["integer", "null"]},
+        "offset_in_measure_q": {"$ref": "#/definitions/rational"},
+        "midi": {"type": "integer", "minimum": 0, "maximum": 127},
+        "step": {"type": "string", "enum": ["A", "B", "C", "D", "E", "F", "G"]},
+        "alter": {"$ref": "#/definitions/rational"},
+        "octave": {"type": "integer"},
+        "pitch_class": {"type": "integer", "minimum": 0, "maximum": 11},
+        "diatonic_step": {"type": "integer"},
+        "tie": {"type": ["string", "null"], "enum": ["start", "continue", "stop", null]},
+        "grace": {"type": "boolean"},
+        "articulations": {"type": "array", "items": {"type": "string"}},
+        "ornaments": {"type": "array", "items": {"type": "string"}},
+        "chord_group": {"type": ["string", "null"]},
+        "source_refs": {"type": "array"}
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+# Full pipeline stack (Spec §5.1). Acquisition needs only requirements-acquire.txt.
+# Versions below are the ones actually installed and exercised on this host
+# (Python 3.9). Pinned for reproducibility (§4.2).
+PyYAML==6.0.2
+music21==8.3.0
+jsonschema==4.25.1
+numpy==2.0.2
+pytest==8.4.2
+
+# --- §16/§17 synthetic generation, §19 tokenization, §20 exports --------------
+ortools==9.15.6755        # CP-SAT constraint generation (§16)
+protobuf==6.33.6          # ortools transitive, pinned for determinism
+absl-py==2.3.1            # ortools transitive
+zstandard==0.25.0         # compressed JSONL exports (§20)
+pandas==2.3.3             # tabular datasets (§20.3, §20.6)
+pyarrow==21.0.0           # parquet exports (§20.6)
+
+# --- not yet exercised; pin when added ---------------------------------------
+# lxml           # MusicXML operations (§5.1)
+# snakemake      # orchestration (§22)
+# verovio        # notation rendering for visual QA (§21.1)
+# streamlit      # optional richer review UI; the built-in reviewer is stdlib-only

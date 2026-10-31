@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://deepfugue/schemas/source_manifest.schema.json",
+  "title": "Source Manifest Row",
+  "description": "One row per acquired source file (Spec Section 6.1).",
+  "type": "object",
+  "required": [
+    "source_file_id",
+    "source_name",
+    "repository_url",
+    "repository_commit",
+    "retrieved_at_utc",
+    "relative_source_path",
+    "sha256",
+    "source_format",
+    "license_scope",
+    "ingest_status"
+  ],
+  "properties": {
+    "source_file_id": {"type": "string"},
+    "source_name": {"type": "string"},
+    "repository_url": {"type": "string", "format": "uri"},
+    "repository_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "retrieved_at_utc": {"type": "string", "format": "date-time"},
+    "relative_source_path": {"type": "string"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_format": {
+      "type": "string",
+      "enum": ["kern", "musicxml", "mei", "csv", "json", "other"]
+    },
+    "composer_claimed": {"type": ["string", "null"]},
+    "work_id_claimed": {"type": ["string", "null"]},
+    "movement_claimed": {"type": ["string", "null"]},
+    "license_name": {"type": ["string", "null"]},
+    "license_url": {"type": ["string", "null"]},
+    "license_scope": {
+      "type": "string",
+      "enum": ["composition", "encoding", "annotation", "repository", "unknown"]
+    },
+    "commercial_use_known": {"type": ["boolean", "null"]},
+    "attribution_required": {"type": ["boolean", "null"]},
+    "quarantine_reason": {"type": ["string", "null"]},
+    "ingest_status": {
+      "type": "string",
+      "enum": ["accepted", "quarantined", "rejected"]
+    }
+  },
+  "additionalProperties": false
+}

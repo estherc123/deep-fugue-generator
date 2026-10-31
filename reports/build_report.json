@@ -1,0 +1,4732 @@
+{
+  "annotations": {
+    "by_type": {
+      "cadence": 102,
+      "countersubject": 174,
+      "episode": 4,
+      "other": 1,
+      "pedal": 19,
+      "subject": 368
+    },
+    "derived_entry_function": {
+      "answer": 86,
+      "entries": 368,
+      "subject": 130,
+      "undetermined": 152
+    },
+    "fugues_aligned": 23,
+    "total": {
+      "accepted": 668,
+      "alternative_groups": 3,
+      "annotations": 804,
+      "rejected_candidates": 136,
+      "warnings": 2
+    },
+    "voice_mapping": {
+      "corpus_mean_voice_note_coverage": 0.967,
+      "min_coverage_gate": 0.5,
+      "strategy": "staff_index_top_down"
+    }
+  },
+  "deduplication": {
+    "groups": 6,
+    "level_census": {
+      "canonical_event_hash": {
+        "blocking": true,
+        "match_groups": 4,
+        "pieces_involved": 8
+      },
+      "per_voice_melody_hash": {
+        "blocking": false,
+        "match_groups": 4,
+        "pieces_involved": 8
+      },
+      "rhythm_hash": {
+        "blocking": false,
+        "match_groups": 5,
+        "pieces_involved": 10
+      },
+      "source_checksum": {
+        "blocking": true,
+        "match_groups": 1,
+        "pieces_involved": 2
+      },
+      "transposition_melodic_hash": {
+        "blocking": true,
+        "match_groups": 4,
+        "pieces_involved": 8
+      },
+      "work_identity": {
+        "blocking": true,
+        "match_groups": 4,
+        "pieces_involved": 8
+      }
+    }
+  },
+  "definition_of_done": {
+    "automated_validation_gates_pass": {
+      "detail": "18/18 gates pass",
+      "met": true
+    },
+    "bcfb_unique_chorales_normalized_139": {
+      "detail": "139 / 139",
+      "met": true
+    },
+    "bcfb_variants_grouped": {
+      "detail": "143 variant files -> 139 works",
+      "met": true
+    },
+    "canonical_schema_documented_and_validated": {
+      "detail": "schemas/canonical_score.schema.json; all 191 pieces validate",
+      "met": true
+    },
+    "clean_checkout_reproduces_build": {
+      "detail": "documented in README Quickstart; every stage is restartable and deterministic under a pinned seed",
+      "met": true
+    },
+    "controlled_invalid_fragments_10000": {
+      "detail": "10000 accepted, one intended violation each",
+      "met": true
+    },
+    "excerpt_candidates_at_least_200": {
+      "detail": "258 candidates proposed",
+      "met": true
+    },
+    "excerpts_manually_approved_50_to_100": {
+      "detail": "51 approved of 258 proposed. Requires a person: \u00a727 forbids presenting automatically selected excerpts as human approved. Run `python -m fugue_data.review.app`.",
+      "met": true,
+      "requires_human_review": true
+    },
+    "final_build_report_generated": {
+      "detail": "this document",
+      "met": true
+    },
+    "hard_valid_fragments_10000": {
+      "detail": "10000 accepted, independently validated",
+      "met": true
+    },
+    "preference_candidates_generated_and_reviewable": {
+      "detail": "7123 pairs from 1354 prompts; review app at `python -m fugue_data.review.pairs_app`",
+      "met": true
+    },
+    "reviewed_pairs_at_least_500": {
+      "detail": "561 reviewed of 7123 candidates. Requires a person: \u00a718.6 forbids exporting an unreviewed pair.",
+      "met": true,
+      "requires_human_review": true
+    },
+    "rule_profiles_and_schemas_implemented": {
+      "detail": "24 rules across 3 profiles; bach_empirical calibrated=True",
+      "met": true
+    },
+    "source_repositories_pinned_and_checksummed": {
+      "detail": "3 sources pinned; 18 gates passed",
+      "met": true
+    },
+    "splits_deterministic_and_leakage_free": {
+      "detail": "185 split units, 0 leakage errors",
+      "met": true
+    },
+    "training_exports_produced_separately": {
+      "detail": "6 export groups written",
+      "met": true
+    },
+    "visual_qa_recorded": {
+      "detail": "294 artefacts rendered and recorded",
+      "met": true
+    },
+    "wtc1_annotations_aligned": {
+      "detail": "23 of 24; fugue 11 (BWV 856) has no upstream structural analysis -- documented override, not fabricated coverage",
+      "met": true
+    },
+    "wtc_fugues_normalized_48": {
+      "detail": "48 / 48",
+      "met": true
+    }
+  },
+  "definition_of_done_summary": {
+    "met": 19,
+    "outstanding_other": [],
+    "outstanding_requiring_human_review": [],
+    "total": 19
+  },
+  "excerpts": {
+    "auto_rejected": 619,
+    "proposed": 258,
+    "rejection_census": {
+      "begins_inside_tie": 323,
+      "cuts_subject_entry": 298,
+      "ends_on_unresolved_suspension": 140,
+      "parser_warnings:parts_excluded": 83,
+      "too_few_notes": 2,
+      "voice_identity_not_preserved": 5
+    },
+    "review_status": {
+      "approved": 51,
+      "correction_required": 3,
+      "pending": 156,
+      "rejected": 48
+    },
+    "trigger_census": {
+      "cadence_arrival": 30,
+      "countersubject_combination": 41,
+      "exposition_boundary": 6,
+      "pedal_point": 8,
+      "sequence": 53,
+      "short_episode": 3,
+      "stretto": 11,
+      "subject_entry": 53,
+      "texture_change": 107
+    }
+  },
+  "exports": {
+    "constraint_critic": {
+      "controlled_negatives": 10000,
+      "note": "Matched parents: every negative names the valid sample it came from.",
+      "positives": 10000
+    },
+    "feasibility": {
+      "note": "Hard-valid real and synthetic material with rule-profile metadata.",
+      "rows": {
+        "train": 8128,
+        "validation": 1034
+      }
+    },
+    "metadata": {
+      "derivatives": 20000,
+      "pieces": 191,
+      "sources": 1029,
+      "splits": 191
+    },
+    "preferences": {
+      "candidate_pairs_available": 4725,
+      "label_confidence": {
+        "confirmed": 31,
+        "contested": 13,
+        "unrated": 437,
+        "weak": 20
+      },
+      "note": "Only reviewed pairs are exported (\u00a718.6). Unreviewed candidates are excluded, so an empty export means labelling has not happened yet, not that no candidates exist.",
+      "rows": {
+        "train": 436,
+        "validation": 65
+      },
+      "unreviewed_excluded": 4224
+    },
+    "structure": {
+      "annotations": 804,
+      "section_windows": 566
+    },
+    "style": {
+      "approved_excerpts_included": 0,
+      "note": "Real Bach movements plus human-approved excerpts only. Pending excerpts are excluded: \u00a727 forbids presenting automatically selected material as human approved.",
+      "pending_excerpts_excluded": 300,
+      "rows": {
+        "test": 21,
+        "train": 150,
+        "validation": 20
+      }
+    }
+  },
+  "generated_at_utc": "2026-10-21T07:11:28Z",
+  "normalization": {
+    "bars": 5843,
+    "cross_format_discrepancies": 0,
+    "notes": 93584,
+    "pieces": 191,
+    "unique_works": 187,
+    "validation_failures": 0
+  },
+  "preferences": {
+    "agent_labelled_pairs": 3730,
+    "agent_labels": 4143,
+    "agent_reviewers": [
+      "agent-1",
+      "agent-2",
+      "agent-3",
+      "agent-4",
+      "agent-5",
+      "agent-r3-1",
+      "agent-r3-2",
+      "agent-r3-4"
+    ],
+    "by_selection_reason": {
+      "close_scores_different_character": 26,
+      "evaluators_disagree": 7092,
+      "soft_rule_gap": 4,
+      "uncertain": 1
+    },
+    "candidates": 3435,
+    "consistency_repeats": 339,
+    "human_label_distribution": {
+      "A": 172,
+      "B": 184,
+      "both_poor": 154,
+      "tie": 51
+    },
+    "note": "Agent labels do not count toward \u00a718.6, which requires human review. They are recorded separately so the two kinds of evidence are never conflated.",
+    "pairs": 7123,
+    "prompts_with_alternatives": 600,
+    "reviewed_by_human": 561,
+    "reviewer_agreement": {
+      "human_vs_agent_overlap": 386,
+      "mean_agent_kappa": 0.481,
+      "mean_human_agent_kappa": 0.0729,
+      "warnings": []
+    }
+  },
+  "report_version": "1.0.0",
+  "rules": {
+    "by_category": {
+      "conditional_constraint": 8,
+      "hard_constraint": 5,
+      "notational_invariant": 4,
+      "soft_preference": 3,
+      "structural_target": 4
+    },
+    "count": 24,
+    "empirical_validation": {
+      "bach_empirical": {
+        "calibrated": true,
+        "false_positive_rates": {
+          "augmented_interval_melodic": 0.7317,
+          "direct_fifths_outer": 0.439,
+          "dissonance_treatment": 0.9756,
+          "leap_recovery": 1.0,
+          "melodic_leap_limit": 0.1707,
+          "suspension_resolution": 0.2195,
+          "voice_monophonic": 0.122,
+          "voice_overlap": 0.9024,
+          "voice_spacing": 0.122
+        },
+        "hard_rules_firing_on_real_bach": []
+      },
+      "high_baroque_conservative": {
+        "calibrated": false,
+        "false_positive_rates": {
+          "augmented_interval_melodic": 0.7317,
+          "direct_fifths_outer": 0.439,
+          "dissonance_treatment": 0.9756,
+          "leap_recovery": 1.0,
+          "melodic_leap_limit": 0.1951,
+          "suspension_resolution": 0.2195,
+          "voice_crossing": 0.7073,
+          "voice_monophonic": 0.122,
+          "voice_overlap": 0.9024,
+          "voice_spacing": 0.5122
+        },
+        "hard_rules_firing_on_real_bach": [
+          "voice_monophonic"
+        ]
+      },
+      "species_strict": {
+        "calibrated": false,
+        "false_positive_rates": {
+          "augmented_interval_melodic": 0.7317,
+          "direct_fifths_outer": 0.439,
+          "dissonance_treatment": 0.9756,
+          "leap_recovery": 1.0,
+          "melodic_leap_limit": 0.8293,
+          "parallel_fifths": 0.0244,
+          "suspension_resolution": 0.2195,
+          "voice_crossing": 0.7073,
+          "voice_monophonic": 0.122,
+          "voice_overlap": 0.9024,
+          "voice_spacing": 0.7561
+        },
+        "hard_rules_firing_on_real_bach": [
+          "augmented_interval_melodic",
+          "dissonance_treatment",
+          "melodic_leap_limit",
+          "parallel_fifths",
+          "suspension_resolution",
+          "voice_monophonic",
+          "voice_overlap",
+          "voice_spacing"
+        ]
+      }
+    },
+    "pieces_evaluated": 41
+  },
+  "sources": {
+    "acceptance_failures": [],
+    "counts": {
+      "algomus": {
+        "computed_annotation_fugues": 5,
+        "dez_files": 60,
+        "files_by_format": {
+          "csv": 1,
+          "json": 124,
+          "other": 47
+        },
+        "ref_annotation_fugues": 23,
+        "source_name": "algomus",
+        "total_files": 172,
+        "wtc1_fugues_missing_ref": [
+          "bach_wtc1_fugue_11"
+        ],
+        "wtc1_fugues_with_any_annotation": 23
+      },
+      "bcfb": {
+        "canonical_variants": 143,
+        "files_by_format": {
+          "csv": 1,
+          "kern": 146,
+          "mei": 146,
+          "musicxml": 251,
+          "other": 213
+        },
+        "kern_secondary_files": 143,
+        "mei_secondary_files": 143,
+        "musicxml_master_files": 143,
+        "retained_non_default_files": 614,
+        "source_name": "bcfb",
+        "total_files": 757,
+        "unique_chorales": 139
+      },
+      "humdrum-wtc": {
+        "files_by_format": {
+          "kern": 96,
+          "other": 4
+        },
+        "preludes": 48,
+        "source_name": "humdrum-wtc",
+        "total_files": 100,
+        "wtc1_fugues": 24,
+        "wtc2_fugues": 24
+      }
+    },
+    "repositories": {
+      "algomus": {
+        "commit": "a1801b5b42a4f8d99783e1e52b3dc2e7407cd5ef",
+        "retrieved_at_utc": "2026-07-31T00:15:41Z",
+        "url": "https://gitlab.com/algomus.fr/algomus-data.git"
+      },
+      "bcfb": {
+        "commit": "431c5c019aeea198c0128a05dd1d2a7364c2d786",
+        "retrieved_at_utc": "2026-07-31T00:15:43Z",
+        "url": "https://github.com/juyaolongpaul/Bach_chorale_FB.git"
+      },
+      "humdrum-wtc": {
+        "commit": "0b4f4d84b90b254615e7ac09730ec473c9611cb6",
+        "retrieved_at_utc": "2026-07-31T00:15:41Z",
+        "url": "https://github.com/humdrum-tools/bach-wtc.git"
+      }
+    },
+    "source_file_rows": 1029
+  },
+  "splits": {
+    "corpora": {
+      "bcfb": {
+        "pieces_by_split": {
+          "test": 15,
+          "train": 114,
+          "validation": 14
+        },
+        "works_by_split": {
+          "test": 14,
+          "train": 111,
+          "validation": 14
+        }
+      },
+      "wtc": {
+        "pieces_by_split": {
+          "test": 6,
+          "train": 36,
+          "validation": 6
+        },
+        "works_by_split": {
+          "test": 6,
+          "train": 36,
+          "validation": 6
+        }
+      }
+    },
+    "leakage_errors": [],
+    "seed": 20260728,
+    "units": 185
+  },
+  "synthetic_invalid": {
+    "accepted": 10000,
+    "max_share_per_rule": 0.15,
+    "mutators_retired": [
+      "create_voice_polyphony"
+    ],
+    "mutators_skipped": {
+      "break_leading_tone_resolution": "soft",
+      "create_illegal_voice_overlap": "soft",
+      "create_prohibited_melodic_leap": "soft",
+      "create_unresolved_suspension": "soft"
+    },
+    "per_rule_counts": {
+      "answer_transformation": 1250,
+      "cadence_target_completion": 1249,
+      "parallel_fifths": 1249,
+      "parallel_octaves": 1249,
+      "subject_entry_identity": 1250,
+      "timing_positive_duration": 1249,
+      "voice_monophonic": 4,
+      "voice_participation": 1250,
+      "voice_range": 1250
+    },
+    "per_rule_share": {
+      "answer_transformation": 0.125,
+      "cadence_target_completion": 0.1249,
+      "parallel_fifths": 0.1249,
+      "parallel_octaves": 0.1249,
+      "subject_entry_identity": 0.125,
+      "timing_positive_duration": 0.1249,
+      "voice_monophonic": 0.0004,
+      "voice_participation": 0.125,
+      "voice_range": 0.125
+    },
+    "rules_over_share": {},
+    "split_counts": {
+      "test": 1023,
+      "train": 7927,
+      "validation": 1050
+    }
+  },
+  "synthetic_valid": {
+    "accepted": 10000,
+    "coverage": {
+      "cadence_target": {
+        "none": 6312,
+        "tonic": 3688
+      },
+      "countersubject": {
+        "False": 5004,
+        "True": 4996
+      },
+      "entry_order": {
+        "bottom_up": 3070,
+        "middle_out": 3333,
+        "top_down": 3597
+      },
+      "length_bars": {
+        "2": 2820,
+        "3": 3422,
+        "4": 3758
+      },
+      "meter": {
+        "3/4": 3747,
+        "4/4": 4361,
+        "6/8": 1892
+      },
+      "mode": {
+        "major": 5544,
+        "minor": 4456
+      },
+      "register": {
+        "high": 3295,
+        "low": 3375,
+        "middle": 3330
+      },
+      "rhythmic_density": {
+        "dense": 4597,
+        "medium": 2687,
+        "sparse": 2716
+      },
+      "subject_length_notes": {
+        "4": 3757,
+        "5": 3287,
+        "6": 2956
+      },
+      "subject_voice": {
+        "bass": 3310,
+        "middle": 3319,
+        "upper": 3371
+      },
+      "tonic_pc": {
+        "0": 1356,
+        "10": 1560,
+        "2": 1346,
+        "3": 1370,
+        "5": 1560,
+        "7": 1317,
+        "9": 1491
+      },
+      "voice_count": {
+        "2": 2047,
+        "3": 3970,
+        "4": 3983
+      }
+    },
+    "rule_profile": "high_baroque_conservative",
+    "ruleset_hash": "1c1e465f9cd6c8f8631b3d5de5d8676d1a5bd58079bc15b7d7b33b0e02ea0ae6",
+    "seed": 20260728,
+    "split_counts": {
+      "test": 1008,
+      "train": 7978,
+      "validation": 1014
+    },
+    "stats": {
+      "duplicates": 0,
+      "no_solution": 12290,
+      "rejected": 0,
+      "solved": 10000
+    }
+  },
+  "tokenization": {
+    "denominator_census": {
+      "12": 2,
+      "4": 167,
+      "8": 22
+    },
+    "grid_roundtrip_failures": 0,
+    "grid_unsupported": 0,
+    "grid_voice_collisions": 185,
+    "pieces": 191,
+    "vocabulary_hash": "af1e20acc040c27418673a39b0f6a6353527cbf0999b3056d8771a26310e61ad",
+    "vocabulary_size": 196
+  },
+  "validation_gates": {
+    "detail": [
+      {
+        "checked": 1029,
+        "failure_count": 0,
+        "gate": "source_provenance",
+        "passed": true,
+        "spec": "\u00a721 missing source provenance"
+      },
+      {
+        "checked": 1029,
+        "failure_count": 0,
+        "gate": "source_revision",
+        "passed": true,
+        "spec": "\u00a721 unexpected source revision"
+      },
+      {
+        "checked": 28,
+        "failure_count": 0,
+        "gate": "checksums",
+        "passed": true,
+        "spec": "\u00a721 checksum mismatch"
+      },
+      {
+        "checked": 191,
+        "failure_count": 0,
+        "gate": "canonical_schema",
+        "passed": true,
+        "spec": "\u00a721 schema failure"
+      },
+      {
+        "checked": 191,
+        "failure_count": 0,
+        "gate": "structural_duration",
+        "passed": true,
+        "spec": "\u00a721 invalid or zero structural duration"
+      },
+      {
+        "checked": 191,
+        "failure_count": 0,
+        "gate": "canonical_event_hash_stable",
+        "passed": true,
+        "spec": "\u00a721 canonical event hash changing unexpectedly"
+      },
+      {
+        "checked": 804,
+        "failure_count": 0,
+        "gate": "annotation_bounds",
+        "passed": true,
+        "spec": "\u00a721 annotation outside piece bounds"
+      },
+      {
+        "checked": 804,
+        "failure_count": 0,
+        "gate": "annotation_voice",
+        "passed": true,
+        "spec": "\u00a721 unresolved annotation voice"
+      },
+      {
+        "checked": 6,
+        "failure_count": 0,
+        "gate": "duplicate_group_split",
+        "passed": true,
+        "spec": "\u00a721 duplicate group crossing splits"
+      },
+      {
+        "checked": 10000,
+        "failure_count": 0,
+        "gate": "derivative_split_inheritance",
+        "passed": true,
+        "spec": "\u00a721 derivative crossing parent split"
+      },
+      {
+        "checked": 258,
+        "failure_count": 0,
+        "gate": "excerpt_split_inheritance",
+        "passed": true,
+        "spec": "\u00a713.5 no excerpt crosses its parent split"
+      },
+      {
+        "checked": 10000,
+        "failure_count": 0,
+        "gate": "synthetic_positive_valid",
+        "passed": true,
+        "spec": "\u00a721 synthetic positive with a hard violation"
+      },
+      {
+        "checked": 10000,
+        "failure_count": 0,
+        "gate": "controlled_negative_single_violation",
+        "passed": true,
+        "spec": "\u00a721 controlled negative with zero or multiple unintended hard violations"
+      },
+      {
+        "checked": 7123,
+        "failure_count": 0,
+        "gate": "preference_prompt_identity",
+        "passed": true,
+        "spec": "\u00a721 preference pair with mismatched prompt conditions"
+      },
+      {
+        "checked": 7381,
+        "failure_count": 0,
+        "gate": "pending_review_not_exported",
+        "passed": true,
+        "spec": "\u00a721 `pending` review included as reviewed"
+      },
+      {
+        "checked": 1,
+        "failure_count": 0,
+        "gate": "tokenizer_version",
+        "passed": true,
+        "spec": "\u00a721 unknown tokenizer version"
+      },
+      {
+        "checked": 782189,
+        "failure_count": 0,
+        "gate": "tokens_in_vocabulary",
+        "passed": true,
+        "spec": "\u00a719.4 emitted token outside the declared vocabulary"
+      },
+      {
+        "checked": 10000,
+        "failure_count": 0,
+        "gate": "ruleset_profile_hash",
+        "passed": true,
+        "spec": "\u00a721 unknown rule-profile hash"
+      }
+    ],
+    "failed": 0,
+    "passed": 18,
+    "total": 18
+  },
+  "versions": {
+    "annotation_map_version": "1.0.0",
+    "generation_version": "1.0.0",
+    "rule_profile_version": "0.1.0",
+    "ruleset_version": "1.0.0",
+    "schema_version": "1.0.0",
+    "splits_version": "1.0.0",
+    "tokenizer_name": "fugue_grid_event",
+    "tokenizer_version": "1.0.0"
+  },
+  "visual_qa": {
+    "anomalous_normalizations_rendered": 154,
+    "artefacts": [
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc2_fugue_11.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc2_fugue_11",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_13.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_13",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_21.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_21",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc2_fugue_03.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc2_fugue_03",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_16.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_16",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_15.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_15",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_12.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_12",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_17.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_17",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc2_fugue_04.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc2_fugue_04",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_20.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_20",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_14.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_14",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc2_fugue_10.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc2_fugue_10",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc2_fugue_16.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc2_fugue_16",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_19.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_19",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_02.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_02",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_23.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_23",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc2_fugue_02.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc2_fugue_02",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/fugue_bach_wtc1_fugue_11.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "wtc_fugues_or_excerpts",
+        "note": "opening four bars",
+        "subject": "bach_wtc1_fugue_11",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv244.62.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv244.62",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv245.37.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv245.37",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv8.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv8.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv10.07b.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv10.07b",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv153.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv153.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv248.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv248.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv40.03.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv40.03",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv64.08.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv64.08",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv244.10.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv244.10",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv167.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv167.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv105.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv105.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv244.25.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv244.25",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv3.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv3.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv11.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv11.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv83.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv83.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv248.23.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv248.23",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv78.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv78.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv62.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv62.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv461.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv461",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/chorale_bach_chorale_bwv244.40.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "bcfb_chorales",
+        "note": "opening four bars",
+        "subject": "bach_chorale_bwv244.40",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv10.07a.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv10.07a",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv10.07b.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv10.07b",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv100.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "2 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv100.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv102.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv102.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv104.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv104.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv105.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv105.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv108.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv108.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv11.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv11.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv112.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv112.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv113.01.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv113.01",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv113.08.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv113.08",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv114.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv114.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv115.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv115.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv121.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv121.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv124.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv124.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv125.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv125.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv126.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv126.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv128.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv128.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv129.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv129.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv13.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv13.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv133.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv133.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv135.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv135.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv136.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv136.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv137.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv137.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv139.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv139.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv14.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv14.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv140.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv140.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv145.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv145.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv149.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv149.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv153.01.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv153.01",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv153.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv153.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv153.09.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv153.09",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv154.03.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv154.03",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv157.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv157.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv159.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv159.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv16.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv16.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv161.06a.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv161.06a",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv161.06b.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv161.06b",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv167.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv167.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv168.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv168.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv171.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv171.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv172.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv172.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv174.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv174.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv176.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv176.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv177.05a.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv177.05a",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv177.05b.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv177.05b",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv185.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv185.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv187.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv187.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv19.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv19.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv194.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv194.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv195.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv195.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv20.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv20.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv24.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv24.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv244.03.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv244.03",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv244.10.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv244.10",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv244.15.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv244.15",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv244.17.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv244.17",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv244.25.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv244.25",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv244.32.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv244.32",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv244.37.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv244.37",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv244.40.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv244.40",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv244.44.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv244.44",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv244.46.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv244.46",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv244.54.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv244.54",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv244.62.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv244.62",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv245.03.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv245.03",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv245.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv245.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv245.11.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv245.11",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv245.14.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv245.14",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv245.15.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv245.15",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv245.17.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv245.17",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv245.22.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv245.22",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv245.26.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv245.26",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv245.28.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv245.28",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv245.37.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv245.37",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv245.40.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv245.40",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv248.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv248.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv248.09.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv248.09",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv248.12.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv248.12",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv248.17.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv248.17",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv248.23.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv248.23",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv248.28.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv248.28",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv248.33.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv248.33",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv248.35.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv248.35",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv248.42.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv248.42",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv248.46.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv248.46",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv248.53.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv248.53",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv248.59.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv248.59",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv248.64.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv248.64",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv250.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv250",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv251.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv251",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv252.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv252",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv26.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv26.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv29.08.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv29.08",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv3.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv3.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv30.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv30.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv31.09.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv31.09",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv33.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv33.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv36.04.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv36.04",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv36.08.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv36.08",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv37.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv37.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv38.06a.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv38.06a",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv38.06b.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv38.06b",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv40.03.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv40.03",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv40.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv40.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv42.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv42.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv43.11.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv43.11",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv447.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv447",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv461.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv461",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv47.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv47.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv470.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv470",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv48.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv48.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv481.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv481",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv488.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv488",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv495.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv495",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv499.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv499",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv5.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv5.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv506.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv506",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv57.08.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv57.08",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv6.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv6.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv62.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv62.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv67.04.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv67.04",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv67.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv67.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv7.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv7.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv70.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv70.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv72.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv72.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv73.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv73.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv74.08.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv74.08",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv76.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv76.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv78.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv78.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv8.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv8.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv81.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv81.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv83.05.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv83.05",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv89.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv89.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv9.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv9.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv91.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv91.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv93.07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv93.07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv94.08.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv94.08",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv96.06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv96.06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_chorale_bwv97.09.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: parts_excluded",
+        "subject": "bach_chorale_bwv97.09",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc1_fugue_01.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "2 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc1_fugue_01",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc1_fugue_06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "5 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc1_fugue_06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc1_fugue_07.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "4 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc1_fugue_07",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc1_fugue_15.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "16 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc1_fugue_15",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc1_fugue_20.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "22 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc1_fugue_20",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc1_fugue_24.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "4 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc1_fugue_24",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc2_fugue_02.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "3 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc2_fugue_02",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc2_fugue_03.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "41 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc2_fugue_03",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc2_fugue_06.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "3 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc2_fugue_06",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc2_fugue_08.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "8 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc2_fugue_08",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc2_fugue_10.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "4 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc2_fugue_10",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc2_fugue_16.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "2 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc2_fugue_16",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc2_fugue_17.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "14 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc2_fugue_17",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/anomaly_bach_wtc2_fugue_20.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "anomalous_normalization",
+        "note": "1 parser warnings; first: voice_partial_overlap",
+        "subject": "bach_wtc2_fugue_20",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_004861.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/major/6/8",
+        "subject": "synv:004861",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_003197.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 2v/major/3/4",
+        "subject": "synv:003197",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_001421.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/major/3/4",
+        "subject": "synv:001421",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_006198.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/major/3/4",
+        "subject": "synv:006198",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_009967.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/major/4/4",
+        "subject": "synv:009967",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_004678.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 2v/minor/3/4",
+        "subject": "synv:004678",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_008700.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/minor/4/4",
+        "subject": "synv:008700",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_003339.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 2v/major/4/4",
+        "subject": "synv:003339",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_002948.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/minor/6/8",
+        "subject": "synv:002948",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_006141.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 2v/minor/4/4",
+        "subject": "synv:006141",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_005843.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/minor/3/4",
+        "subject": "synv:005843",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_008746.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/minor/4/4",
+        "subject": "synv:008746",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_009133.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 2v/minor/4/4",
+        "subject": "synv:009133",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_009840.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/minor/3/4",
+        "subject": "synv:009840",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_008759.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/major/4/4",
+        "subject": "synv:008759",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_002469.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/major/6/8",
+        "subject": "synv:002469",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_003397.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/minor/6/8",
+        "subject": "synv:003397",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_001138.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 2v/major/3/4",
+        "subject": "synv:001138",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_008034.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 2v/major/3/4",
+        "subject": "synv:008034",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_004132.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/major/4/4",
+        "subject": "synv:004132",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_005141.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/major/3/4",
+        "subject": "synv:005141",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_001076.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 2v/major/3/4",
+        "subject": "synv:001076",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_003215.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/minor/6/8",
+        "subject": "synv:003215",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_008515.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/major/6/8",
+        "subject": "synv:008515",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_000089.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/major/4/4",
+        "subject": "synv:000089",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_002327.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/minor/3/4",
+        "subject": "synv:002327",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_009059.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/minor/3/4",
+        "subject": "synv:009059",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_009141.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 2v/minor/6/8",
+        "subject": "synv:009141",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_007032.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/major/3/4",
+        "subject": "synv:007032",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_009495.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/minor/6/8",
+        "subject": "synv:009495",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_001619.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 2v/major/4/4",
+        "subject": "synv:001619",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_000294.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/major/3/4",
+        "subject": "synv:000294",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_000404.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/minor/4/4",
+        "subject": "synv:000404",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_001242.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 2v/minor/4/4",
+        "subject": "synv:001242",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_007430.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/minor/4/4",
+        "subject": "synv:007430",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_004127.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/minor/4/4",
+        "subject": "synv:004127",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_003621.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/major/4/4",
+        "subject": "synv:003621",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_003798.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/minor/6/8",
+        "subject": "synv:003798",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_004954.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/major/3/4",
+        "subject": "synv:004954",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_002671.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/major/4/4",
+        "subject": "synv:002671",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_005842.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/major/4/4",
+        "subject": "synv:005842",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_007373.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/minor/4/4",
+        "subject": "synv:007373",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_004912.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/minor/3/4",
+        "subject": "synv:004912",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_003614.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/major/3/4",
+        "subject": "synv:003614",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_009671.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 2v/minor/4/4",
+        "subject": "synv:009671",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_008764.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 2v/major/4/4",
+        "subject": "synv:008764",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_000628.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/major/6/8",
+        "subject": "synv:000628",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_004966.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/minor/4/4",
+        "subject": "synv:004966",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_004524.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 3v/minor/4/4",
+        "subject": "synv:004524",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/valid_synv_009683.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "synthetic_valid",
+        "note": "coverage 4v/minor/4/4",
+        "subject": "synv:009683",
+        "violations": []
+      },
+      {
+        "file": "visual_qa/invalid_syni_009831.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation alter_answer_transformation; violated answer_transformation",
+        "subject": "syni:009831",
+        "violations": [
+          {
+            "evidence": {
+              "expected": [
+                4,
+                1,
+                2,
+                2,
+                -2
+              ],
+              "got": [
+                4,
+                4,
+                -1,
+                2,
+                -2
+              ]
+            },
+            "measure_number": null,
+            "message": "answer in voice_3 is neither a real nor a tonal transformation of the subject",
+            "note_ids": [],
+            "onset_q": "11/4",
+            "piece_id": "syni:009831",
+            "rule_id": "answer_transformation",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_3"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_003224.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation break_cadence_target; violated cadence_target_completion",
+        "subject": "syni:003224",
+        "violations": [
+          {
+            "evidence": {
+              "bass_pc": 11
+            },
+            "measure_number": null,
+            "message": "scheduled cadence at 12 does not arrive on pitch class 9",
+            "note_ids": [],
+            "onset_q": "12",
+            "piece_id": "syni:003224",
+            "rule_id": "cadence_target_completion",
+            "severity": "hard",
+            "voice_ids": []
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_003377.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_parallel_fifth; violated parallel_fifths",
+        "subject": "syni:003377",
+        "violations": [
+          {
+            "evidence": {
+              "from_interval": 7,
+              "to_interval": 7
+            },
+            "measure_number": null,
+            "message": "parallel perfect fifths between voice_2 and voice_3 at 1/2",
+            "note_ids": [
+              "req:013849:voice_2:0",
+              "req:013849:voice_3:0",
+              "req:013849:voice_2:1/2",
+              "req:013849:voice_3:1/2"
+            ],
+            "onset_q": "1/2",
+            "piece_id": "syni:003377",
+            "rule_id": "parallel_fifths",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_2",
+              "voice_3"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_008313.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_parallel_octave; violated parallel_octaves",
+        "subject": "syni:008313",
+        "violations": [
+          {
+            "evidence": {
+              "from_interval": 0,
+              "to_interval": 0
+            },
+            "measure_number": null,
+            "message": "parallel octaves or unisons between voice_2 and voice_3 at 1/2",
+            "note_ids": [
+              "req:009501:voice_2:0",
+              "req:009501:voice_3:0",
+              "req:009501:voice_2:1/2",
+              "req:009501:voice_3:1/2"
+            ],
+            "onset_q": "1/2",
+            "piece_id": "syni:008313",
+            "rule_id": "parallel_octaves",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_2",
+              "voice_3"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_002503.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation alter_required_subject_note; violated subject_entry_identity",
+        "subject": "syni:002503",
+        "violations": [
+          {
+            "evidence": {
+              "expected": [
+                -1,
+                1,
+                4,
+                7
+              ],
+              "got": [
+                0,
+                0,
+                4,
+                7
+              ]
+            },
+            "measure_number": null,
+            "message": "entry in voice_1 does not match the subject intervals",
+            "note_ids": [],
+            "onset_q": "0",
+            "piece_id": "syni:002503",
+            "rule_id": "subject_entry_identity",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_009166.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_invalid_duration; violated timing_positive_duration",
+        "subject": "syni:009166",
+        "violations": [
+          {
+            "evidence": {},
+            "measure_number": null,
+            "message": "non-positive duration 0",
+            "note_ids": [
+              "req:008831:voice_1:5"
+            ],
+            "onset_q": "5",
+            "piece_id": "syni:009166",
+            "rule_id": "timing_positive_duration",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_009615.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation silence_a_voice; violated voice_participation",
+        "subject": "syni:009615",
+        "violations": [
+          {
+            "evidence": {
+              "share": 0.111
+            },
+            "measure_number": null,
+            "message": "voice_1 sounds for 11% of the fragment (minimum 20%)",
+            "note_ids": [],
+            "onset_q": "0",
+            "piece_id": "syni:009615",
+            "rule_id": "voice_participation",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_005445.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation exceed_voice_range; violated voice_range",
+        "subject": "syni:005445",
+        "violations": [
+          {
+            "evidence": {
+              "high": 96,
+              "low": 36,
+              "midi": 102
+            },
+            "measure_number": null,
+            "message": "voice_1 midi 102 outside [36, 96]",
+            "note_ids": [
+              "req:003091:voice_1:41/4"
+            ],
+            "onset_q": "41/4",
+            "piece_id": "syni:005445",
+            "rule_id": "voice_range",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_004591.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation alter_answer_transformation; violated answer_transformation",
+        "subject": "syni:004591",
+        "violations": [
+          {
+            "evidence": {
+              "expected": [
+                -3,
+                2,
+                -4,
+                4,
+                1
+              ],
+              "got": [
+                -3,
+                5,
+                -7,
+                4,
+                1
+              ]
+            },
+            "measure_number": null,
+            "message": "answer in voice_2 is neither a real nor a tonal transformation of the subject",
+            "note_ids": [],
+            "onset_q": "9/2",
+            "piece_id": "syni:004591",
+            "rule_id": "answer_transformation",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_2"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_000138.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation break_cadence_target; violated cadence_target_completion",
+        "subject": "syni:000138",
+        "violations": [
+          {
+            "evidence": {
+              "bass_pc": 5
+            },
+            "measure_number": null,
+            "message": "scheduled cadence at 12 does not arrive on pitch class 3",
+            "note_ids": [],
+            "onset_q": "12",
+            "piece_id": "syni:000138",
+            "rule_id": "cadence_target_completion",
+            "severity": "hard",
+            "voice_ids": []
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_009449.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_parallel_fifth; violated parallel_fifths",
+        "subject": "syni:009449",
+        "violations": [
+          {
+            "evidence": {
+              "from_interval": 7,
+              "to_interval": 7
+            },
+            "measure_number": null,
+            "message": "parallel perfect fifths between voice_1 and voice_2 at 1/4",
+            "note_ids": [
+              "req:016296:voice_1:0",
+              "req:016296:voice_2:0",
+              "req:016296:voice_1:1/4",
+              "req:016296:voice_2:1/4"
+            ],
+            "onset_q": "1/4",
+            "piece_id": "syni:009449",
+            "rule_id": "parallel_fifths",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1",
+              "voice_2"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_007120.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_parallel_octave; violated parallel_octaves",
+        "subject": "syni:007120",
+        "violations": [
+          {
+            "evidence": {
+              "from_interval": 0,
+              "to_interval": 0
+            },
+            "measure_number": null,
+            "message": "parallel octaves or unisons between voice_1 and voice_4 at 1/2",
+            "note_ids": [
+              "req:005910:voice_1:0",
+              "req:005910:voice_4:0",
+              "req:005910:voice_1:1/2",
+              "req:005910:voice_4:1/2"
+            ],
+            "onset_q": "1/2",
+            "piece_id": "syni:007120",
+            "rule_id": "parallel_octaves",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1",
+              "voice_4"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_005320.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation alter_required_subject_note; violated subject_entry_identity",
+        "subject": "syni:005320",
+        "violations": [
+          {
+            "evidence": {
+              "expected": [
+                -5,
+                1,
+                7,
+                -1
+              ],
+              "got": [
+                -4,
+                0,
+                7,
+                -1
+              ]
+            },
+            "measure_number": null,
+            "message": "entry in voice_1 does not match the subject intervals",
+            "note_ids": [],
+            "onset_q": "0",
+            "piece_id": "syni:005320",
+            "rule_id": "subject_entry_identity",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_009382.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_invalid_duration; violated timing_positive_duration",
+        "subject": "syni:009382",
+        "violations": [
+          {
+            "evidence": {},
+            "measure_number": null,
+            "message": "non-positive duration 0",
+            "note_ids": [
+              "req:015453:voice_1:7"
+            ],
+            "onset_q": "7",
+            "piece_id": "syni:009382",
+            "rule_id": "timing_positive_duration",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_000863.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation silence_a_voice; violated voice_participation",
+        "subject": "syni:000863",
+        "violations": [
+          {
+            "evidence": {
+              "share": 0.042
+            },
+            "measure_number": null,
+            "message": "voice_1 sounds for 4% of the fragment (minimum 20%)",
+            "note_ids": [],
+            "onset_q": "0",
+            "piece_id": "syni:000863",
+            "rule_id": "voice_participation",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_002455.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation exceed_voice_range; violated voice_range",
+        "subject": "syni:002455",
+        "violations": [
+          {
+            "evidence": {
+              "high": 96,
+              "low": 36,
+              "midi": 102
+            },
+            "measure_number": null,
+            "message": "voice_1 midi 102 outside [36, 96]",
+            "note_ids": [
+              "req:009338:voice_1:3"
+            ],
+            "onset_q": "3",
+            "piece_id": "syni:002455",
+            "rule_id": "voice_range",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_007074.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation alter_answer_transformation; violated answer_transformation",
+        "subject": "syni:007074",
+        "violations": [
+          {
+            "evidence": {
+              "expected": [
+                2,
+                -2,
+                7,
+                2
+              ],
+              "got": [
+                2,
+                1,
+                4,
+                2
+              ]
+            },
+            "measure_number": null,
+            "message": "answer in voice_2 is neither a real nor a tonal transformation of the subject",
+            "note_ids": [],
+            "onset_q": "13/2",
+            "piece_id": "syni:007074",
+            "rule_id": "answer_transformation",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_2"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_008239.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation break_cadence_target; violated cadence_target_completion",
+        "subject": "syni:008239",
+        "violations": [
+          {
+            "evidence": {
+              "bass_pc": 0
+            },
+            "measure_number": null,
+            "message": "scheduled cadence at 12 does not arrive on pitch class 10",
+            "note_ids": [],
+            "onset_q": "12",
+            "piece_id": "syni:008239",
+            "rule_id": "cadence_target_completion",
+            "severity": "hard",
+            "voice_ids": []
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_000718.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_parallel_fifth; violated parallel_fifths",
+        "subject": "syni:000718",
+        "violations": [
+          {
+            "evidence": {
+              "from_interval": 7,
+              "to_interval": 7
+            },
+            "measure_number": null,
+            "message": "parallel perfect fifths between voice_1 and voice_3 at 1/2",
+            "note_ids": [
+              "req:004122:voice_1:0",
+              "req:004122:voice_3:0",
+              "req:004122:voice_1:1/2",
+              "req:004122:voice_3:1/2"
+            ],
+            "onset_q": "1/2",
+            "piece_id": "syni:000718",
+            "rule_id": "parallel_fifths",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1",
+              "voice_3"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_000531.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_parallel_octave; violated parallel_octaves",
+        "subject": "syni:000531",
+        "violations": [
+          {
+            "evidence": {
+              "from_interval": 0,
+              "to_interval": 0
+            },
+            "measure_number": null,
+            "message": "parallel octaves or unisons between voice_2 and voice_3 at 1/4",
+            "note_ids": [
+              "req:019288:voice_2:0",
+              "req:019288:voice_3:0",
+              "req:019288:voice_2:1/4",
+              "req:019288:voice_3:1/4"
+            ],
+            "onset_q": "1/4",
+            "piece_id": "syni:000531",
+            "rule_id": "parallel_octaves",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_2",
+              "voice_3"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_001567.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation alter_required_subject_note; violated subject_entry_identity",
+        "subject": "syni:001567",
+        "violations": [
+          {
+            "evidence": {
+              "expected": [
+                2,
+                2,
+                7
+              ],
+              "got": [
+                3,
+                1,
+                7
+              ]
+            },
+            "measure_number": null,
+            "message": "entry in voice_3 does not match the subject intervals",
+            "note_ids": [],
+            "onset_q": "0",
+            "piece_id": "syni:001567",
+            "rule_id": "subject_entry_identity",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_3"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_000506.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_invalid_duration; violated timing_positive_duration",
+        "subject": "syni:000506",
+        "violations": [
+          {
+            "evidence": {},
+            "measure_number": null,
+            "message": "non-positive duration 0",
+            "note_ids": [
+              "req:022182:voice_1:9/2"
+            ],
+            "onset_q": "9/2",
+            "piece_id": "syni:000506",
+            "rule_id": "timing_positive_duration",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_003996.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation silence_a_voice; violated voice_participation",
+        "subject": "syni:003996",
+        "violations": [
+          {
+            "evidence": {
+              "share": 0.0
+            },
+            "measure_number": null,
+            "message": "voice_1 sounds for 0% of the fragment (minimum 20%)",
+            "note_ids": [],
+            "onset_q": "0",
+            "piece_id": "syni:003996",
+            "rule_id": "voice_participation",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_001551.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation exceed_voice_range; violated voice_range",
+        "subject": "syni:001551",
+        "violations": [
+          {
+            "evidence": {
+              "high": 96,
+              "low": 36,
+              "midi": 102
+            },
+            "measure_number": null,
+            "message": "voice_1 midi 102 outside [36, 96]",
+            "note_ids": [
+              "req:021161:voice_1:5"
+            ],
+            "onset_q": "5",
+            "piece_id": "syni:001551",
+            "rule_id": "voice_range",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_001071.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation alter_answer_transformation; violated answer_transformation",
+        "subject": "syni:001071",
+        "violations": [
+          {
+            "evidence": {
+              "expected": [
+                -3,
+                2,
+                3,
+                2
+              ],
+              "got": [
+                -3,
+                5,
+                0,
+                2
+              ]
+            },
+            "measure_number": null,
+            "message": "answer in voice_2 is neither a real nor a tonal transformation of the subject",
+            "note_ids": [],
+            "onset_q": "7",
+            "piece_id": "syni:001071",
+            "rule_id": "answer_transformation",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_2"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_005250.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation break_cadence_target; violated cadence_target_completion",
+        "subject": "syni:005250",
+        "violations": [
+          {
+            "evidence": {
+              "bass_pc": 7
+            },
+            "measure_number": null,
+            "message": "scheduled cadence at 16 does not arrive on pitch class 5",
+            "note_ids": [],
+            "onset_q": "16",
+            "piece_id": "syni:005250",
+            "rule_id": "cadence_target_completion",
+            "severity": "hard",
+            "voice_ids": []
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_000443.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_parallel_fifth; violated parallel_fifths",
+        "subject": "syni:000443",
+        "violations": [
+          {
+            "evidence": {
+              "from_interval": 7,
+              "to_interval": 7
+            },
+            "measure_number": null,
+            "message": "parallel perfect fifths between voice_1 and voice_2 at 1/2",
+            "note_ids": [
+              "req:019797:voice_1:0",
+              "req:019797:voice_2:0",
+              "req:019797:voice_1:1/2",
+              "req:019797:voice_2:1/2"
+            ],
+            "onset_q": "1/2",
+            "piece_id": "syni:000443",
+            "rule_id": "parallel_fifths",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1",
+              "voice_2"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_004440.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_parallel_octave; violated parallel_octaves",
+        "subject": "syni:004440",
+        "violations": [
+          {
+            "evidence": {
+              "from_interval": 0,
+              "to_interval": 0
+            },
+            "measure_number": null,
+            "message": "parallel octaves or unisons between voice_3 and voice_4 at 1/4",
+            "note_ids": [
+              "req:009123:voice_3:0",
+              "req:009123:voice_4:0",
+              "req:009123:voice_3:1/4",
+              "req:009123:voice_4:1/4"
+            ],
+            "onset_q": "1/4",
+            "piece_id": "syni:004440",
+            "rule_id": "parallel_octaves",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_3",
+              "voice_4"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_004415.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation alter_required_subject_note; violated subject_entry_identity",
+        "subject": "syni:004415",
+        "violations": [
+          {
+            "evidence": {
+              "expected": [
+                5,
+                -1,
+                -4
+              ],
+              "got": [
+                6,
+                -2,
+                -4
+              ]
+            },
+            "measure_number": null,
+            "message": "entry in voice_3 does not match the subject intervals",
+            "note_ids": [],
+            "onset_q": "0",
+            "piece_id": "syni:004415",
+            "rule_id": "subject_entry_identity",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_3"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_007726.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_invalid_duration; violated timing_positive_duration",
+        "subject": "syni:007726",
+        "violations": [
+          {
+            "evidence": {},
+            "measure_number": null,
+            "message": "non-positive duration 0",
+            "note_ids": [
+              "req:019842:voice_1:4"
+            ],
+            "onset_q": "4",
+            "piece_id": "syni:007726",
+            "rule_id": "timing_positive_duration",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_007254.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation silence_a_voice; violated voice_participation",
+        "subject": "syni:007254",
+        "violations": [
+          {
+            "evidence": {
+              "share": 0.125
+            },
+            "measure_number": null,
+            "message": "voice_1 sounds for 12% of the fragment (minimum 20%)",
+            "note_ids": [],
+            "onset_q": "0",
+            "piece_id": "syni:007254",
+            "rule_id": "voice_participation",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_003669.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation exceed_voice_range; violated voice_range",
+        "subject": "syni:003669",
+        "violations": [
+          {
+            "evidence": {
+              "high": 96,
+              "low": 36,
+              "midi": 102
+            },
+            "measure_number": null,
+            "message": "voice_1 midi 102 outside [36, 96]",
+            "note_ids": [
+              "req:015639:voice_1:7/2"
+            ],
+            "onset_q": "7/2",
+            "piece_id": "syni:003669",
+            "rule_id": "voice_range",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_006925.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation alter_answer_transformation; violated answer_transformation",
+        "subject": "syni:006925",
+        "violations": [
+          {
+            "evidence": {
+              "expected": [
+                7,
+                -3,
+                7
+              ],
+              "got": [
+                7,
+                0,
+                4
+              ]
+            },
+            "measure_number": null,
+            "message": "answer in voice_3 is neither a real nor a tonal transformation of the subject",
+            "note_ids": [],
+            "onset_q": "7",
+            "piece_id": "syni:006925",
+            "rule_id": "answer_transformation",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_3"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_000440.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation break_cadence_target; violated cadence_target_completion",
+        "subject": "syni:000440",
+        "violations": [
+          {
+            "evidence": {
+              "bass_pc": 5
+            },
+            "measure_number": null,
+            "message": "scheduled cadence at 9 does not arrive on pitch class 3",
+            "note_ids": [],
+            "onset_q": "9",
+            "piece_id": "syni:000440",
+            "rule_id": "cadence_target_completion",
+            "severity": "hard",
+            "voice_ids": []
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_009858.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_parallel_fifth; violated parallel_fifths",
+        "subject": "syni:009858",
+        "violations": [
+          {
+            "evidence": {
+              "from_interval": 7,
+              "to_interval": 7
+            },
+            "measure_number": null,
+            "message": "parallel perfect fifths between voice_1 and voice_3 at 1/4",
+            "note_ids": [
+              "req:019954:voice_1:0",
+              "req:019954:voice_3:0",
+              "req:019954:voice_1:1/4",
+              "req:019954:voice_3:1/4"
+            ],
+            "onset_q": "1/4",
+            "piece_id": "syni:009858",
+            "rule_id": "parallel_fifths",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1",
+              "voice_3"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_000719.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_parallel_octave; violated parallel_octaves",
+        "subject": "syni:000719",
+        "violations": [
+          {
+            "evidence": {
+              "from_interval": 0,
+              "to_interval": 0
+            },
+            "measure_number": null,
+            "message": "parallel octaves or unisons between voice_3 and voice_4 at 1/2",
+            "note_ids": [
+              "req:019194:voice_3:0",
+              "req:019194:voice_4:0",
+              "req:019194:voice_3:1/2",
+              "req:019194:voice_4:1/2"
+            ],
+            "onset_q": "1/2",
+            "piece_id": "syni:000719",
+            "rule_id": "parallel_octaves",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_3",
+              "voice_4"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_007608.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation alter_required_subject_note; violated subject_entry_identity",
+        "subject": "syni:007608",
+        "violations": [
+          {
+            "evidence": {
+              "expected": [
+                3,
+                -3,
+                -5,
+                -2,
+                -5
+              ],
+              "got": [
+                4,
+                -4,
+                -5,
+                -2,
+                -5
+              ]
+            },
+            "measure_number": null,
+            "message": "entry in voice_3 does not match the subject intervals",
+            "note_ids": [],
+            "onset_q": "0",
+            "piece_id": "syni:007608",
+            "rule_id": "subject_entry_identity",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_3"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_002429.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_invalid_duration; violated timing_positive_duration",
+        "subject": "syni:002429",
+        "violations": [
+          {
+            "evidence": {},
+            "measure_number": null,
+            "message": "non-positive duration 0",
+            "note_ids": [
+              "req:011360:voice_1:17/2"
+            ],
+            "onset_q": "17/2",
+            "piece_id": "syni:002429",
+            "rule_id": "timing_positive_duration",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_004192.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation silence_a_voice; violated voice_participation",
+        "subject": "syni:004192",
+        "violations": [
+          {
+            "evidence": {
+              "share": 0.146
+            },
+            "measure_number": null,
+            "message": "voice_1 sounds for 15% of the fragment (minimum 20%)",
+            "note_ids": [],
+            "onset_q": "0",
+            "piece_id": "syni:004192",
+            "rule_id": "voice_participation",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_003725.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation exceed_voice_range; violated voice_range",
+        "subject": "syni:003725",
+        "violations": [
+          {
+            "evidence": {
+              "high": 96,
+              "low": 36,
+              "midi": 102
+            },
+            "measure_number": null,
+            "message": "voice_1 midi 102 outside [36, 96]",
+            "note_ids": [
+              "req:010481:voice_1:6"
+            ],
+            "onset_q": "6",
+            "piece_id": "syni:003725",
+            "rule_id": "voice_range",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_000364.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation alter_answer_transformation; violated answer_transformation",
+        "subject": "syni:000364",
+        "violations": [
+          {
+            "evidence": {
+              "expected": [
+                -5,
+                -4,
+                2,
+                2,
+                -2
+              ],
+              "got": [
+                -5,
+                -1,
+                -1,
+                2,
+                -2
+              ]
+            },
+            "measure_number": null,
+            "message": "answer in voice_1 is neither a real nor a tonal transformation of the subject",
+            "note_ids": [],
+            "onset_q": "4",
+            "piece_id": "syni:000364",
+            "rule_id": "answer_transformation",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_001723.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation break_cadence_target; violated cadence_target_completion",
+        "subject": "syni:001723",
+        "violations": [
+          {
+            "evidence": {
+              "bass_pc": 0
+            },
+            "measure_number": null,
+            "message": "scheduled cadence at 8 does not arrive on pitch class 10",
+            "note_ids": [],
+            "onset_q": "8",
+            "piece_id": "syni:001723",
+            "rule_id": "cadence_target_completion",
+            "severity": "hard",
+            "voice_ids": []
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_002355.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_parallel_fifth; violated parallel_fifths",
+        "subject": "syni:002355",
+        "violations": [
+          {
+            "evidence": {
+              "from_interval": 7,
+              "to_interval": 7
+            },
+            "measure_number": null,
+            "message": "parallel perfect fifths between voice_3 and voice_4 at 1/4",
+            "note_ids": [
+              "req:001512:voice_3:0",
+              "req:001512:voice_4:0",
+              "req:001512:voice_3:1/4",
+              "req:001512:voice_4:1/4"
+            ],
+            "onset_q": "1/4",
+            "piece_id": "syni:002355",
+            "rule_id": "parallel_fifths",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_3",
+              "voice_4"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_006389.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_parallel_octave; violated parallel_octaves",
+        "subject": "syni:006389",
+        "violations": [
+          {
+            "evidence": {
+              "from_interval": 0,
+              "to_interval": 0
+            },
+            "measure_number": null,
+            "message": "parallel octaves or unisons between voice_2 and voice_3 at 1/4",
+            "note_ids": [
+              "req:017995:voice_2:0",
+              "req:017995:voice_3:0",
+              "req:017995:voice_2:1/4",
+              "req:017995:voice_3:1/4"
+            ],
+            "onset_q": "1/4",
+            "piece_id": "syni:006389",
+            "rule_id": "parallel_octaves",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_2",
+              "voice_3"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_009872.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation alter_required_subject_note; violated subject_entry_identity",
+        "subject": "syni:009872",
+        "violations": [
+          {
+            "evidence": {
+              "expected": [
+                -4,
+                -1,
+                5,
+                5,
+                2
+              ],
+              "got": [
+                -3,
+                -2,
+                5,
+                5,
+                2
+              ]
+            },
+            "measure_number": null,
+            "message": "entry in voice_2 does not match the subject intervals",
+            "note_ids": [],
+            "onset_q": "0",
+            "piece_id": "syni:009872",
+            "rule_id": "subject_entry_identity",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_2"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_009959.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation create_invalid_duration; violated timing_positive_duration",
+        "subject": "syni:009959",
+        "violations": [
+          {
+            "evidence": {},
+            "measure_number": null,
+            "message": "non-positive duration 0",
+            "note_ids": [
+              "req:009182:voice_1:9/2"
+            ],
+            "onset_q": "9/2",
+            "piece_id": "syni:009959",
+            "rule_id": "timing_positive_duration",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_009142.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation silence_a_voice; violated voice_participation",
+        "subject": "syni:009142",
+        "violations": [
+          {
+            "evidence": {
+              "share": 0.156
+            },
+            "measure_number": null,
+            "message": "voice_1 sounds for 16% of the fragment (minimum 20%)",
+            "note_ids": [],
+            "onset_q": "0",
+            "piece_id": "syni:009142",
+            "rule_id": "voice_participation",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_009183.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation exceed_voice_range; violated voice_range",
+        "subject": "syni:009183",
+        "violations": [
+          {
+            "evidence": {
+              "high": 96,
+              "low": 36,
+              "midi": 102
+            },
+            "measure_number": null,
+            "message": "voice_1 midi 102 outside [36, 96]",
+            "note_ids": [
+              "req:008762:voice_1:7/2"
+            ],
+            "onset_q": "7/2",
+            "piece_id": "syni:009183",
+            "rule_id": "voice_range",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_004390.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation alter_answer_transformation; violated answer_transformation",
+        "subject": "syni:004390",
+        "violations": [
+          {
+            "evidence": {
+              "expected": [
+                -4,
+                4,
+                -5,
+                -5,
+                1
+              ],
+              "got": [
+                -4,
+                7,
+                -8,
+                -5,
+                1
+              ]
+            },
+            "measure_number": null,
+            "message": "answer in voice_1 is neither a real nor a tonal transformation of the subject",
+            "note_ids": [],
+            "onset_q": "6",
+            "piece_id": "syni:004390",
+            "rule_id": "answer_transformation",
+            "severity": "hard",
+            "voice_ids": [
+              "voice_1"
+            ]
+          }
+        ]
+      },
+      {
+        "file": "visual_qa/invalid_syni_000547.svg",
+        "inspected": false,
+        "inspection_note": null,
+        "inspector": null,
+        "kind": "controlled_negatives",
+        "note": "mutation break_cadence_target; violated cadence_target_completion",
+        "subject": "syni:000547",
+        "violations": [
+          {
+            "evidence": {
+              "bass_pc": 5
+            },
+            "measure_number": null,
+            "message": "scheduled cadence at 9 does not arrive on pitch class 3",
+            "note_ids": [],
+            "onset_q": "9",
+            "piece_id": "syni:000547",
+            "rule_id": "cadence_target_completion",
+            "severity": "hard",
+            "voice_ids": []
+          }
+        ]
+      }
+    ],
+    "failures": [],
+    "inspected_count": 0,
+    "note": "Renders are produced and recorded here. `inspected` is left false for every artefact: the pipeline does not claim a human looked at them (\u00a71, \u00a727). Fill it in as they are reviewed.",
+    "quotas": {
+      "bcfb_chorales": 20,
+      "controlled_negatives": 50,
+      "synthetic_valid": 50,
+      "wtc_fugues_or_excerpts": 20
+    },
+    "rendered_by_kind": {
+      "anomalous_normalization": 154,
+      "bcfb_chorales": 20,
+      "controlled_negatives": 50,
+      "synthetic_valid": 50,
+      "wtc_fugues_or_excerpts": 20
+    },
+    "seed": 20260728,
+    "stage": "visual_qa",
+    "total_rendered": 294
+  }
+}

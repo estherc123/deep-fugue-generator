@@ -1,0 +1,42 @@
+# Complete-work dataset splitting and deduplication (Spec §12, §13).
+splits_version: "1.0.0"
+
+# Default seed. Overridable per run with `fugue-data split --seed N`; whatever is
+# used is recorded on every row of the split manifest (§13.4).
+split_seed: 20260728
+
+# --- Deduplication (§12) -------------------------------------------------- #
+# All six levels are computed and reported. `blocking` levels additionally fuse
+# their members into one split unit, so the group cannot straddle a split.
+#
+# §13.5 requires that neither exact nor transposition-normalized duplicates cross
+# splits, so those two levels block. Per-voice-melody and rhythm-only matches are
+# similarity signals, not identity -- two different chorales in the same meter can
+# share a rhythm hash -- so they are reported for the build report but do not by
+# themselves fuse works.
+dedup:
+  blocking_levels:
+    - source_checksum
+    - canonical_event_hash
+    - transposition_melodic_hash
+    - work_identity
+  reported_levels:
+    - per_voice_melody_hash
+    - rhythm_hash
+
+# --- Split targets (§13.2, §13.3) ----------------------------------------- #
+# Targets count *unique works* (work_group_id), not encoded variant files: the
+# four BCFB a/b variant pairs are one work each, and a duplicate group spanning
+# two work ids contributes both works to whichever split it lands in.
+corpora:
+  wtc:
+    description: Well-Tempered Clavier fugues, Books I and II
+    targets: {train: 36, validation: 6, test: 6}
+    # §13.2: stratify approximately by book, mode, voice count, meter, length.
+    stratify_by: [book, mode, voice_count, meter, length_bucket]
+  bcfb:
+    description: Bach Chorales Figured Bass, unique chorales
+    targets: {train: 111, validation: 14, test: 14}
+    # §13.3 asks only that alternate versions be grouped, which dedup guarantees.
+    # Chorales are uniformly 4-voice, so voice count carries no signal here.
+    stratify_by: [mode, meter, length_bucket]

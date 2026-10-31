@@ -1,0 +1,136 @@
+{
+  "annotations": {
+    "bach_wtc1_fugue_02": {
+      "count": 30,
+      "counts_by_type": {
+        "cadence": 4,
+        "countersubject": 12,
+        "episode": 4,
+        "other": 1,
+        "pedal": 1,
+        "subject": 8
+      },
+      "mean_voice_note_coverage": 0.973106
+    }
+  },
+  "note": "Pinned canonical outputs (\u00a725.3). A change here means the normalizer or schema changed: it requires a documented migration, a version bump, and review of the affected exports.",
+  "pieces": {
+    "bach_chorale_bwv10.07a": {
+      "core_event_hash": "20961e460eee9893293fb0c02ecf685168ffeeb70ade1075e34e3a1e344e6975",
+      "measure_count": 22,
+      "note_count": 212,
+      "quarter_length_total": "88",
+      "rhythm_hash": "8bcf55474d2717463c5b71a36300c985a48ee077e0907d8af45b8310bae8394b",
+      "transposition_melodic_hash": "f900f370eace35d6bbaff938d276e23e2b5285ca143fdc4d1c2861760a7840bd",
+      "voice_count": 4,
+      "work_group_id": "BWV10.07"
+    },
+    "bach_chorale_bwv10.07b": {
+      "core_event_hash": "4f9edc4fd2e5590b2678a4dc6cfdb00b9aff2a7014d519b779aaf1e0ba1f401e",
+      "measure_count": 22,
+      "note_count": 212,
+      "quarter_length_total": "88",
+      "rhythm_hash": "8bcf55474d2717463c5b71a36300c985a48ee077e0907d8af45b8310bae8394b",
+      "transposition_melodic_hash": "c5574666ee057dc2b7f08e685f078134da7ece5cfb539fdbd4a0f4e58b00a9e8",
+      "voice_count": 4,
+      "work_group_id": "BWV10.07"
+    },
+    "bach_chorale_bwv117.04": {
+      "core_event_hash": "c89f406e956487f961a5db6d54450571e1fd3f56c37cbfd60fcc5b9c94ced006",
+      "measure_count": 17,
+      "note_count": 290,
+      "quarter_length_total": "56",
+      "rhythm_hash": "2702003f360c62a6464fb27ecf805f0524561b6b724a385eb96c23bf3c5f9e07",
+      "transposition_melodic_hash": "139f6d82f4a0969485b4ef13481d9fb14bf810223b4cd515b742d51015beed88",
+      "voice_count": 4,
+      "work_group_id": "BWV117.04"
+    },
+    "bach_chorale_bwv125.06": {
+      "core_event_hash": "e54d4321752fa8bed4dca21b39928b27e44cb2060107146a36565494ecf5c41b",
+      "measure_count": 13,
+      "note_count": 215,
+      "quarter_length_total": "48",
+      "rhythm_hash": "7af9552fb71f2c74e6e759a627dc0686f97f1522abe5c79f2bc4a0066118ba40",
+      "transposition_melodic_hash": "92735c3174081927c202d420ddc56ecdff0c16a5bf3da515d2dc7d30d4aa0efa",
+      "voice_count": 4,
+      "work_group_id": "BWV125.06"
+    },
+    "bach_wtc1_fugue_01": {
+      "core_event_hash": "d74c06a382ae17a7896ca4197ff7f150dc89d594d08998fd0e9079fbc8425b3d",
+      "measure_count": 27,
+      "note_count": 792,
+      "quarter_length_total": "108",
+      "rhythm_hash": "5a44cc11c3da9584509b7c7034dd5d55d720e2ba3c96952ee6ab7e7670e73fd0",
+      "transposition_melodic_hash": "1b2249982eda6de15d1b61bb996d2df346287ec4d12d446baefa57c6d808f94c",
+      "voice_count": 4,
+      "work_group_id": "BWV846"
+    },
+    "bach_wtc1_fugue_02": {
+      "core_event_hash": "b3afb6189ec42283688dc15f4ff9ca3eab5b4b3f20efc6df27bac49ccdef6b25",
+      "measure_count": 31,
+      "note_count": 770,
+      "quarter_length_total": "124",
+      "rhythm_hash": "e68e19ae6626b49aaf6fec8cb20a6e092316c008abd5d23a592b7def50d95b0d",
+      "transposition_melodic_hash": "ad73784dead406333c57947f23d0e38615a160895d990bb502d869aa7e1c82fa",
+      "voice_count": 3,
+      "work_group_id": "BWV847"
+    },
+    "bach_wtc1_fugue_04": {
+      "core_event_hash": "d92fc59efe1c878f86aabdd0cc29066a61af99dfa545b24fdf7a508ed0c6f61e",
+      "measure_count": 115,
+      "note_count": 1429,
+      "quarter_length_total": "460",
+      "rhythm_hash": "06f37a09ae9fbd8cc5f2fe1ed279258d3fbc55453921891eeb2a6a37e96c0df3",
+      "transposition_melodic_hash": "d3f17f1b8273c55f42023c9a136b174a0ac48efbd60d0ab0786eab6a63e59ff3",
+      "voice_count": 5,
+      "work_group_id": "BWV849"
+    },
+    "bach_wtc1_fugue_10": {
+      "core_event_hash": "f710a6d40f69cb44b7893fffc0c9be4a6b57776b76819efa31dced39e6f1b40f",
+      "measure_count": 42,
+      "note_count": 825,
+      "quarter_length_total": "247/2",
+      "rhythm_hash": "577d6434e7b6d9f92f0fe641f4b9169d07fc9efb9dc53ac70d42a0878b86b4ce",
+      "transposition_melodic_hash": "9380848a9c5eb24c00b0b49feb1f0179c95d1c61614ba02f80aeb3bb8d2f9937",
+      "voice_count": 2,
+      "work_group_id": "BWV855"
+    },
+    "bach_wtc1_fugue_22": {
+      "core_event_hash": "bf228d28a99e385f5333d94346f89d6ccd4d007148db4eb1d5c4f4d4664e7f9b",
+      "measure_count": 75,
+      "note_count": 813,
+      "quarter_length_total": "300",
+      "rhythm_hash": "a050c33dc67041c62fd6887f6cad05ef928d1149e108c7ac18f54533b27c5c0b",
+      "transposition_melodic_hash": "2c61d3f7f3f11de6ad584d41465a2a39ca9a126fbea8f976498e8b387cd59e19",
+      "voice_count": 5,
+      "work_group_id": "BWV867"
+    },
+    "bach_wtc2_fugue_01": {
+      "core_event_hash": "0abb1f50ba7c88a4bfedf0203b1c3414bfffb0e6c9e38316e10ca0f73ee86530",
+      "measure_count": 83,
+      "note_count": 1072,
+      "quarter_length_total": "166",
+      "rhythm_hash": "e41d2a1f94f0e932a50a98f9e0b3df031725ef1750dc1cc120680045b4496ad2",
+      "transposition_melodic_hash": "2cfb411f7fb710e238507d5c1627bc88996e962f8c5e440cb77871c6943654e1",
+      "voice_count": 3,
+      "work_group_id": "BWV870"
+    },
+    "bach_wtc2_fugue_24": {
+      "core_event_hash": "b728743d33874941ef80053db1228c15489a55c234b279186847f2d33e915ea9",
+      "measure_count": 101,
+      "note_count": 1036,
+      "quarter_length_total": "301/2",
+      "rhythm_hash": "c76a1ce704041db3b3d20e492ec8a339522f21854937f20480e2dd7dd9956730",
+      "transposition_melodic_hash": "84699928547dbb48a1034287d6cc89e19c68c687fe64cc95c289753ccb769c1c",
+      "voice_count": 3,
+      "work_group_id": "BWV893"
+    }
+  },
+  "ruleset_hashes": {
+    "bach_empirical": "459bd440397d1e8c35df09400e1e7a3508199e4b45b993699b9498b31adab8bd",
+    "high_baroque_conservative": "1c1e465f9cd6c8f8631b3d5de5d8676d1a5bd58079bc15b7d7b33b0e02ea0ae6",
+    "species_strict": "45583f843710d4a7c0038447294a0497ee2fe036f9694588f038dae8e573aed5"
+  },
+  "schema_version": "1.0.0",
+  "vocabulary_hash": "af1e20acc040c27418673a39b0f6a6353527cbf0999b3056d8771a26310e61ad"
+}

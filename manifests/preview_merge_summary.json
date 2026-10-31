@@ -1,0 +1,19 @@
+{
+  "candidates_added": 112,
+  "human_labels_carried": 140,
+  "label_conflicts_skipped": 0,
+  "label_distribution": {
+    "A": 50,
+    "B": 60,
+    "both_poor": 19,
+    "tie": 11
+  },
+  "note": "Preview candidates were produced by the same solver, validator and ruleset as the main run, so they are ordinary corpus members; `provenance: preview_batch` records where they came from. Labels are carried as human review because a person made them.",
+  "pairs_added": 140,
+  "preview_pairs_reviewed": 140,
+  "preview_pairs_seen": 140,
+  "preview_root": "/tmp/preview",
+  "stage": "merge_preview",
+  "total_human_labelled": 140,
+  "total_pairs": 3290
+}

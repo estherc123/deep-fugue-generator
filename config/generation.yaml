@@ -1,0 +1,52 @@
+# Synthetic generation (Spec §16, §17, §18).
+generation_version: "1.0.0"
+generator_version: "1.0.0"
+validator_version: "1.0.0"
+
+valid:
+  target_count: 10000          # §16.1
+  rule_profile: high_baroque_conservative
+  seed: 20260728
+  solver_workers: 8
+  max_solve_time_s: 5.0
+
+  # §16.3 required coverage. The request builder walks this grid so the accepted
+  # set is balanced by construction rather than by luck.
+  coverage:
+    voice_count: [2, 3, 4]
+    mode: [major, minor]
+    tonic_pc: [0, 2, 3, 5, 7, 9, 10]        # several keys
+    meter: ["4/4", "3/4", "6/8"]
+    length_bars: [2, 3, 4]
+    subject_length_notes: [4, 5, 6]
+    entry_order: [top_down, bottom_up, middle_out]
+    subject_voice: [upper, middle, bass]
+    rhythmic_density: [sparse, medium, dense]
+    cadence_target: [tonic, none]
+    countersubject: [true, false]
+    register: [low, middle, high]
+
+invalid:
+  target_count: 10000          # §17.1
+  seed: 20260729
+  # §17.4: no single rule may exceed this share of the invalid set.
+  max_share_per_rule: 0.15
+  mutators:
+    - create_parallel_fifth
+    - create_parallel_octave
+    - break_leading_tone_resolution
+    - create_unresolved_suspension
+    - alter_required_subject_note
+    - exceed_voice_range
+    - create_illegal_voice_overlap
+    - create_prohibited_melodic_leap
+    - break_cadence_target
+    - create_invalid_duration      # notation-only test subset
+
+preferences:
+  target_pairs: 3000             # §18.1 asks for 2,000-5,000
+  candidates_per_prompt: 6       # §18.3 asks for 4-8
+  # Only the most informative comparisons per prompt are kept, so the
+  # budget spreads across subjects instead of re-judging a few.
+  max_pairs_per_prompt: 5
+  seed: 20260730

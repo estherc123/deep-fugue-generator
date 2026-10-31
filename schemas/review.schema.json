@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://deepfugue/schemas/review.schema.json",
+  "title": "Excerpt Review Record",
+  "description": "One proposed 2-8 bar real-Bach excerpt and its human review state (Spec Section 14.4).",
+  "type": "object",
+  "required": [
+    "excerpt_id",
+    "piece_id",
+    "start_onset_q",
+    "end_onset_q",
+    "start_measure",
+    "end_measure",
+    "proposal_reasons",
+    "review_status"
+  ],
+  "properties": {
+    "excerpt_id": {"type": "string"},
+    "piece_id": {"type": "string"},
+    "work_group_id": {"type": ["string", "null"]},
+    "split": {"type": ["string", "null"], "enum": ["train", "validation", "test", null]},
+    "start_onset_q": {"type": "string", "pattern": "^-?\\d+(/\\d+)?$"},
+    "end_onset_q": {"type": "string", "pattern": "^-?\\d+(/\\d+)?$"},
+    "start_measure": {"type": ["string", "null"]},
+    "end_measure": {"type": ["string", "null"]},
+    "bars": {"type": ["integer", "null"]},
+    "voice_count": {"type": ["integer", "null"]},
+    "note_count": {"type": ["integer", "null"]},
+    "clipped_boundary_notes": {"type": ["integer", "null"],
+      "description": "Notes truncated by the window end; declared so a clipped release is visible to the reviewer."},
+    "proposal_reasons": {"type": "array", "items": {"type": "string"}},
+    "render_path": {"type": ["string", "null"]},
+    "midi_preview_path": {"type": ["string", "null"]},
+    "review_status": {
+      "type": "string",
+      "enum": ["pending", "approved", "rejected", "correction_required"]
+    },
+    "review_tags": {"type": "array", "items": {"type": "string"}},
+    "review_comment": {"type": ["string", "null"]},
+    "reviewer": {"type": ["string", "null"]},
+    "reviewed_at_utc": {"type": ["string", "null"]},
+    "auto_rejected": {"type": "boolean"},
+    "auto_rejection_reasons": {"type": "array", "items": {"type": "string"}},
+    "source_canonical_event_hash": {"type": ["string", "null"]},
+    "excerpts_version": {"type": ["string", "null"]}
+  }
+}

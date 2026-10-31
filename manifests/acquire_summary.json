@@ -1,0 +1,56 @@
+{
+  "expected": {
+    "algomus_wtc1_coverage": 24,
+    "bcfb_encoded_variants": 143,
+    "bcfb_unique_chorales": 139,
+    "wtc1_fugues": 24,
+    "wtc2_fugues": 24
+  },
+  "failures": [],
+  "summaries": {
+    "algomus": {
+      "computed_annotation_fugues": 5,
+      "dez_files": 60,
+      "files_by_format": {
+        "csv": 1,
+        "json": 124,
+        "other": 47
+      },
+      "ref_annotation_fugues": 23,
+      "source_name": "algomus",
+      "total_files": 172,
+      "wtc1_fugues_missing_ref": [
+        "bach_wtc1_fugue_11"
+      ],
+      "wtc1_fugues_with_any_annotation": 23
+    },
+    "bcfb": {
+      "canonical_variants": 143,
+      "files_by_format": {
+        "csv": 1,
+        "kern": 146,
+        "mei": 146,
+        "musicxml": 251,
+        "other": 213
+      },
+      "kern_secondary_files": 143,
+      "mei_secondary_files": 143,
+      "musicxml_master_files": 143,
+      "retained_non_default_files": 614,
+      "source_name": "bcfb",
+      "total_files": 757,
+      "unique_chorales": 139
+    },
+    "humdrum-wtc": {
+      "files_by_format": {
+        "kern": 96,
+        "other": 4
+      },
+      "preludes": 48,
+      "source_name": "humdrum-wtc",
+      "total_files": 100,
+      "wtc1_fugues": 24,
+      "wtc2_fugues": 24
+    }
+  }
+}

@@ -1,0 +1,46 @@
+# Real-Bach excerpt proposal and human review (Spec §14).
+excerpts_version: "1.0.0"
+
+proposal:
+  target_count: 300          # §14.6 requires at least 200 candidates
+  min_bars: 2                # §14.1: 2-8 bar candidates
+  max_bars: 8
+  seed: 20260728
+
+  # §14.2 candidate triggers. Annotation-driven triggers run on the 23 annotated
+  # WTC I fugues; the derived ones (stretto, texture change, sequence) are computed
+  # from the canonical score and so also reach WTC II and the chorales.
+  triggers:
+    subject_entry: true          # complete subject/answer entries
+    countersubject_combination: true
+    exposition_boundary: true
+    cadence_arrival: true
+    pedal_point: true
+    short_episode: true
+    stretto: true                # overlapping subject entries in different voices
+    texture_change: true         # clean change in the number of sounding voices
+    sequence: true               # repeated melodic pattern at a shifted pitch level
+  # Cap per trigger so one plentiful trigger cannot dominate the pool.
+  max_per_trigger_per_piece: 8
+
+# §14.3 automatic rejection.
+rejection:
+  reject_tied_boundary: true          # begins or ends inside a tied note,
+                                      # after snapping outward has been tried
+  reject_cut_subject: true            # cuts through an annotated subject entry
+  reject_unresolved_suspension: true  # ends on a dissonance that never resolves
+  reject_parser_warnings: true        # piece carries unresolved parser warnings
+  reject_missing_measures: true
+  reject_voice_identity_loss: true    # fewer than `min_sounding_voices` lines sound
+  min_sounding_voices: 2              # a resting voice is normal counterpoint, not loss
+  min_notes: 8                        # too sparse to judge musically
+
+render:
+  midi: true
+  piano_roll_svg: true
+
+review:
+  # Tags offered in the review UI (§14.5).
+  tags: [good_subject_entry, clean_cadence, strong_counterpoint, awkward_boundary,
+         ambiguous_analysis, encoding_issue, too_sparse, excellent_example]
+  reviewers: []

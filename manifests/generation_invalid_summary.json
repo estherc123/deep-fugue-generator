@@ -1,0 +1,80 @@
+{
+  "accepted": 10000,
+  "attempts": 21591,
+  "elapsed_s": 319.7,
+  "failures": [],
+  "max_share_per_rule": 0.15,
+  "mutators_retired": [
+    "create_voice_polyphony"
+  ],
+  "mutators_skipped_not_hard_in_profile": {
+    "break_leading_tone_resolution": "soft",
+    "create_illegal_voice_overlap": "soft",
+    "create_prohibited_melodic_leap": "soft",
+    "create_unresolved_suspension": "soft"
+  },
+  "mutators_usable": [
+    "alter_answer_transformation",
+    "alter_required_subject_note",
+    "break_cadence_target",
+    "create_invalid_duration",
+    "create_parallel_fifth",
+    "create_parallel_octave",
+    "create_voice_polyphony",
+    "exceed_voice_range",
+    "silence_a_voice"
+  ],
+  "per_mutator_counts": {
+    "alter_answer_transformation": 1250,
+    "alter_required_subject_note": 1250,
+    "break_cadence_target": 1249,
+    "create_invalid_duration": 1249,
+    "create_parallel_fifth": 1249,
+    "create_parallel_octave": 1249,
+    "create_voice_polyphony": 4,
+    "exceed_voice_range": 1250,
+    "silence_a_voice": 1250
+  },
+  "per_rule_counts": {
+    "answer_transformation": 1250,
+    "cadence_target_completion": 1249,
+    "parallel_fifths": 1249,
+    "parallel_octaves": 1249,
+    "subject_entry_identity": 1250,
+    "timing_positive_duration": 1249,
+    "voice_monophonic": 4,
+    "voice_participation": 1250,
+    "voice_range": 1250
+  },
+  "per_rule_share": {
+    "answer_transformation": 0.125,
+    "cadence_target_completion": 0.1249,
+    "parallel_fifths": 0.1249,
+    "parallel_octaves": 0.1249,
+    "subject_entry_identity": 0.125,
+    "timing_positive_duration": 0.1249,
+    "voice_monophonic": 0.0004,
+    "voice_participation": 0.125,
+    "voice_range": 0.125
+  },
+  "reject_reasons": {
+    "duplicate": 751,
+    "multiple_intended": 83,
+    "mutation_not_applicable": 3540,
+    "no_intended_violation": 590,
+    "schema": 2622,
+    "unintended:answer_transformation": 619,
+    "unintended:parallel_fifths": 99,
+    "unintended:parallel_octaves": 65,
+    "unintended:subject_entry_identity": 3222
+  },
+  "rule_profile": "high_baroque_conservative",
+  "rules_over_share": {},
+  "split_counts": {
+    "test": 1023,
+    "train": 7927,
+    "validation": 1050
+  },
+  "stage": "generate_invalid",
+  "target": 10000
+}

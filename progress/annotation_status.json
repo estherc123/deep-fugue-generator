@@ -1,0 +1,64 @@
+{
+  "accepted_by_type": {
+    "cadence": 102,
+    "countersubject": 174,
+    "episode": 4,
+    "other": 1,
+    "pedal": 19,
+    "subject": 368
+  },
+  "annotation_map_version": "1.0.0",
+  "annotation_schema_version": "1.0.0",
+  "cadence_types": {
+    "DC": 4,
+    "HC": 7,
+    "IAC": 1,
+    "PAC": 66,
+    "rIAC": 24
+  },
+  "derived_entry_function": {
+    "answer": 86,
+    "entries": 368,
+    "subject": 130,
+    "undetermined": 152
+  },
+  "fugues_aligned": 23,
+  "fugues_without_annotations": [
+    "bach_wtc1_fugue_11"
+  ],
+  "generated_at_utc": "2026-08-30T06:53:23Z",
+  "include_computed": false,
+  "overrides": {
+    "ref_fugue_coverage": {
+      "accepted_value": 23,
+      "reason": "At pinned Algomus commit a1801b5b, fugue 11 (BWV 856) ships only an audio-synchro JSON, no -ref.dez structural analysis. Same documented upstream gap already recorded for acquisition in config/pipeline.yaml.",
+      "spec_expected": 24
+    }
+  },
+  "source": "algomus",
+  "spec_expected_fugues": 24,
+  "stage": "annotations",
+  "totals": {
+    "accepted": 668,
+    "alternative_groups": 3,
+    "annotations": 804,
+    "rejected_candidates": 136,
+    "warnings": 2
+  },
+  "transformations": {
+    "augmented": 3,
+    "consolidated": 1,
+    "fragmented": 4,
+    "in_episode": 4,
+    "incomplete": 46,
+    "inverted": 43,
+    "segment_a": 1,
+    "segment_b": 1,
+    "varied": 28
+  },
+  "voice_mapping": {
+    "corpus_mean_voice_note_coverage": 0.967,
+    "min_coverage_gate": 0.5,
+    "strategy": "staff_index_top_down"
+  }
+}

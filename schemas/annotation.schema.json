@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://deepfugue/schemas/annotation.schema.json",
+  "title": "Piece Annotation Set",
+  "description": "Structural annotations aligned to one canonical piece (Spec Section 11.2). Musical time is exact rational strings in quarter-note units on the same time base as the canonical score.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "piece_id",
+    "source_name",
+    "annotation_map_version",
+    "annotations",
+    "alignment"
+  ],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "piece_id": {"type": "string"},
+    "work_group_id": {"type": ["string", "null"]},
+    "source_name": {"type": "string"},
+    "annotation_map_version": {"type": "string"},
+    "source_file_ids": {"type": "array", "items": {"type": "string"}},
+    "annotations": {"type": "array", "items": {"$ref": "#/definitions/annotation"}},
+    "alignment": {
+      "type": "object",
+      "description": "Per-piece alignment provenance and the measured quality of the staff-to-voice mapping.",
+      "required": ["voice_mapping_strategy", "piece_quarter_length", "voice_count"],
+      "properties": {
+        "voice_mapping_strategy": {"type": "string"},
+        "piece_quarter_length": {"$ref": "#/definitions/rational"},
+        "voice_count": {"type": "integer", "minimum": 1},
+        "mean_voice_note_coverage": {"type": ["number", "null"]},
+        "min_voice_note_coverage": {"type": ["number", "null"]},
+        "counts_by_type": {"type": "object"},
+        "counts_by_annotator": {"type": "object"},
+        "rejected_candidate_count": {"type": "integer", "minimum": 0},
+        "alternative_group_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {"type": "string"},
+          "message": {"type": "string"},
+          "annotation_id": {"type": ["string", "null"]}
+        }
+      }
+    }
+  },
+  "definitions": {
+    "rational": {
+      "type": "string",
+      "description": "Exact rational in quarter-note units, e.g. \"3/8\" or \"0\".",
+      "pattern": "^-?\\d+(/\\d+)?$"
+    },
+    "annotation": {
+      "type": "object",
+      "required": [
+        "annotation_id",
+        "piece_id",
+        "type",
+        "onset_q",
+        "source_name",
+        "source_reference"
+      ],
+      "properties": {
+        "annotation_id": {"type": "string"},
+        "piece_id": {"type": "string"},
+        "type": {
+          "type": "string",
+          "enum": ["subject", "answer", "countersubject", "cadence", "pedal", "episode", "other"]
+        },
+        "voice_id": {"type": ["string", "null"]},
+        "onset_q": {"$ref": "#/definitions/rational"},
+        "duration_q": {
+          "description": "Null for point events such as cadence arrivals; otherwise strictly positive.",
+          "anyOf": [{"$ref": "#/definitions/rational"}, {"type": "null"}]
+        },
+        "measure_number_source": {"type": ["string", "null"]},
+        "position_source": {"type": ["string", "null"]},
+        "variant": {"type": ["string", "null"]},
+        "confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "analytical_alternative_group": {"type": ["string", "null"]},
+        "source_name": {"type": "string"},
+        "source_reference": {"type": "string"},
+
+        "annotator": {
+          "type": "string",
+          "description": "reference_human = the Algomus musicologists' analysis; computed_algorithmic = output of the Algomus analysis system, never human-verified (Spec Section 27).",
+          "enum": ["reference_human", "computed_algorithmic"]
+        },
+        "analytical_status": {
+          "type": "string",
+          "description": "accepted = the analyst asserts this label; rejected_candidate = a span the analyst explicitly considered and declined to count (Dezrann 'ignore').",
+          "enum": ["accepted", "rejected_candidate"]
+        },
+        "transformations": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Analytical transformations carried by the raw label: inverted, incomplete, augmented, varied, fragmented, ..."
+        },
+        "subject_index": {"type": ["integer", "null"]},
+        "countersubject_index": {"type": ["integer", "null"]},
+        "segment": {"type": ["string", "null"]},
+        "cadence_key_area": {"type": ["string", "null"]},
+        "cadence_type": {"type": ["string", "null"]},
+        "pedal_degree": {"type": ["string", "null"]},
+        "entry_function": {
+          "type": ["string", "null"],
+          "description": "DERIVED, not annotated: tonal function computed from transposition against the first entry. Never populated from source data.",
+          "enum": ["subject", "answer", null]
+        },
+        "entry_function_derivation": {"type": ["string", "null"]},
+        "entry_head_diatonic_interval": {"type": ["integer", "null"]},
+        "voice_note_coverage": {
+          "type": ["number", "null"],
+          "description": "Fraction of the annotation span in which the resolved voice actually sounds notes; the measured evidence that staff-to-voice alignment is correct."
+        },
+        "raw": {
+          "type": "object",
+          "description": "The source label preserved verbatim, so no vocabulary is lost in mapping.",
+          "required": ["type", "tag"],
+          "properties": {
+            "type": {"type": "string"},
+            "tag": {"type": ["string", "null"]},
+            "staff": {"type": ["string", "integer", "null"]},
+            "start": {"type": "number"},
+            "duration": {"type": ["number", "null"]},
+            "layers": {"type": ["array", "null"], "items": {"type": "string"}}
+          }
+        }
+      }
+    }
+  }
+}

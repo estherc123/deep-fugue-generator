@@ -1,0 +1,144 @@
+piece_id,work_group_id,voice_count,measure_count,notes,meter,key_fifths,quarter_length_total,excluded_parts,warnings,event_hash
+bach_chorale_bwv10.07a,BWV10.07,4,22,212,4/4,-2,88,Continuo,1,20961e460eee9893
+bach_chorale_bwv10.07b,BWV10.07,4,22,212,4/4,-2,88,Organ,1,4f9edc4fd2e5590b
+bach_chorale_bwv100.06,BWV100.06,4,39,292,4/4,1,125,Horn in G;Horn in G;Timpani;Flute;Oboe d'amore;Violin;Violin;Viola;Continuo,2,72f5263af8a31628
+bach_chorale_bwv102.07,BWV102.07,4,13,228,4/4,-2,48,Continuo,1,e958e9b389089a26
+bach_chorale_bwv104.06,BWV104.06,4,17,283,4/4,3,56,Continuo,1,490aeec715bcf155
+bach_chorale_bwv105.06,BWV105.06,4,24,310,4/4,-2,85,Violin;Violin;Viola;Continuo,1,a5d66c53b1cce8c2
+bach_chorale_bwv108.06,BWV108.06,4,14,288,4/4,2,52,Continuo,1,50a22f9adff925ae
+bach_chorale_bwv11.06,BWV11.06,4,30,359,3/4,2,90,Continuo,1,9aa4c7540a220b9f
+bach_chorale_bwv112.05,BWV112.05,4,17,295,4/4,1,56,Horn in G;Horn in G;Oboe d'amore;Oboe d'amore;Continuo,1,1a98c4b7732110f2
+bach_chorale_bwv113.01,BWV113.01,4,87,310,3/4,2,241,Oboe d'amore;Oboe d'amore;Violin;Violin;Viola;Continuo,1,51cb930ba62c348e
+bach_chorale_bwv113.08,BWV113.08,4,18,285,4/4,2,60,Continuo,1,c0e877302c7dcb33
+bach_chorale_bwv114.07,BWV114.07,4,17,291,4/4,-2,56,Continuo,1,aefba51f3d87d086
+bach_chorale_bwv115.06,BWV115.06,4,14,247,4/4,1,56,Continuo,1,7fcd072cdb984c51
+bach_chorale_bwv117.04,BWV117.04,4,17,290,4/4,1,56,,0,c89f406e956487f9
+bach_chorale_bwv117.09,BWV117.09,4,17,290,4/4,1,56,,0,c89f406e956487f9
+bach_chorale_bwv121.06,BWV121.06,4,17,279,4/4,2,65,Continuo,1,247014f9ee0db537
+bach_chorale_bwv124.06,BWV124.06,4,13,250,4/4,4,52,Continuo,1,7ffa8ee181d65b79
+bach_chorale_bwv125.06,BWV125.06,4,13,215,4/4,1,48,Continuo,1,e54d4321752fa8be
+bach_chorale_bwv126.06,BWV126.06,4,28,484,4/4,0,108,Continuo,1,5d978a9ab7524618
+bach_chorale_bwv128.05,BWV128.05,4,17,243,4/4,1,64,Horn in G;Horn in G;Continuo,1,18bd859df78a23ab
+bach_chorale_bwv129.05,BWV129.05,4,34,267,4/4,2,221/2,B♭ Trumpet;B♭ Trumpet;B♭ Trumpet;Timpani;Flute;Oboe;Oboe;Violin;Violin;Viola;Continuo,1,af6519797bab43f2
+bach_chorale_bwv13.06,BWV13.06,4,13,206,4/4,-2,48,Continuo,1,ae791eb38e144105
+bach_chorale_bwv133.06,BWV133.06,4,19,239,4/4,2,64,Continuo,1,11acf6b000333238
+bach_chorale_bwv135.06,BWV135.06,4,19,278,4/4,0,64,Continuo,1,64b8286aabd2759c
+bach_chorale_bwv136.06,BWV136.06,4,13,195,4/4,2,48,Flute;Continuo,1,7588cda3dc89455d
+bach_chorale_bwv137.05,BWV137.05,4,13,144,3/4,0,39,C Trumpet;C Trumpet;C Trumpet;Timpani;Continuo,1,85dc2144f033ca4f
+bach_chorale_bwv139.06,BWV139.06,4,15,226,4/4,4,48,Continuo,1,30ae852c1b1cb045
+bach_chorale_bwv14.05,BWV14.05,4,15,310,4/4,-2,56,Continuo,1,407784703319e2b4
+bach_chorale_bwv140.07,BWV140.07,4,52,407,2/2,-3,208,Continuo,1,3c97243e3f11ba24
+bach_chorale_bwv145.05,BWV145.05,4,18,176,3/4,2,54,Continuo,1,d659c5cde97b99c2
+bach_chorale_bwv149.07,BWV149.07,4,29,508,4/4,0,105,C Trumpet;C Trumpet;C Trumpet;Timpani;Continuo,1,f194c346b31e0eb0
+bach_chorale_bwv153.01,BWV153.01,4,17,271,4/4,1,56,Continuo,1,e54baa35c9311550
+bach_chorale_bwv153.05,BWV153.05,4,19,242,4/4,0,64,Continuo,1,861c66555ce495ff
+bach_chorale_bwv153.09,BWV153.09,4,32,286,3/4,0,96,Continuo,1,28d26551f9976774
+bach_chorale_bwv154.03,BWV154.03,4,16,274,4/4,3,64,Continuo,1,0d327c1990c3583b
+bach_chorale_bwv157.05,BWV157.05,4,13,246,4/4,2,52,Continuo,1,921b5e2f0df4113d
+bach_chorale_bwv159.05,BWV159.05,4,16,283,4/4,-3,64,Continuo,1,a4e53dac53664378
+bach_chorale_bwv16.06,BWV16.06,4,19,256,4/4,0,64,Continuo,1,48a0fae1dbbe9d03
+bach_chorale_bwv161.06a,BWV161.06,4,19,285,4/4,0,64,Flute;Continuo,1,2588c13daeadf11c
+bach_chorale_bwv161.06b,BWV161.06,4,19,285,4/4,0,64,Flute;Continuo,1,75ff75b0303ef08c
+bach_chorale_bwv167.05,BWV167.05,4,70,589,3/4,1,191,C Trumpet;Oboe;Violin;Violin;Viola;Continuo,1,e289411f1197dde7
+bach_chorale_bwv168.06,BWV168.06,4,18,283,4/4,2,60,Continuo,1,1375c9ddd52a9764
+bach_chorale_bwv171.06,BWV171.06,4,49,546,4/4,2,160,B♭ Trumpet;B♭ Trumpet;B♭ Trumpet;Timpani;Continuo,1,07f1b792ca64b060
+bach_chorale_bwv172.06,BWV172.06,4,23,360,4/4,-1,80,Violin;Continuo,1,c66030d7e4b55dfc
+bach_chorale_bwv174.05,BWV174.05,4,28,495,4/4,2,100,Continuo,1,ea1e1f0aa5f1aac0
+bach_chorale_bwv176.06,BWV176.06,4,19,360,4/4,-2,72,Continuo,1,69070bb5a78b1fae
+bach_chorale_bwv177.05a,BWV177.05,4,20,354,4/4,-2,68,Continuo,1,780f4563027b0b97
+bach_chorale_bwv177.05b,BWV177.05,4,20,354,4/4,-2,68,Organ,1,780f4563027b0b97
+bach_chorale_bwv185.06,BWV185.06,4,20,336,4/4,-2,68,Violin;Continuo,1,66f0c7fd22691471
+bach_chorale_bwv187.07,BWV187.07,4,28,282,3/4,-2,84,Continuo,1,b0b0ec039b279a71
+bach_chorale_bwv19.07,BWV19.07,4,36,280,3/4,0,108,C Trumpet;C Trumpet;C Trumpet;Timpani,1,55470cc154855c63
+bach_chorale_bwv194.06,BWV194.06,4,17,298,4/4,-2,68,Oboe;Oboe;Oboe;Violin;Violin;Viola;Continuo,1,da0d54670c183d49
+bach_chorale_bwv195.06,BWV195.06,4,11,208,4/4,1,40,Horn in G;Horn in G;Timpani;Flute;Continuo,1,30cd775694e44bcc
+bach_chorale_bwv20.07,BWV20.07,4,19,293,4/4,-1,64,Continuo,1,5e10eb77fbcddd6e
+bach_chorale_bwv24.06,BWV24.06,4,27,307,4/4,-1,102,Clarino;Oboe;Violin;Violin;Viola;Continuo,1,ebf3030c85a2fccf
+bach_chorale_bwv244.03,BWV244.03,4,12,192,4/4,2,44,Continuo,1,b9c66c13e7a08ae5
+bach_chorale_bwv244.10,BWV244.10,4,13,221,4/4,-4,48,Continuo,1,e8f12247314084cc
+bach_chorale_bwv244.15,BWV244.15,4,19,258,4/4,4,64,Continuo,1,85549a25e07fa96f
+bach_chorale_bwv244.17,BWV244.17,4,9,168,4/4,0,32,Continuo,1,bf8fddba3b03a177
+bach_chorale_bwv244.25,BWV244.25,4,19,310,4/4,2,64,Continuo,1,ce0e4df65545cb22
+bach_chorale_bwv244.32,BWV244.32,4,12,208,4/4,-2,44,Continuo,1,e23f7f78e7dc3600
+bach_chorale_bwv244.37,BWV244.37,4,13,218,4/4,-1,48,Continuo,1,2ff312621d0e217c
+bach_chorale_bwv244.40,BWV244.40,4,16,310,4/4,3,64,Continuo,1,24ff1be5280ff88a
+bach_chorale_bwv244.44,BWV244.44,4,19,258,4/4,2,64,Continuo,1,8c44dbba86407df9
+bach_chorale_bwv244.46,BWV244.46,4,12,188,4/4,2,44,Continuo,1,9a3f5dbddd186e82
+bach_chorale_bwv244.54,BWV244.54,4,19,255,4/4,-1,64,Continuo,1,f51459c4bc3e2046
+bach_chorale_bwv244.62,BWV244.62,4,19,263,4/4,0,64,Continuo,1,6a8b9a9cda9555f2
+bach_chorale_bwv245.03,BWV245.03,4,12,188,4/4,-2,44,Continuo,1,8eb881d20f134a08
+bach_chorale_bwv245.05,BWV245.05,4,13,235,4/4,-1,48,Continuo,1,017f579c217a755d
+bach_chorale_bwv245.11,BWV245.11,4,26,412,4/4,3,96,Continuo,1,3905c5554903c927
+bach_chorale_bwv245.14,BWV245.14,4,16,256,4/4,3,64,Continuo,1,21d4825301e22947
+bach_chorale_bwv245.15,BWV245.15,4,17,251,4/4,0,68,Continuo,1,268450123a59da13
+bach_chorale_bwv245.17,BWV245.17,4,24,436,4/4,0,88,Continuo,1,14687b3631455c00
+bach_chorale_bwv245.22,BWV245.22,4,15,231,4/4,4,48,Continuo,1,9ceeadef710933e5
+bach_chorale_bwv245.26,BWV245.26,4,19,225,4/4,-3,64,Continuo,1,5e7d381555d08034
+bach_chorale_bwv245.28,BWV245.28,4,16,235,4/4,3,64,Continuo,1,70213d435ed7b8aa
+bach_chorale_bwv245.37,BWV245.37,4,17,250,4/4,-3,68,Continuo,1,993d0914bd2a4bd6
+bach_chorale_bwv245.40,BWV245.40,4,31,496,4/4,-3,112,Continuo,1,b90ea104f815f0a0
+bach_chorale_bwv248.05,BWV248.05,4,19,289,4/4,0,64,Continuo,1,03e45a80eec2a811
+bach_chorale_bwv248.09,BWV248.09,4,16,175,4/4,2,50,D Trumpet;D Trumpet;D Trumpet;Timpani;Continuo,1,fd846f55ae0a8bf1
+bach_chorale_bwv248.12,BWV248.12,4,19,321,4/4,1,64,Continuo,1,74036ef0e9a80f6c
+bach_chorale_bwv248.17,BWV248.17,4,9,168,4/4,0,32,Continuo,1,f17752f654d9ac3b
+bach_chorale_bwv248.23,BWV248.23,4,15,185,12/8,1,75,Flute;Flute;Oboe d'amore;Oboe d'amore;Oboe da caccia;Oboe da caccia;Violin;Violin;Viola;Continuo,1,a5099f110bea005d
+bach_chorale_bwv248.28,BWV248.28,4,11,216,4/4,2,40,Continuo,1,acc94e19447c8cce
+bach_chorale_bwv248.33,BWV248.33,4,13,210,4/4,1,52,Continuo,1,a8a80dceb594e7e4
+bach_chorale_bwv248.35,BWV248.35,4,12,236,4/4,3,44,Continuo,1,d69c8408b8b92da9
+bach_chorale_bwv248.42,BWV248.42,4,53,284,3/4,-1,146,Corno da caccia;Corno da caccia;Oboe;Oboe;Violin;Violin;Viola;Continuo,1,2cbb3b31dbbfd336
+bach_chorale_bwv248.46,BWV248.46,4,13,237,4/4,3,48,Continuo,1,b79340c571351710
+bach_chorale_bwv248.53,BWV248.53,4,12,253,4/4,3,48,Contrabass,1,4b7e0e41bfac7b3f
+bach_chorale_bwv248.59,BWV248.59,4,17,291,4/4,1,56,Contrabass,1,1afa8d152f769997
+bach_chorale_bwv248.64,BWV248.64,4,69,275,4/4,2,229,B♭ Trumpet;B♭ Trumpet;B♭ Trumpet;Timpani;Oboe;Oboe;Violin;Violin;Viola;Continuo,1,ee1e732c5d2ed5df
+bach_chorale_bwv250,BWV250,4,17,278,4/4,1,56,Horn in G;Horn in G;Continuo,1,f1dcd21962278637
+bach_chorale_bwv251,BWV251,4,17,305,4/4,1,56,Horn in G;Horn in G;Continuo,1,5cf3efad0ad1ac0b
+bach_chorale_bwv252,BWV252,4,19,276,4/4,1,64,Horn in G;Horn in G;Continuo,1,c1487f23a7bdcdb6
+bach_chorale_bwv26.06,BWV26.06,4,10,188,4/4,0,40,Contrabass,1,fe6092b4b8e4c20a
+bach_chorale_bwv29.08,BWV29.08,4,47,523,3/4,2,132,D Trumpet;D Trumpet;D Trumpet;Timpani;Continuo,1,d52d0a84955e5553
+bach_chorale_bwv3.06,BWV3.06,4,9,167,4/4,3,32,Continuo,1,c9b18233a2a705aa
+bach_chorale_bwv30.06,BWV30.06,4,19,316,4/4,3,76,Continuo,1,428b8f6710c43185
+bach_chorale_bwv31.09,BWV31.09,4,18,290,4/4,0,60,Tromba,1,778e1a08ecaaa4ce
+bach_chorale_bwv33.06,BWV33.06,4,25,416,4/4,0,88,Continuo,1,e10b528943eba251
+bach_chorale_bwv36.04,BWV36.04,4,23,350,4/4,2,80,Continuo,1,7099ea815326d193
+bach_chorale_bwv36.08,BWV36.08,4,8,150,4/4,2,32,Continuo,1,87290b50c8767534
+bach_chorale_bwv37.06,BWV37.06,4,18,308,4/4,3,68,Continuo,1,e1bc8d5f5cbf0278
+bach_chorale_bwv38.06a,BWV38.06,4,18,254,4/4,0,72,Continuo,1,e45c30e4bef25b02
+bach_chorale_bwv38.06b,BWV38.06,4,18,254,4/4,0,72,Contrabass,1,e45c30e4bef25b02
+bach_chorale_bwv40.03,BWV40.03,4,12,204,4/4,-1,44,Continuo,1,68f97a67ef73af22
+bach_chorale_bwv40.06,BWV40.06,4,16,250,4/4,-1,64,Continuo,1,180bdaf51aea199f
+bach_chorale_bwv42.07,BWV42.07,4,28,474,4/4,3,108,Continuo,1,354e91d84052dd05
+bach_chorale_bwv43.11,BWV43.11,4,30,261,3/4,1,90,Continuo,1,25574bc040710fbb
+bach_chorale_bwv447,BWV447,4,12,211,4/4,-1,45,Continuo,1,b8275cab73210605
+bach_chorale_bwv461,BWV461,4,38,379,3/4,-1,114,Continuo,1,5a3684c97b3e0744
+bach_chorale_bwv47.05,BWV47.05,4,11,181,4/4,-2,40,Continuo,1,b8338822db948047
+bach_chorale_bwv470,BWV470,4,16,290,4/4,-2,64,Continuo,1,bae47b20d026d379
+bach_chorale_bwv48.07,BWV48.07,4,18,280,4/4,-2,60,Continuo,1,63b8f74e92e7bdef
+bach_chorale_bwv481,BWV481,4,40,491,3/4,-1,120,Continuo,1,b895db2cb7e2918c
+bach_chorale_bwv488,BWV488,4,15,281,4/4,1,60,Continuo,1,3e6868a9b75ef366
+bach_chorale_bwv495,BWV495,4,11,183,4/4,-1,44,Continuo,1,e88c82dca769a829
+bach_chorale_bwv499,BWV499,4,14,233,4/4,-2,56,Continuo,1,ca70cf3f587dc5a6
+bach_chorale_bwv5.07,BWV5.07,4,13,198,4/4,-2,48,Contrabass,1,648b03520abba8fe
+bach_chorale_bwv506,BWV506,4,13,188,4/4,0,50,Continuo,1,333019fabeadf92e
+bach_chorale_bwv57.08,BWV57.08,4,18,213,3/4,-2,54,Continuo,1,64b6a4f9007b1ee4
+bach_chorale_bwv6.06,BWV6.06,4,9,164,4/4,-2,33,Continuo,1,3708ea377f2d81d6
+bach_chorale_bwv62.06,BWV62.06,4,8,148,4/4,2,32,Continuo,1,fda67988f78b7451
+bach_chorale_bwv64.08,BWV64.08,4,19,272,4/4,1,76,,0,23e2f3eb8cb3b1aa
+bach_chorale_bwv67.04,BWV67.04,4,19,173,3/4,4,54,Continuo,1,c6b1236d871a9946
+bach_chorale_bwv67.07,BWV67.07,4,16,190,4/4,3,52,Continuo,1,29a5eec02b269159
+bach_chorale_bwv7.07,BWV7.07,4,21,354,4/4,2,72,Continuo,1,f87c151bdd8ab92c
+bach_chorale_bwv70.07,BWV70.07,4,34,276,3/4,1,102,Continuo,1,82e1addc8a00164f
+bach_chorale_bwv72.06,BWV72.06,4,13,215,4/4,1,48,Continuo,1,e54d4321752fa8be
+bach_chorale_bwv73.05,BWV73.05,4,17,238,4/4,-2,64,Continuo,1,ad629b9a29ff2276
+bach_chorale_bwv74.08,BWV74.08,4,14,257,4/4,0,52,Continuo,1,4499adcfef8678d7
+bach_chorale_bwv76.07,BWV76.07,4,36,420,4/4,0,133,Baroque Trumpet in C;Oboe;Oboe;Viola;Contrabass,1,73219bd9325f4227
+bach_chorale_bwv78.07,BWV78.07,4,16,281,4/4,-2,64,Flute;Continuo,1,45a052e040d11643
+bach_chorale_bwv8.06,BWV8.06,4,20,297,4/4,4,80,Continuo,1,863aa8670da85b3d
+bach_chorale_bwv81.07,BWV81.07,4,19,283,4/4,1,76,Continuo,1,05d89ad7390645d6
+bach_chorale_bwv83.05,BWV83.05,4,13,203,4/4,0,48,Continuo,1,2c40b84470c553b4
+bach_chorale_bwv89.06,BWV89.06,4,13,192,4/4,-2,48,Continuo,1,e17f2d9a612719bf
+bach_chorale_bwv9.07,BWV9.07,4,17,293,4/4,4,56,Continuo,1,bb440ee8e37388c0
+bach_chorale_bwv91.06,BWV91.06,4,11,200,4/4,1,40,Horn in G;Horn in G;Timpani;Continuo,1,b68558c579749e82
+bach_chorale_bwv93.07,BWV93.07,4,18,220,4/4,-2,60,Continuo,1,ff6b1b857407e388
+bach_chorale_bwv94.08,BWV94.08,4,17,239,4/4,2,64,Continuo,1,52334737f0b17358
+bach_chorale_bwv96.06,BWV96.06,4,17,219,4/4,-1,56,Continuo,1,815029d4dd264407
+bach_chorale_bwv97.09,BWV97.09,4,13,222,4/4,-2,48,Violin;Violin;Viola;Continuo,1,361a4561004f6c24

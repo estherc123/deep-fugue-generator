@@ -1,0 +1,1171 @@
+{
+  "denominator_census": {
+    "4": 167,
+    "8": 22,
+    "12": 2
+  },
+  "failures": [],
+  "grid_unsupported": 0,
+  "grid_voice_collisions": 185,
+  "pieces_tokenized": 191,
+  "results": {
+    "grid_unsupported": [],
+    "roundtrip_failures": [],
+    "tokenized": [
+      {
+        "event_records": 212,
+        "grid_tokens": 2929,
+        "piece_id": "bach_chorale_bwv10.07a",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 212,
+        "grid_tokens": 2929,
+        "piece_id": "bach_chorale_bwv10.07b",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 292,
+        "grid_tokens": 4160,
+        "piece_id": "bach_chorale_bwv100.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 228,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv102.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 283,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv104.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 310,
+        "grid_tokens": 2830,
+        "piece_id": "bach_chorale_bwv105.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 288,
+        "grid_tokens": 1732,
+        "piece_id": "bach_chorale_bwv108.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 359,
+        "grid_tokens": 3003,
+        "piece_id": "bach_chorale_bwv11.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 295,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv112.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 310,
+        "grid_tokens": 8037,
+        "piece_id": "bach_chorale_bwv113.01",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 285,
+        "grid_tokens": 1998,
+        "piece_id": "bach_chorale_bwv113.08",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 291,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv114.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 247,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv115.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 290,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv117.04",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 290,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv117.09",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 279,
+        "grid_tokens": 2165,
+        "piece_id": "bach_chorale_bwv121.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 250,
+        "grid_tokens": 1732,
+        "piece_id": "bach_chorale_bwv124.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 215,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv125.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 484,
+        "grid_tokens": 3594,
+        "piece_id": "bach_chorale_bwv126.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 243,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv128.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 267,
+        "grid_tokens": 3678,
+        "piece_id": "bach_chorale_bwv129.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 206,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv13.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 239,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv133.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 278,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv135.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 195,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv136.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 144,
+        "grid_tokens": 1303,
+        "piece_id": "bach_chorale_bwv137.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 226,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv139.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 310,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv14.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 407,
+        "grid_tokens": 6815,
+        "piece_id": "bach_chorale_bwv140.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 176,
+        "grid_tokens": 1803,
+        "piece_id": "bach_chorale_bwv145.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 508,
+        "grid_tokens": 3495,
+        "piece_id": "bach_chorale_bwv149.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 271,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv153.01",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 242,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv153.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 286,
+        "grid_tokens": 3203,
+        "piece_id": "bach_chorale_bwv153.09",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 274,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv154.03",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 246,
+        "grid_tokens": 1732,
+        "piece_id": "bach_chorale_bwv157.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 283,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv159.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 256,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv16.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 285,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv161.06a",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 285,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv161.06b",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 589,
+        "grid_tokens": 6370,
+        "piece_id": "bach_chorale_bwv167.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 283,
+        "grid_tokens": 1998,
+        "piece_id": "bach_chorale_bwv168.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 546,
+        "grid_tokens": 5328,
+        "piece_id": "bach_chorale_bwv171.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 360,
+        "grid_tokens": 2663,
+        "piece_id": "bach_chorale_bwv172.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 495,
+        "grid_tokens": 3328,
+        "piece_id": "bach_chorale_bwv174.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 360,
+        "grid_tokens": 2397,
+        "piece_id": "bach_chorale_bwv176.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 354,
+        "grid_tokens": 2264,
+        "piece_id": "bach_chorale_bwv177.05a",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 354,
+        "grid_tokens": 2264,
+        "piece_id": "bach_chorale_bwv177.05b",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 336,
+        "grid_tokens": 4440,
+        "piece_id": "bach_chorale_bwv185.06",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 282,
+        "grid_tokens": 2803,
+        "piece_id": "bach_chorale_bwv187.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 280,
+        "grid_tokens": 3603,
+        "piece_id": "bach_chorale_bwv19.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 298,
+        "grid_tokens": 2264,
+        "piece_id": "bach_chorale_bwv194.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 208,
+        "grid_tokens": 1333,
+        "piece_id": "bach_chorale_bwv195.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 293,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv20.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 307,
+        "grid_tokens": 3395,
+        "piece_id": "bach_chorale_bwv24.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 192,
+        "grid_tokens": 1466,
+        "piece_id": "bach_chorale_bwv244.03",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 221,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv244.10",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 258,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv244.15",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 168,
+        "grid_tokens": 1067,
+        "piece_id": "bach_chorale_bwv244.17",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 310,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv244.25",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 208,
+        "grid_tokens": 1466,
+        "piece_id": "bach_chorale_bwv244.32",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 218,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv244.37",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 310,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv244.40",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 258,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv244.44",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 188,
+        "grid_tokens": 1466,
+        "piece_id": "bach_chorale_bwv244.46",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 255,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv244.54",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 263,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv244.62",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 188,
+        "grid_tokens": 1466,
+        "piece_id": "bach_chorale_bwv245.03",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 235,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv245.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 412,
+        "grid_tokens": 3195,
+        "piece_id": "bach_chorale_bwv245.11",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 256,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv245.14",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 251,
+        "grid_tokens": 2264,
+        "piece_id": "bach_chorale_bwv245.15",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 436,
+        "grid_tokens": 2929,
+        "piece_id": "bach_chorale_bwv245.17",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 231,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv245.22",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 225,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv245.26",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 235,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv245.28",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 250,
+        "grid_tokens": 2264,
+        "piece_id": "bach_chorale_bwv245.37",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 496,
+        "grid_tokens": 3727,
+        "piece_id": "bach_chorale_bwv245.40",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 289,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv248.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 175,
+        "grid_tokens": 1666,
+        "piece_id": "bach_chorale_bwv248.09",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 321,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv248.12",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 168,
+        "grid_tokens": 1067,
+        "piece_id": "bach_chorale_bwv248.17",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 185,
+        "grid_tokens": 2566,
+        "piece_id": "bach_chorale_bwv248.23",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 216,
+        "grid_tokens": 1333,
+        "piece_id": "bach_chorale_bwv248.28",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 210,
+        "grid_tokens": 1732,
+        "piece_id": "bach_chorale_bwv248.33",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 236,
+        "grid_tokens": 1466,
+        "piece_id": "bach_chorale_bwv248.35",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 284,
+        "grid_tokens": 4870,
+        "piece_id": "bach_chorale_bwv248.42",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 237,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv248.46",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 253,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv248.53",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 291,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv248.59",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 275,
+        "grid_tokens": 14946,
+        "piece_id": "bach_chorale_bwv248.64",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 278,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv250",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 305,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv251",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 276,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv252",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 188,
+        "grid_tokens": 1333,
+        "piece_id": "bach_chorale_bwv26.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 523,
+        "grid_tokens": 4403,
+        "piece_id": "bach_chorale_bwv29.08",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 167,
+        "grid_tokens": 1067,
+        "piece_id": "bach_chorale_bwv3.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 316,
+        "grid_tokens": 2530,
+        "piece_id": "bach_chorale_bwv30.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 290,
+        "grid_tokens": 1998,
+        "piece_id": "bach_chorale_bwv31.09",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 416,
+        "grid_tokens": 2929,
+        "piece_id": "bach_chorale_bwv33.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 350,
+        "grid_tokens": 5223,
+        "piece_id": "bach_chorale_bwv36.04",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 150,
+        "grid_tokens": 1067,
+        "piece_id": "bach_chorale_bwv36.08",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 308,
+        "grid_tokens": 2264,
+        "piece_id": "bach_chorale_bwv37.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 254,
+        "grid_tokens": 2397,
+        "piece_id": "bach_chorale_bwv38.06a",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 254,
+        "grid_tokens": 2397,
+        "piece_id": "bach_chorale_bwv38.06b",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 204,
+        "grid_tokens": 1466,
+        "piece_id": "bach_chorale_bwv40.03",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 250,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv40.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 474,
+        "grid_tokens": 3594,
+        "piece_id": "bach_chorale_bwv42.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 261,
+        "grid_tokens": 3003,
+        "piece_id": "bach_chorale_bwv43.11",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 211,
+        "grid_tokens": 1500,
+        "piece_id": "bach_chorale_bwv447",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 379,
+        "grid_tokens": 3803,
+        "piece_id": "bach_chorale_bwv461",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 181,
+        "grid_tokens": 1333,
+        "piece_id": "bach_chorale_bwv47.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 290,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv470",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 280,
+        "grid_tokens": 1998,
+        "piece_id": "bach_chorale_bwv48.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 491,
+        "grid_tokens": 4003,
+        "piece_id": "bach_chorale_bwv481",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 281,
+        "grid_tokens": 1998,
+        "piece_id": "bach_chorale_bwv488",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 183,
+        "grid_tokens": 1466,
+        "piece_id": "bach_chorale_bwv495",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 233,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv499",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 198,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv5.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 188,
+        "grid_tokens": 1666,
+        "piece_id": "bach_chorale_bwv506",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 213,
+        "grid_tokens": 1803,
+        "piece_id": "bach_chorale_bwv57.08",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 164,
+        "grid_tokens": 1101,
+        "piece_id": "bach_chorale_bwv6.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 148,
+        "grid_tokens": 1067,
+        "piece_id": "bach_chorale_bwv62.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 272,
+        "grid_tokens": 2530,
+        "piece_id": "bach_chorale_bwv64.08",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 173,
+        "grid_tokens": 1803,
+        "piece_id": "bach_chorale_bwv67.04",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 190,
+        "grid_tokens": 1732,
+        "piece_id": "bach_chorale_bwv67.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 354,
+        "grid_tokens": 2397,
+        "piece_id": "bach_chorale_bwv7.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 276,
+        "grid_tokens": 3403,
+        "piece_id": "bach_chorale_bwv70.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 215,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv72.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 238,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv73.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 257,
+        "grid_tokens": 1732,
+        "piece_id": "bach_chorale_bwv74.08",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 420,
+        "grid_tokens": 4426,
+        "piece_id": "bach_chorale_bwv76.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 281,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv78.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 297,
+        "grid_tokens": 2663,
+        "piece_id": "bach_chorale_bwv8.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 283,
+        "grid_tokens": 2530,
+        "piece_id": "bach_chorale_bwv81.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 203,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv83.05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 192,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv89.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 293,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv9.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 200,
+        "grid_tokens": 1333,
+        "piece_id": "bach_chorale_bwv91.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 220,
+        "grid_tokens": 1998,
+        "piece_id": "bach_chorale_bwv93.07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 239,
+        "grid_tokens": 2131,
+        "piece_id": "bach_chorale_bwv94.08",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 219,
+        "grid_tokens": 1865,
+        "piece_id": "bach_chorale_bwv96.06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 222,
+        "grid_tokens": 1599,
+        "piece_id": "bach_chorale_bwv97.09",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 792,
+        "grid_tokens": 7104,
+        "piece_id": "bach_wtc1_fugue_01",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 770,
+        "grid_tokens": 3187,
+        "piece_id": "bach_wtc1_fugue_02",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 1471,
+        "grid_tokens": 5625,
+        "piece_id": "bach_wtc1_fugue_03",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 1429,
+        "grid_tokens": 18843,
+        "piece_id": "bach_wtc1_fugue_04",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 796,
+        "grid_tokens": 7118,
+        "piece_id": "bach_wtc1_fugue_05",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 747,
+        "grid_tokens": 3407,
+        "piece_id": "bach_wtc1_fugue_06",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 938,
+        "grid_tokens": 3778,
+        "piece_id": "bach_wtc1_fugue_07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 1484,
+        "grid_tokens": 17200,
+        "piece_id": "bach_wtc1_fugue_08",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 762,
+        "grid_tokens": 2969,
+        "piece_id": "bach_wtc1_fugue_09",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 825,
+        "grid_tokens": 4164,
+        "piece_id": "bach_wtc1_fugue_10",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 696,
+        "grid_tokens": 2883,
+        "piece_id": "bach_wtc1_fugue_11",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 1410,
+        "grid_tokens": 7774,
+        "piece_id": "bach_wtc1_fugue_12",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 891,
+        "grid_tokens": 6940,
+        "piece_id": "bach_wtc1_fugue_13",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 883,
+        "grid_tokens": 8000,
+        "piece_id": "bach_wtc1_fugue_14",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 1759,
+        "grid_tokens": 13012,
+        "piece_id": "bach_wtc1_fugue_15",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 786,
+        "grid_tokens": 4587,
+        "piece_id": "bach_wtc1_fugue_16",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 933,
+        "grid_tokens": 4693,
+        "piece_id": "bach_wtc1_fugue_17",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 848,
+        "grid_tokens": 5515,
+        "piece_id": "bach_wtc1_fugue_18",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 1284,
+        "grid_tokens": 12173,
+        "piece_id": "bach_wtc1_fugue_19",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 2517,
+        "grid_tokens": 22806,
+        "piece_id": "bach_wtc1_fugue_20",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 968,
+        "grid_tokens": 3701,
+        "piece_id": "bach_wtc1_fugue_21",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 813,
+        "grid_tokens": 12277,
+        "piece_id": "bach_wtc1_fugue_22",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 876,
+        "grid_tokens": 4563,
+        "piece_id": "bach_wtc1_fugue_23",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 1946,
+        "grid_tokens": 19917,
+        "piece_id": "bach_wtc1_fugue_24",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 1072,
+        "grid_tokens": 4236,
+        "piece_id": "bach_wtc2_fugue_01",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 703,
+        "grid_tokens": 7311,
+        "piece_id": "bach_wtc2_fugue_02",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 920,
+        "grid_tokens": 6898,
+        "piece_id": "bach_wtc2_fugue_03",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 1443,
+        "grid_tokens": 5975,
+        "piece_id": "bach_wtc2_fugue_04",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 969,
+        "grid_tokens": 6553,
+        "piece_id": "bach_wtc2_fugue_05",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 845,
+        "grid_tokens": 7914,
+        "piece_id": "bach_wtc2_fugue_06",
+        "steps_per_quarter": 12
+      },
+      {
+        "event_records": 750,
+        "grid_tokens": 9173,
+        "piece_id": "bach_wtc2_fugue_07",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 1120,
+        "grid_tokens": 6121,
+        "piece_id": "bach_wtc2_fugue_08",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 802,
+        "grid_tokens": 11226,
+        "piece_id": "bach_wtc2_fugue_09",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 1566,
+        "grid_tokens": 25103,
+        "piece_id": "bach_wtc2_fugue_10",
+        "steps_per_quarter": 12
+      },
+      {
+        "event_records": 1104,
+        "grid_tokens": 7824,
+        "piece_id": "bach_wtc2_fugue_11",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 1167,
+        "grid_tokens": 4338,
+        "piece_id": "bach_wtc2_fugue_12",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 1150,
+        "grid_tokens": 8319,
+        "piece_id": "bach_wtc2_fugue_13",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 1497,
+        "grid_tokens": 13793,
+        "piece_id": "bach_wtc2_fugue_14",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 738,
+        "grid_tokens": 5475,
+        "piece_id": "bach_wtc2_fugue_15",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 1738,
+        "grid_tokens": 16337,
+        "piece_id": "bach_wtc2_fugue_16",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 1418,
+        "grid_tokens": 13053,
+        "piece_id": "bach_wtc2_fugue_17",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 1691,
+        "grid_tokens": 11300,
+        "piece_id": "bach_wtc2_fugue_18",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 806,
+        "grid_tokens": 2932,
+        "piece_id": "bach_wtc2_fugue_19",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 765,
+        "grid_tokens": 5519,
+        "piece_id": "bach_wtc2_fugue_20",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 1022,
+        "grid_tokens": 13767,
+        "piece_id": "bach_wtc2_fugue_21",
+        "steps_per_quarter": 8
+      },
+      {
+        "event_records": 1828,
+        "grid_tokens": 19799,
+        "piece_id": "bach_wtc2_fugue_22",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 1466,
+        "grid_tokens": 13627,
+        "piece_id": "bach_wtc2_fugue_23",
+        "steps_per_quarter": 4
+      },
+      {
+        "event_records": 1036,
+        "grid_tokens": 7629,
+        "piece_id": "bach_wtc2_fugue_24",
+        "steps_per_quarter": 8
+      }
+    ]
+  },
+  "roundtrip_failures": 0,
+  "stage": "tokenize",
+  "tokenizer_name": "fugue_grid_event",
+  "tokenizer_version": "1.0.0",
+  "total_event_records": 93584,
+  "total_grid_tokens": 782189,
+  "vocabulary_hash": "af1e20acc040c27418673a39b0f6a6353527cbf0999b3056d8771a26310e61ad",
+  "vocabulary_size": 196
+}

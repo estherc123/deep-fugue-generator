@@ -1,0 +1,37 @@
+# Global pipeline configuration and versioning (Section 4.2).
+schema_version: "1.0.0"
+rule_profile_version: "0.1.0"
+tokenizer_version: "0.1.0"
+
+paths:
+  raw: data/raw
+  canonical: data/canonical
+  annotations: data/annotations
+  manifests: manifests
+  reports: reports
+  progress: progress
+
+acquisition:
+  # Expected counts; any mismatch stops the pipeline unless overridden (Section 9.2).
+  expected:
+    wtc1_fugues: 24
+    wtc2_fugues: 24
+    bcfb_unique_chorales: 139
+    bcfb_encoded_variants: 143
+    algomus_wtc1_coverage: 24
+  # A versioned override may relax a specific expectation with a documented reason
+  # (Spec Section 9.2). Each override records why the pinned upstream revision
+  # deviates from the spec's nominal count.
+  overrides:
+    algomus_wtc1_coverage:
+      accepted_value: 23
+      spec_expected: 24
+      reason: >-
+        At pinned commit a1801b5b, the Algomus repo ships human reference (.dez)
+        structural annotations for 23 of 24 WTC I fugues. Fugue 11 (BWV 856) has
+        only an audio-synchro JSON, no -ref.dez structural analysis. Documented
+        upstream gap; the missing fugue is reported, not fabricated.
+
+environment:
+  python: "3.11"          # target; dev host may run 3.9 for acquisition-only stages
+  actual_python_note: "acquisition stage is stdlib+pyyaml only and runs on 3.9"

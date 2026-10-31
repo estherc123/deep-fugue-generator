@@ -1,0 +1,31 @@
+{
+  "by_review_status": {
+    "pending": 6579,
+    "reviewed": 544
+  },
+  "by_selection_reason": {
+    "close_scores_different_character": 26,
+    "evaluators_disagree": 7092,
+    "soft_rule_gap": 4,
+    "uncertain": 1
+  },
+  "by_split": {
+    "train": 6346,
+    "validation": 777
+  },
+  "consistency_repeats": 339,
+  "failures": [],
+  "fresh_pairs_added": 3000,
+  "fresh_pairs_target": 3000,
+  "human_checkpoint": {
+    "command": "python -m fugue_data.review.pairs_app",
+    "outstanding": 0,
+    "requirement": "at least 500 reviewed pairs for the first iteration (\u00a718.6)",
+    "reviewed": 544
+  },
+  "labelled": 544,
+  "pairs": 7123,
+  "prompts": 1354,
+  "schema_errors": [],
+  "stage": "generate_preference_candidates"
+}

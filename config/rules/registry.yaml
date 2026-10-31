@@ -1,0 +1,243 @@
+# Rule registry (Spec §15.3). Severities live in the three profile files beside
+# this one; this file is the shared definition, citation and implementation link.
+#
+# Every rule cites a source, or is explicitly marked `project_policy` (a choice
+# this project made) or `empirical_rule` (derived from measuring the corpus),
+# per Spec §3.4. No rule is hard merely because a textbook phrases it
+# categorically (§15.6).
+ruleset_version: "1.0.0"
+
+rules:
+  # --- notational invariants ---------------------------------------------- #
+  - rule_id: timing_nonnegative_onset
+    name: Onsets are non-negative
+    category: notational_invariant
+    scope: note
+    description: Every note begins at or after the start of the fragment.
+    sources: [project_policy]
+    implementation: r_timing_nonnegative_onset
+
+  - rule_id: timing_positive_duration
+    name: Structural durations are positive
+    category: notational_invariant
+    scope: note
+    description: No note has zero or negative duration; grace notes are excluded.
+    sources: [project_policy]
+    implementation: r_timing_positive_duration
+
+  - rule_id: timing_within_bounds
+    name: Notes lie within the fragment
+    category: notational_invariant
+    scope: note
+    description: No note sounds past the declared end of the fragment.
+    sources: [project_policy]
+    implementation: r_timing_within_bounds
+
+  - rule_id: voice_monophonic
+    name: Each voice is monophonic
+    category: notational_invariant
+    scope: voice
+    description: >-
+      A contrapuntal voice sounds one pitch at a time. Real Bach keyboard writing
+      contains brief divisi, so this is hard only for generated material and stays
+      diagnostic for the empirical profile.
+    sources: ["Open Music Theory, species counterpoint", empirical_rule]
+    implementation: r_voice_monophonic
+
+  # --- ranges and spacing --------------------------------------------------- #
+  - rule_id: voice_range
+    name: Voices stay within their configured range
+    category: hard_constraint
+    scope: voice
+    description: Each voice stays inside the range profile configured for it.
+    sources: ["Music Theory for the 21st-Century Classroom, counterpoint", project_policy]
+    implementation: r_voice_range
+
+  - rule_id: voice_spacing
+    name: Adjacent upper voices stay within a configured span
+    category: conditional_constraint
+    scope: voice_pair
+    description: >-
+      Adjacent upper voices are not spaced more than the configured interval apart.
+      The bass is exempt, where wide spacing is idiomatic.
+    exceptions: ["bass to tenor", "voice entries and exits"]
+    sources: ["Open Music Theory, High Baroque Fugal Exposition"]
+    implementation: r_voice_spacing
+
+  - rule_id: voice_overlap
+    name: No illegal voice overlap
+    category: conditional_constraint
+    scope: voice_pair
+    description: >-
+      A lower voice does not move above the pitch the upper voice just left, nor
+      the reverse. Momentary crossing is a separate, softer matter.
+    sources: ["Music Theory for the 21st-Century Classroom, counterpoint"]
+    implementation: r_voice_overlap
+
+  - rule_id: voice_crossing
+    name: Voice crossing
+    category: soft_preference
+    scope: voice_pair
+    description: >-
+      Voices cross. Bach crosses voices freely, so this is never hard -- it is
+      reported so a generator can prefer to avoid it, per §15.5.
+    sources: [empirical_rule]
+    implementation: r_voice_crossing
+
+  # --- parallels and directs ------------------------------------------------ #
+  - rule_id: parallel_fifths
+    name: No parallel perfect fifths
+    category: hard_constraint
+    scope: voice_pair
+    description: Two voices do not move in parallel from one perfect fifth to another.
+    sources: ["Open Music Theory, species counterpoint", "Fux, Gradus ad Parnassum"]
+    implementation: r_parallel_fifths
+
+  - rule_id: parallel_octaves
+    name: No parallel perfect octaves or unisons
+    category: hard_constraint
+    scope: voice_pair
+    description: Two voices do not move in parallel from one perfect octave or unison to another.
+    sources: ["Open Music Theory, species counterpoint", "Fux, Gradus ad Parnassum"]
+    implementation: r_parallel_octaves
+
+  - rule_id: direct_fifths_outer
+    name: Direct fifths or octaves into the outer voices
+    category: soft_preference
+    scope: voice_pair
+    description: >-
+      Outer voices reach a perfect consonance by similar motion with a leap in the
+      upper voice. Common enough in Bach that §15.5 forbids making it universally
+      hard; kept diagnostic or soft.
+    sources: ["Open Music Theory, species counterpoint", empirical_rule]
+    implementation: r_direct_fifths_outer
+
+  # --- melody --------------------------------------------------------------- #
+  - rule_id: melodic_leap_limit
+    name: Melodic leaps stay within a configured size
+    category: conditional_constraint
+    scope: voice
+    description: >-
+      A melodic leap does not exceed the configured maximum. The octave and the
+      ascending minor sixth are permitted; §15.5 forbids treating every large leap
+      as hard.
+    exceptions: ["octave leap", "leap across a rest", "sequence repetition"]
+    sources: ["Fux, Gradus ad Parnassum", "Open Music Theory, species counterpoint"]
+    implementation: r_melodic_leap_limit
+
+  - rule_id: augmented_interval_melodic
+    name: No melodic augmented intervals
+    category: conditional_constraint
+    scope: voice
+    description: A voice does not move by an augmented second or augmented fourth.
+    exceptions: ["chromatic passages", "diminished-seventh arpeggiation"]
+    sources: ["Fux, Gradus ad Parnassum"]
+    implementation: r_augmented_interval_melodic
+
+  - rule_id: leap_recovery
+    name: Large leaps are followed by contrary stepwise motion
+    category: soft_preference
+    scope: voice
+    description: A leap of a fifth or more is followed by a step in the opposite direction.
+    sources: ["Fux, Gradus ad Parnassum"]
+    implementation: r_leap_recovery
+
+  # --- tendency tones and dissonance ---------------------------------------- #
+  - rule_id: leading_tone_resolution
+    name: The leading tone resolves upward at a cadence
+    category: conditional_constraint
+    scope: voice
+    description: >-
+      A leading tone in an outer voice at a cadential arrival resolves up by
+      semitone to the tonic.
+    exceptions: ["inner voices", "sequential passages", "leading tone as a passing note"]
+    sources: ["Music Theory for the 21st-Century Classroom, counterpoint and fugue analysis"]
+    implementation: r_leading_tone_resolution
+
+  - rule_id: suspension_resolution
+    name: Suspensions resolve downward by step
+    category: conditional_constraint
+    scope: voice
+    description: >-
+      A dissonance held over a change of harmony resolves down by step. Classifies
+      suspension against passing and neighbour motion first, so ordinary passing
+      dissonance is not flagged.
+    sources: ["Open Music Theory, species counterpoint"]
+    implementation: r_suspension_resolution
+
+  - rule_id: dissonance_treatment
+    name: Dissonances are prepared or approached by step
+    category: conditional_constraint
+    scope: chord
+    description: >-
+      A dissonant vertical is a suspension, passing note, neighbour note or
+      anticipation -- not an unprepared leap into dissonance.
+    exceptions: ["cadential trills", "written-out ornaments"]
+    sources: ["Open Music Theory, species counterpoint",
+              "Expressing Musical Ideas with Constraint Programming, IJCAI 2024"]
+    implementation: r_dissonance_treatment
+
+  # --- fugal structure ------------------------------------------------------ #
+  - rule_id: subject_entry_identity
+    name: Scheduled subject entries match the subject
+    category: structural_target
+    scope: section
+    description: >-
+      Every entry the plan schedules is present at the planned onset and voice, and
+      its interval sequence matches the subject under the permitted transformation.
+    sources: ["Open Music Theory, High Baroque Fugal Exposition"]
+    implementation: r_subject_entry_identity
+
+  - rule_id: answer_transformation
+    name: The answer is a permitted real or tonal transformation
+    category: conditional_constraint
+    scope: section
+    description: >-
+      An answer transposes the subject to the dominant either exactly (real) or with
+      the opening degree adjusted (tonal). Other transpositions of a scheduled answer
+      are violations.
+    sources: ["Open Music Theory, High Baroque Fugal Exposition",
+              "Music Theory for the 21st-Century Classroom, fugue analysis"]
+    implementation: r_answer_transformation
+
+  - rule_id: cadence_target_completion
+    name: A scheduled cadence target is reached
+    category: structural_target
+    scope: section
+    description: A planned cadence arrives at the planned onset in the planned key area.
+    sources: ["Music Theory for the 21st-Century Classroom, counterpoint and fugue analysis"]
+    implementation: r_cadence_target_completion
+
+  - rule_id: voice_participation
+    name: Every voice participates
+    category: hard_constraint
+    scope: piece
+    description: Each declared voice sounds for at least the configured share of the fragment.
+    sources: [project_policy]
+    implementation: r_voice_participation
+
+  - rule_id: max_dead_air
+    name: Dead air is bounded
+    category: hard_constraint
+    scope: piece
+    description: No span longer than the configured maximum passes with no voice sounding.
+    sources: [project_policy]
+    implementation: r_max_dead_air
+
+  - rule_id: section_length_limit
+    name: Section length stays within bounds
+    category: structural_target
+    scope: section
+    description: The fragment length lies within the configured bar bounds.
+    sources: [project_policy]
+    implementation: r_section_length_limit
+
+  - rule_id: structural_target_reachable
+    name: No state from which a required target is unreachable
+    category: structural_target
+    scope: piece
+    description: >-
+      Every remaining scheduled entry or cadence still has room before the end of
+      the fragment. Catches a search state that cannot complete (§15.5).
+    sources: [project_policy]
+    implementation: r_structural_target_reachable

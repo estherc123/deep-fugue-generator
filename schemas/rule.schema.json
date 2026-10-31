@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://deepfugue/schemas/rule.schema.json",
+  "title": "Rule",
+  "description": "One counterpoint rule and its severity per profile (Spec Section 15.3).",
+  "type": "object",
+  "required": ["rule_id", "name", "version", "category", "scope", "description",
+               "profile_severity", "sources", "implementation"],
+  "properties": {
+    "rule_id": {"type": "string"},
+    "name": {"type": "string"},
+    "version": {"type": "string"},
+    "category": {
+      "type": "string",
+      "enum": ["notational_invariant", "hard_constraint", "conditional_constraint",
+               "soft_preference", "structural_target"]
+    },
+    "scope": {
+      "type": "string",
+      "enum": ["note", "voice", "voice_pair", "chord", "transition", "phrase",
+               "section", "piece"]
+    },
+    "description": {"type": "string"},
+    "applies_when": {"type": "object"},
+    "violation_when": {"type": "object"},
+    "exceptions": {"type": "array", "items": {"type": "string"}},
+    "profile_severity": {
+      "type": "object",
+      "required": ["species_strict", "high_baroque_conservative", "bach_empirical"],
+      "additionalProperties": {"type": "string", "enum": ["off", "diagnostic", "soft", "hard"]}
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "description": "At least one citation, or the literal marker `project_policy` or `empirical_rule` (Spec Section 3.4).",
+      "items": {"type": "string"}
+    },
+    "implementation": {"type": "string"},
+    "test_fixtures": {
+      "type": "object",
+      "properties": {
+        "valid": {"type": "array"},
+        "invalid": {"type": "array"}
+      }
+    }
+  }
+}

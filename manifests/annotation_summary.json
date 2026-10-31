@@ -1,0 +1,239 @@
+{
+  "aligned_count": 23,
+  "annotation_map_version": "1.0.0",
+  "corpus_mean_voice_note_coverage": 0.9670283514195397,
+  "expected_ref_fugues": 23,
+  "failed_count": 0,
+  "failures": [],
+  "overrides": {
+    "ref_fugue_coverage": {
+      "accepted_value": 23,
+      "reason": "At pinned Algomus commit a1801b5b, fugue 11 (BWV 856) ships only an audio-synchro JSON, no -ref.dez structural analysis. Same documented upstream gap already recorded for acquisition in config/pipeline.yaml.",
+      "spec_expected": 24
+    }
+  },
+  "results": {
+    "aligned": [
+      {
+        "accepted": 29,
+        "alternative_groups": 0,
+        "annotations": 29,
+        "mean_voice_note_coverage": 1.0,
+        "piece_id": "bach_wtc1_fugue_01",
+        "rejected_candidates": 0,
+        "warnings": 0
+      },
+      {
+        "accepted": 30,
+        "alternative_groups": 0,
+        "annotations": 30,
+        "mean_voice_note_coverage": 0.9731060606060605,
+        "piece_id": "bach_wtc1_fugue_02",
+        "rejected_candidates": 0,
+        "warnings": 0
+      },
+      {
+        "accepted": 37,
+        "alternative_groups": 0,
+        "annotations": 38,
+        "mean_voice_note_coverage": 1.0,
+        "piece_id": "bach_wtc1_fugue_03",
+        "rejected_candidates": 1,
+        "warnings": 0
+      },
+      {
+        "accepted": 50,
+        "alternative_groups": 3,
+        "annotations": 88,
+        "mean_voice_note_coverage": 1.0,
+        "piece_id": "bach_wtc1_fugue_04",
+        "rejected_candidates": 38,
+        "warnings": 0
+      },
+      {
+        "accepted": 37,
+        "alternative_groups": 0,
+        "annotations": 37,
+        "mean_voice_note_coverage": 1.0,
+        "piece_id": "bach_wtc1_fugue_05",
+        "rejected_candidates": 0,
+        "warnings": 0
+      },
+      {
+        "accepted": 24,
+        "alternative_groups": 0,
+        "annotations": 45,
+        "mean_voice_note_coverage": 0.992063492063492,
+        "piece_id": "bach_wtc1_fugue_06",
+        "rejected_candidates": 21,
+        "warnings": 0
+      },
+      {
+        "accepted": 22,
+        "alternative_groups": 0,
+        "annotations": 22,
+        "mean_voice_note_coverage": 0.9550709706959708,
+        "piece_id": "bach_wtc1_fugue_07",
+        "rejected_candidates": 0,
+        "warnings": 0
+      },
+      {
+        "accepted": 32,
+        "alternative_groups": 0,
+        "annotations": 41,
+        "mean_voice_note_coverage": 0.9961538461538461,
+        "piece_id": "bach_wtc1_fugue_08",
+        "rejected_candidates": 9,
+        "warnings": 1
+      },
+      {
+        "accepted": 20,
+        "alternative_groups": 0,
+        "annotations": 38,
+        "mean_voice_note_coverage": 0.9287581699346407,
+        "piece_id": "bach_wtc1_fugue_09",
+        "rejected_candidates": 18,
+        "warnings": 0
+      },
+      {
+        "accepted": 22,
+        "alternative_groups": 0,
+        "annotations": 22,
+        "mean_voice_note_coverage": 1.0,
+        "piece_id": "bach_wtc1_fugue_10",
+        "rejected_candidates": 0,
+        "warnings": 0
+      },
+      {
+        "accepted": 30,
+        "alternative_groups": 0,
+        "annotations": 33,
+        "mean_voice_note_coverage": 0.9510069640504424,
+        "piece_id": "bach_wtc1_fugue_12",
+        "rejected_candidates": 3,
+        "warnings": 0
+      },
+      {
+        "accepted": 24,
+        "alternative_groups": 0,
+        "annotations": 26,
+        "mean_voice_note_coverage": 0.9686274509803923,
+        "piece_id": "bach_wtc1_fugue_13",
+        "rejected_candidates": 2,
+        "warnings": 0
+      },
+      {
+        "accepted": 20,
+        "alternative_groups": 0,
+        "annotations": 26,
+        "mean_voice_note_coverage": 1.0,
+        "piece_id": "bach_wtc1_fugue_14",
+        "rejected_candidates": 6,
+        "warnings": 1
+      },
+      {
+        "accepted": 13,
+        "alternative_groups": 0,
+        "annotations": 32,
+        "mean_voice_note_coverage": 1.0,
+        "piece_id": "bach_wtc1_fugue_15",
+        "rejected_candidates": 19,
+        "warnings": 0
+      },
+      {
+        "accepted": 33,
+        "alternative_groups": 0,
+        "annotations": 36,
+        "mean_voice_note_coverage": 0.9529780564263324,
+        "piece_id": "bach_wtc1_fugue_16",
+        "rejected_candidates": 3,
+        "warnings": 0
+      },
+      {
+        "accepted": 20,
+        "alternative_groups": 0,
+        "annotations": 20,
+        "mean_voice_note_coverage": 1.0,
+        "piece_id": "bach_wtc1_fugue_17",
+        "rejected_candidates": 0,
+        "warnings": 0
+      },
+      {
+        "accepted": 33,
+        "alternative_groups": 0,
+        "annotations": 33,
+        "mean_voice_note_coverage": 0.9571244239631337,
+        "piece_id": "bach_wtc1_fugue_18",
+        "rejected_candidates": 0,
+        "warnings": 0
+      },
+      {
+        "accepted": 25,
+        "alternative_groups": 0,
+        "annotations": 25,
+        "mean_voice_note_coverage": 0.8256448412698414,
+        "piece_id": "bach_wtc1_fugue_19",
+        "rejected_candidates": 0,
+        "warnings": 0
+      },
+      {
+        "accepted": 53,
+        "alternative_groups": 0,
+        "annotations": 57,
+        "mean_voice_note_coverage": 0.9466444768046596,
+        "piece_id": "bach_wtc1_fugue_20",
+        "rejected_candidates": 4,
+        "warnings": 0
+      },
+      {
+        "accepted": 26,
+        "alternative_groups": 0,
+        "annotations": 26,
+        "mean_voice_note_coverage": 0.8865384615384616,
+        "piece_id": "bach_wtc1_fugue_21",
+        "rejected_candidates": 0,
+        "warnings": 0
+      },
+      {
+        "accepted": 27,
+        "alternative_groups": 0,
+        "annotations": 27,
+        "mean_voice_note_coverage": 0.9079348681621411,
+        "piece_id": "bach_wtc1_fugue_22",
+        "rejected_candidates": 0,
+        "warnings": 0
+      },
+      {
+        "accepted": 21,
+        "alternative_groups": 0,
+        "annotations": 25,
+        "mean_voice_note_coverage": 1.0,
+        "piece_id": "bach_wtc1_fugue_23",
+        "rejected_candidates": 4,
+        "warnings": 0
+      },
+      {
+        "accepted": 40,
+        "alternative_groups": 0,
+        "annotations": 48,
+        "mean_voice_note_coverage": 1.0,
+        "piece_id": "bach_wtc1_fugue_24",
+        "rejected_candidates": 8,
+        "warnings": 0
+      }
+    ],
+    "failed": [],
+    "skipped": [],
+    "validation_failures": []
+  },
+  "skipped_count": 0,
+  "source": "algomus",
+  "spec_expected_ref_fugues": 24,
+  "stage": "annotations",
+  "total_accepted": 668,
+  "total_alternative_groups": 3,
+  "total_annotations": 804,
+  "total_rejected_candidates": 136,
+  "total_warnings": 2,
+  "validation_failure_count": 0
+}

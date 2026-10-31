@@ -1,0 +1,74 @@
+{
+  "already_labelled_excluded": 3216,
+  "batches": [
+    {
+      "batch": 1,
+      "file": "data/generated/agent_batches/round3/agent_batch_1.json",
+      "items": 220
+    },
+    {
+      "batch": 2,
+      "file": "data/generated/agent_batches/round3/agent_batch_2.json",
+      "items": 220
+    },
+    {
+      "batch": 3,
+      "file": "data/generated/agent_batches/round3/agent_batch_3.json",
+      "items": 220
+    },
+    {
+      "batch": 4,
+      "file": "data/generated/agent_batches/round3/agent_batch_4.json",
+      "items": 220
+    }
+  ],
+  "distinct_pairs_to_agents": 760,
+  "human_labelled_excluded": 406,
+  "reserved_for_human_review": 834,
+  "shared_calibration_pairs": 40,
+  "shared_pair_ids": [
+    "pair:ec2650441109ed70",
+    "pair:3afa0a0fbb4e101d",
+    "pair:59a7f9728e8c1826",
+    "pair:2f08ee23ed7620fb:repeat",
+    "pair:57270aa5b5788c5c",
+    "pair:e8746b5431d57051",
+    "pair:c4e2a5bfa8dc7fb0:repeat",
+    "pair:e7d2000fb6e3f77f",
+    "pair:0dcb41b6ce9ffc59",
+    "pair:ea67e73a207b5975",
+    "pair:02bad556a8cd5369",
+    "pair:ae40606d0f177dcf",
+    "pair:cc67d8f2589b8277",
+    "pair:66526b01eb9d2438",
+    "pair:3f185cacbed61a82:repeat",
+    "pair:9345656aa0360235",
+    "pair:c4cd1f501b826b34",
+    "pair:b43b264c1e1b4995",
+    "pair:94fc155086309252",
+    "pair:73eb8ece2afe4026",
+    "pair:6516363ef16f9bb0",
+    "pair:cfe03c9c14f3dc12",
+    "pair:ec7027493ac9982b",
+    "pair:93e0396113bc33fc",
+    "pair:89cef408c3755059",
+    "pair:1597d1abe25aa43f",
+    "pair:094bba3e379fb44e",
+    "pair:df501711c18bce23",
+    "pair:37606d1fab8de33c",
+    "pair:f5dcab0c23773415",
+    "pair:5571e562e012a805",
+    "pair:9ee4a331c3c987af:repeat",
+    "pair:6add05b2a609b233",
+    "pair:afab968569013375",
+    "pair:008a1e1bb7ade58a",
+    "pair:1680da3267d115cc",
+    "pair:8789e4325466e2e9",
+    "pair:68b300f134722bd3",
+    "pair:6eb9d8c585af918a",
+    "pair:636e52b118488eff"
+  ],
+  "stage": "split_agent_batches",
+  "total_pairs": 4725,
+  "unlabelled_pool": 1594
+}

@@ -1,0 +1,22 @@
+# Corpus data is NOT committed. The acquisition stage reproduces it exactly from
+# commit SHAs pinned in config/sources.yaml, with per-file sha256 recorded in
+# manifests/sources.jsonl -- that is what makes the build reproducible without
+# redistributing third-party material. The three sources carry different licences
+# (BCFB CC BY 4.0, Algomus attribution-required, humdrum-wtc unstated), so the raw
+# trees in particular are deliberately left out.
+data/
+
+# Local environment and caches
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+
+# Bulk review artefacts: regenerable, and large
+progress/agent_review/
+reports/visual_qa/
+reports/pipeline.log.jsonl
+
+# Scratch
+*.tmp

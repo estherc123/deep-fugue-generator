@@ -1,0 +1,2 @@
+# Dependencies for the acquisition stage only (Spec §9). Stdlib does the rest.
+PyYAML==6.0.2

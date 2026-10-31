@@ -1,0 +1,35 @@
+# Model-view tokenization (Spec §19).
+#
+# Canonical score data and model tokens are different layers: tokens are derived
+# from `data/canonical/*.json` and never replace it (§19.1).
+tokenizer_name: fugue_grid_event
+tokenizer_version: "1.0.0"
+
+# --- Grid view (§19.2) ---------------------------------------------------- #
+grid:
+  # Steps per quarter note. 4 = sixteenth-note resolution, the spec default.
+  # A piece is emitted at the FIRST denominator in this ladder that represents
+  # every onset and duration exactly; nothing is ever silently quantized (§19.2).
+  # Measured over this corpus: 167 pieces are exact at 4, 22 need 8 (32nds), and
+  # 2 need 12 (triplets against sixteenths).
+  denominator_ladder: [4, 8, 12, 24]
+  # If no denominator in the ladder is exact, the grid view is marked unsupported
+  # for that piece and only the event view is emitted -- never a lossy grid.
+  on_inexact: mark_unsupported
+  emit_bar_tokens: true
+  emit_beat_tokens: true
+  emit_structural_annotation_tokens: true
+
+# --- Event view (§19.3) --------------------------------------------------- #
+event:
+  # Relative pitch is expressed as a diatonic-step and semitone delta from the
+  # previous note in the same voice; the first note of a voice carries null.
+  include_pitch_spelling: true
+  include_relative_pitch: true
+  include_section_metadata: true
+
+# Structural tokens are drawn from aligned annotations where they exist (WTC I).
+annotations:
+  token_types: [subject, answer, countersubject, cadence, pedal, episode]
+  # Only analyst-asserted labels become tokens; rejected candidates never do.
+  accepted_status_only: true

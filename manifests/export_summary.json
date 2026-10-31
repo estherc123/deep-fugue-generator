@@ -1,0 +1,65 @@
+{
+  "exports": {
+    "constraint_critic": {
+      "controlled_negatives": 10000,
+      "note": "Matched parents: every negative names the valid sample it came from.",
+      "positives": 10000
+    },
+    "feasibility": {
+      "note": "Hard-valid real and synthetic material with rule-profile metadata.",
+      "rows": {
+        "train": 8128,
+        "validation": 1034
+      }
+    },
+    "metadata": {
+      "derivatives": 20000,
+      "pieces": 191,
+      "sources": 1029,
+      "splits": 191
+    },
+    "preferences": {
+      "candidate_pairs_available": 4725,
+      "label_confidence": {
+        "confirmed": 31,
+        "contested": 13,
+        "unrated": 437,
+        "weak": 20
+      },
+      "note": "Only reviewed pairs are exported (\u00a718.6). Unreviewed candidates are excluded, so an empty export means labelling has not happened yet, not that no candidates exist.",
+      "rows": {
+        "train": 436,
+        "validation": 65
+      },
+      "unreviewed_excluded": 4224
+    },
+    "structure": {
+      "annotations": 804,
+      "section_windows": 566
+    },
+    "style": {
+      "approved_excerpts_included": 0,
+      "note": "Real Bach movements plus human-approved excerpts only. Pending excerpts are excluded: \u00a727 forbids presenting automatically selected material as human approved.",
+      "pending_excerpts_excluded": 300,
+      "rows": {
+        "test": 21,
+        "train": 150,
+        "validation": 20
+      }
+    }
+  },
+  "failures": [],
+  "human_checkpoints": {
+    "excerpts": {
+      "approved": 0,
+      "pending": 300,
+      "target": "50-100 approved (\u00a714.6)"
+    },
+    "preferences": {
+      "candidates": 4725,
+      "reviewed": 501,
+      "target": "500+ reviewed (\u00a718.6)"
+    }
+  },
+  "stage": "export"
+}

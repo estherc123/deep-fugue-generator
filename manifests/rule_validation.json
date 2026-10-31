@@ -1,0 +1,1233 @@
+{
+  "failures": [],
+  "held_out_only": true,
+  "pieces_evaluated": 41,
+  "profiles": {
+    "bach_empirical": {
+      "calibrated": true,
+      "hard_rules_firing_on_real_bach": [],
+      "notes_evaluated": 21461,
+      "rules": {
+        "answer_transformation": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "soft",
+          "total_detections": 0
+        },
+        "augmented_interval_melodic": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 9.23,
+          "false_positive_rate": 0.7317,
+          "pieces_firing": 30,
+          "pieces_firing_rate": 0.7317,
+          "samples": [
+            {
+              "message": "voice_4 moves by a tritone",
+              "onset_q": "16",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 moves by a tritone",
+              "onset_q": "11",
+              "piece_id": "bach_chorale_bwv125.06"
+            },
+            {
+              "message": "voice_2 moves by a tritone",
+              "onset_q": "30",
+              "piece_id": "bach_chorale_bwv125.06"
+            }
+          ],
+          "severity": "diagnostic",
+          "total_detections": 198
+        },
+        "cadence_target_completion": {
+          "category": "structural_target",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "direct_fifths_outer": {
+          "category": "soft_preference",
+          "detections_per_1000_notes": 1.68,
+          "false_positive_rate": 0.439,
+          "pieces_firing": 18,
+          "pieces_firing_rate": 0.439,
+          "samples": [
+            {
+              "message": "outer voices reach a perfect consonance by similar motion with a leap of 7 semitones",
+              "onset_q": "3",
+              "piece_id": "bach_chorale_bwv108.06"
+            },
+            {
+              "message": "outer voices reach a perfect consonance by similar motion with a leap of 5 semitones",
+              "onset_q": "69/2",
+              "piece_id": "bach_chorale_bwv129.05"
+            },
+            {
+              "message": "outer voices reach a perfect consonance by similar motion with a leap of 7 semitones",
+              "onset_q": "24",
+              "piece_id": "bach_chorale_bwv161.06a"
+            }
+          ],
+          "severity": "diagnostic",
+          "total_detections": 36
+        },
+        "dissonance_treatment": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 74.09,
+          "false_positive_rate": 0.9756,
+          "pieces_firing": 40,
+          "pieces_firing_rate": 0.9756,
+          "samples": [
+            {
+              "message": "voice_2 enters a dissonance against the bass without preparation or stepwise approach",
+              "onset_q": "115/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_2 enters a dissonance against the bass without preparation or stepwise approach",
+              "onset_q": "117/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_2 enters a dissonance against the bass without preparation or stepwise approach",
+              "onset_q": "119/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            }
+          ],
+          "severity": "diagnostic",
+          "total_detections": 1590
+        },
+        "leading_tone_resolution": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "diagnostic",
+          "total_detections": 0
+        },
+        "leap_recovery": {
+          "category": "soft_preference",
+          "detections_per_1000_notes": 50.6,
+          "false_positive_rate": 1.0,
+          "pieces_firing": 41,
+          "pieces_firing_rate": 1.0,
+          "samples": [
+            {
+              "message": "voice_4 leaps -7 then moves 12 instead of stepping back",
+              "onset_q": "12",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 leaps 8 then moves -4 instead of stepping back",
+              "onset_q": "159/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 leaps -9 then moves 8 instead of stepping back",
+              "onset_q": "167/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            }
+          ],
+          "severity": "diagnostic",
+          "total_detections": 1086
+        },
+        "max_dead_air": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "melodic_leap_limit": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 0.65,
+          "false_positive_rate": 0.1707,
+          "pieces_firing": 7,
+          "pieces_firing_rate": 0.1707,
+          "samples": [
+            {
+              "message": "voice_4 leaps 17 semitones (limit 16)",
+              "onset_q": "24",
+              "piece_id": "bach_chorale_bwv153.09"
+            },
+            {
+              "message": "voice_4 leaps 17 semitones (limit 16)",
+              "onset_q": "72",
+              "piece_id": "bach_chorale_bwv153.09"
+            },
+            {
+              "message": "voice_4 leaps 17 semitones (limit 16)",
+              "onset_q": "18",
+              "piece_id": "bach_chorale_bwv157.05"
+            }
+          ],
+          "severity": "diagnostic",
+          "total_detections": 14
+        },
+        "parallel_fifths": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "parallel_octaves": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "section_length_limit": {
+          "category": "structural_target",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "structural_target_reachable": {
+          "category": "structural_target",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "subject_entry_identity": {
+          "category": "structural_target",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "suspension_resolution": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 1.12,
+          "false_positive_rate": 0.2195,
+          "pieces_firing": 9,
+          "pieces_firing_rate": 0.2195,
+          "samples": [
+            {
+              "message": "suspension in voice_2 does not resolve down by step",
+              "onset_q": "105",
+              "piece_id": "bach_chorale_bwv129.05"
+            },
+            {
+              "message": "suspension in voice_1 does not resolve down by step",
+              "onset_q": "74",
+              "piece_id": "bach_chorale_bwv129.05"
+            },
+            {
+              "message": "suspension in voice_3 does not resolve down by step",
+              "onset_q": "74",
+              "piece_id": "bach_chorale_bwv129.05"
+            }
+          ],
+          "severity": "soft",
+          "total_detections": 24
+        },
+        "timing_nonnegative_onset": {
+          "category": "notational_invariant",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "timing_positive_duration": {
+          "category": "notational_invariant",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "timing_within_bounds": {
+          "category": "notational_invariant",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "voice_crossing": {
+          "category": "soft_preference",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "off",
+          "total_detections": 0
+        },
+        "voice_monophonic": {
+          "category": "notational_invariant",
+          "detections_per_1000_notes": 2.47,
+          "false_positive_rate": 0.122,
+          "pieces_firing": 5,
+          "pieces_firing_rate": 0.122,
+          "samples": [
+            {
+              "message": "voice_3 sounds two pitches at 114",
+              "onset_q": "114",
+              "piece_id": "bach_wtc1_fugue_02"
+            },
+            {
+              "message": "voice_3 sounds two pitches at 116",
+              "onset_q": "116",
+              "piece_id": "bach_wtc1_fugue_02"
+            },
+            {
+              "message": "voice_2 sounds two pitches at 120",
+              "onset_q": "120",
+              "piece_id": "bach_wtc1_fugue_02"
+            }
+          ],
+          "severity": "diagnostic",
+          "total_detections": 53
+        },
+        "voice_overlap": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 23.44,
+          "false_positive_rate": 0.9024,
+          "pieces_firing": 37,
+          "pieces_firing_rate": 0.9024,
+          "samples": [
+            {
+              "message": "voice_4 rises above the previous voice_3 pitch (60 > 58)",
+              "onset_q": "117/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_2 rises above the previous voice_1 pitch (69 > 67)",
+              "onset_q": "16",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 rises above the previous voice_2 pitch (62 > 57)",
+              "onset_q": "167/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            }
+          ],
+          "severity": "diagnostic",
+          "total_detections": 503
+        },
+        "voice_participation": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "voice_range": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "voice_spacing": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 1.54,
+          "false_positive_rate": 0.122,
+          "pieces_firing": 5,
+          "pieces_firing_rate": 0.122,
+          "samples": [
+            {
+              "message": "voice_1-voice_2 spaced 28 semitones (limit 24)",
+              "onset_q": "103/2",
+              "piece_id": "bach_wtc1_fugue_02"
+            },
+            {
+              "message": "voice_1-voice_2 spaced 28 semitones (limit 24)",
+              "onset_q": "111/2",
+              "piece_id": "bach_wtc1_fugue_02"
+            },
+            {
+              "message": "voice_1-voice_2 spaced 30 semitones (limit 24)",
+              "onset_q": "207/4",
+              "piece_id": "bach_wtc1_fugue_02"
+            }
+          ],
+          "severity": "diagnostic",
+          "total_detections": 33
+        }
+      },
+      "ruleset_hash": "459bd440397d1e8c35df09400e1e7a3508199e4b45b993699b9498b31adab8bd"
+    },
+    "high_baroque_conservative": {
+      "calibrated": false,
+      "hard_rules_firing_on_real_bach": [
+        "voice_monophonic"
+      ],
+      "notes_evaluated": 21461,
+      "rules": {
+        "answer_transformation": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "augmented_interval_melodic": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 9.23,
+          "false_positive_rate": 0.7317,
+          "pieces_firing": 30,
+          "pieces_firing_rate": 0.7317,
+          "samples": [
+            {
+              "message": "voice_4 moves by a tritone",
+              "onset_q": "16",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 moves by a tritone",
+              "onset_q": "11",
+              "piece_id": "bach_chorale_bwv125.06"
+            },
+            {
+              "message": "voice_2 moves by a tritone",
+              "onset_q": "30",
+              "piece_id": "bach_chorale_bwv125.06"
+            }
+          ],
+          "severity": "soft",
+          "total_detections": 198
+        },
+        "cadence_target_completion": {
+          "category": "structural_target",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "direct_fifths_outer": {
+          "category": "soft_preference",
+          "detections_per_1000_notes": 1.68,
+          "false_positive_rate": 0.439,
+          "pieces_firing": 18,
+          "pieces_firing_rate": 0.439,
+          "samples": [
+            {
+              "message": "outer voices reach a perfect consonance by similar motion with a leap of 7 semitones",
+              "onset_q": "3",
+              "piece_id": "bach_chorale_bwv108.06"
+            },
+            {
+              "message": "outer voices reach a perfect consonance by similar motion with a leap of 5 semitones",
+              "onset_q": "69/2",
+              "piece_id": "bach_chorale_bwv129.05"
+            },
+            {
+              "message": "outer voices reach a perfect consonance by similar motion with a leap of 7 semitones",
+              "onset_q": "24",
+              "piece_id": "bach_chorale_bwv161.06a"
+            }
+          ],
+          "severity": "diagnostic",
+          "total_detections": 36
+        },
+        "dissonance_treatment": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 74.09,
+          "false_positive_rate": 0.9756,
+          "pieces_firing": 40,
+          "pieces_firing_rate": 0.9756,
+          "samples": [
+            {
+              "message": "voice_2 enters a dissonance against the bass without preparation or stepwise approach",
+              "onset_q": "115/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_2 enters a dissonance against the bass without preparation or stepwise approach",
+              "onset_q": "117/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_2 enters a dissonance against the bass without preparation or stepwise approach",
+              "onset_q": "119/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            }
+          ],
+          "severity": "soft",
+          "total_detections": 1590
+        },
+        "leading_tone_resolution": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "soft",
+          "total_detections": 0
+        },
+        "leap_recovery": {
+          "category": "soft_preference",
+          "detections_per_1000_notes": 50.6,
+          "false_positive_rate": 1.0,
+          "pieces_firing": 41,
+          "pieces_firing_rate": 1.0,
+          "samples": [
+            {
+              "message": "voice_4 leaps -7 then moves 12 instead of stepping back",
+              "onset_q": "12",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 leaps 8 then moves -4 instead of stepping back",
+              "onset_q": "159/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 leaps -9 then moves 8 instead of stepping back",
+              "onset_q": "167/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            }
+          ],
+          "severity": "soft",
+          "total_detections": 1086
+        },
+        "max_dead_air": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "melodic_leap_limit": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 1.12,
+          "false_positive_rate": 0.1951,
+          "pieces_firing": 8,
+          "pieces_firing_rate": 0.1951,
+          "samples": [
+            {
+              "message": "voice_4 leaps 17 semitones (limit 12)",
+              "onset_q": "24",
+              "piece_id": "bach_chorale_bwv153.09"
+            },
+            {
+              "message": "voice_4 leaps 17 semitones (limit 12)",
+              "onset_q": "72",
+              "piece_id": "bach_chorale_bwv153.09"
+            },
+            {
+              "message": "voice_4 leaps 17 semitones (limit 12)",
+              "onset_q": "18",
+              "piece_id": "bach_chorale_bwv157.05"
+            }
+          ],
+          "severity": "soft",
+          "total_detections": 24
+        },
+        "parallel_fifths": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "parallel_octaves": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "section_length_limit": {
+          "category": "structural_target",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "structural_target_reachable": {
+          "category": "structural_target",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "subject_entry_identity": {
+          "category": "structural_target",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "suspension_resolution": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 1.12,
+          "false_positive_rate": 0.2195,
+          "pieces_firing": 9,
+          "pieces_firing_rate": 0.2195,
+          "samples": [
+            {
+              "message": "suspension in voice_2 does not resolve down by step",
+              "onset_q": "105",
+              "piece_id": "bach_chorale_bwv129.05"
+            },
+            {
+              "message": "suspension in voice_1 does not resolve down by step",
+              "onset_q": "74",
+              "piece_id": "bach_chorale_bwv129.05"
+            },
+            {
+              "message": "suspension in voice_3 does not resolve down by step",
+              "onset_q": "74",
+              "piece_id": "bach_chorale_bwv129.05"
+            }
+          ],
+          "severity": "soft",
+          "total_detections": 24
+        },
+        "timing_nonnegative_onset": {
+          "category": "notational_invariant",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "timing_positive_duration": {
+          "category": "notational_invariant",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "timing_within_bounds": {
+          "category": "notational_invariant",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "voice_crossing": {
+          "category": "soft_preference",
+          "detections_per_1000_notes": 8.95,
+          "false_positive_rate": 0.7073,
+          "pieces_firing": 29,
+          "pieces_firing_rate": 0.7073,
+          "samples": [
+            {
+              "message": "voice_2 is above voice_1 at 16",
+              "onset_q": "16",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 is above voice_2 at 165/2",
+              "onset_q": "165/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 is above voice_2 at 167/2",
+              "onset_q": "167/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            }
+          ],
+          "severity": "diagnostic",
+          "total_detections": 192
+        },
+        "voice_monophonic": {
+          "category": "notational_invariant",
+          "detections_per_1000_notes": 2.47,
+          "false_positive_rate": 0.122,
+          "pieces_firing": 5,
+          "pieces_firing_rate": 0.122,
+          "samples": [
+            {
+              "message": "voice_3 sounds two pitches at 114",
+              "onset_q": "114",
+              "piece_id": "bach_wtc1_fugue_02"
+            },
+            {
+              "message": "voice_3 sounds two pitches at 116",
+              "onset_q": "116",
+              "piece_id": "bach_wtc1_fugue_02"
+            },
+            {
+              "message": "voice_2 sounds two pitches at 120",
+              "onset_q": "120",
+              "piece_id": "bach_wtc1_fugue_02"
+            }
+          ],
+          "severity": "hard",
+          "total_detections": 53
+        },
+        "voice_overlap": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 23.44,
+          "false_positive_rate": 0.9024,
+          "pieces_firing": 37,
+          "pieces_firing_rate": 0.9024,
+          "samples": [
+            {
+              "message": "voice_4 rises above the previous voice_3 pitch (60 > 58)",
+              "onset_q": "117/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_2 rises above the previous voice_1 pitch (69 > 67)",
+              "onset_q": "16",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 rises above the previous voice_2 pitch (62 > 57)",
+              "onset_q": "167/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            }
+          ],
+          "severity": "soft",
+          "total_detections": 503
+        },
+        "voice_participation": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "voice_range": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "voice_spacing": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 19.71,
+          "false_positive_rate": 0.5122,
+          "pieces_firing": 21,
+          "pieces_firing_rate": 0.5122,
+          "samples": [
+            {
+              "message": "voice_2-voice_3 spaced 24 semitones (limit 16)",
+              "onset_q": "23",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_2-voice_3 spaced 23 semitones (limit 16)",
+              "onset_q": "47/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_2-voice_3 spaced 19 semitones (limit 16)",
+              "onset_q": "35",
+              "piece_id": "bach_chorale_bwv13.06"
+            }
+          ],
+          "severity": "soft",
+          "total_detections": 423
+        }
+      },
+      "ruleset_hash": "1c1e465f9cd6c8f8631b3d5de5d8676d1a5bd58079bc15b7d7b33b0e02ea0ae6"
+    },
+    "species_strict": {
+      "calibrated": false,
+      "hard_rules_firing_on_real_bach": [
+        "augmented_interval_melodic",
+        "dissonance_treatment",
+        "melodic_leap_limit",
+        "parallel_fifths",
+        "suspension_resolution",
+        "voice_monophonic",
+        "voice_overlap",
+        "voice_spacing"
+      ],
+      "notes_evaluated": 21461,
+      "rules": {
+        "answer_transformation": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "augmented_interval_melodic": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 9.23,
+          "false_positive_rate": 0.7317,
+          "pieces_firing": 30,
+          "pieces_firing_rate": 0.7317,
+          "samples": [
+            {
+              "message": "voice_4 moves by a tritone",
+              "onset_q": "16",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 moves by a tritone",
+              "onset_q": "11",
+              "piece_id": "bach_chorale_bwv125.06"
+            },
+            {
+              "message": "voice_2 moves by a tritone",
+              "onset_q": "30",
+              "piece_id": "bach_chorale_bwv125.06"
+            }
+          ],
+          "severity": "hard",
+          "total_detections": 198
+        },
+        "cadence_target_completion": {
+          "category": "structural_target",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "direct_fifths_outer": {
+          "category": "soft_preference",
+          "detections_per_1000_notes": 1.68,
+          "false_positive_rate": 0.439,
+          "pieces_firing": 18,
+          "pieces_firing_rate": 0.439,
+          "samples": [
+            {
+              "message": "outer voices reach a perfect consonance by similar motion with a leap of 7 semitones",
+              "onset_q": "3",
+              "piece_id": "bach_chorale_bwv108.06"
+            },
+            {
+              "message": "outer voices reach a perfect consonance by similar motion with a leap of 5 semitones",
+              "onset_q": "69/2",
+              "piece_id": "bach_chorale_bwv129.05"
+            },
+            {
+              "message": "outer voices reach a perfect consonance by similar motion with a leap of 7 semitones",
+              "onset_q": "24",
+              "piece_id": "bach_chorale_bwv161.06a"
+            }
+          ],
+          "severity": "soft",
+          "total_detections": 36
+        },
+        "dissonance_treatment": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 74.09,
+          "false_positive_rate": 0.9756,
+          "pieces_firing": 40,
+          "pieces_firing_rate": 0.9756,
+          "samples": [
+            {
+              "message": "voice_2 enters a dissonance against the bass without preparation or stepwise approach",
+              "onset_q": "115/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_2 enters a dissonance against the bass without preparation or stepwise approach",
+              "onset_q": "117/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_2 enters a dissonance against the bass without preparation or stepwise approach",
+              "onset_q": "119/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            }
+          ],
+          "severity": "hard",
+          "total_detections": 1590
+        },
+        "leading_tone_resolution": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "leap_recovery": {
+          "category": "soft_preference",
+          "detections_per_1000_notes": 50.6,
+          "false_positive_rate": 1.0,
+          "pieces_firing": 41,
+          "pieces_firing_rate": 1.0,
+          "samples": [
+            {
+              "message": "voice_4 leaps -7 then moves 12 instead of stepping back",
+              "onset_q": "12",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 leaps 8 then moves -4 instead of stepping back",
+              "onset_q": "159/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 leaps -9 then moves 8 instead of stepping back",
+              "onset_q": "167/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            }
+          ],
+          "severity": "soft",
+          "total_detections": 1086
+        },
+        "max_dead_air": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "melodic_leap_limit": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 15.56,
+          "false_positive_rate": 0.8293,
+          "pieces_firing": 34,
+          "pieces_firing_rate": 0.8293,
+          "samples": [
+            {
+              "message": "voice_4 leaps 10 semitones (limit 8)",
+              "onset_q": "117/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_4 leaps 9 semitones (limit 8)",
+              "onset_q": "163/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 leaps 9 semitones (limit 8)",
+              "onset_q": "74",
+              "piece_id": "bach_chorale_bwv105.06"
+            }
+          ],
+          "severity": "hard",
+          "total_detections": 334
+        },
+        "parallel_fifths": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.05,
+          "false_positive_rate": 0.0244,
+          "pieces_firing": 1,
+          "pieces_firing_rate": 0.0244,
+          "samples": [
+            {
+              "message": "parallel perfect fifths between voice_1 and voice_3 at 307/2",
+              "onset_q": "307/2",
+              "piece_id": "bach_wtc1_fugue_03"
+            }
+          ],
+          "severity": "hard",
+          "total_detections": 1
+        },
+        "parallel_octaves": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "section_length_limit": {
+          "category": "structural_target",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "structural_target_reachable": {
+          "category": "structural_target",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "subject_entry_identity": {
+          "category": "structural_target",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "suspension_resolution": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 1.12,
+          "false_positive_rate": 0.2195,
+          "pieces_firing": 9,
+          "pieces_firing_rate": 0.2195,
+          "samples": [
+            {
+              "message": "suspension in voice_2 does not resolve down by step",
+              "onset_q": "105",
+              "piece_id": "bach_chorale_bwv129.05"
+            },
+            {
+              "message": "suspension in voice_1 does not resolve down by step",
+              "onset_q": "74",
+              "piece_id": "bach_chorale_bwv129.05"
+            },
+            {
+              "message": "suspension in voice_3 does not resolve down by step",
+              "onset_q": "74",
+              "piece_id": "bach_chorale_bwv129.05"
+            }
+          ],
+          "severity": "hard",
+          "total_detections": 24
+        },
+        "timing_nonnegative_onset": {
+          "category": "notational_invariant",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "timing_positive_duration": {
+          "category": "notational_invariant",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "timing_within_bounds": {
+          "category": "notational_invariant",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "voice_crossing": {
+          "category": "soft_preference",
+          "detections_per_1000_notes": 8.95,
+          "false_positive_rate": 0.7073,
+          "pieces_firing": 29,
+          "pieces_firing_rate": 0.7073,
+          "samples": [
+            {
+              "message": "voice_2 is above voice_1 at 16",
+              "onset_q": "16",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 is above voice_2 at 165/2",
+              "onset_q": "165/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 is above voice_2 at 167/2",
+              "onset_q": "167/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            }
+          ],
+          "severity": "soft",
+          "total_detections": 192
+        },
+        "voice_monophonic": {
+          "category": "notational_invariant",
+          "detections_per_1000_notes": 2.47,
+          "false_positive_rate": 0.122,
+          "pieces_firing": 5,
+          "pieces_firing_rate": 0.122,
+          "samples": [
+            {
+              "message": "voice_3 sounds two pitches at 114",
+              "onset_q": "114",
+              "piece_id": "bach_wtc1_fugue_02"
+            },
+            {
+              "message": "voice_3 sounds two pitches at 116",
+              "onset_q": "116",
+              "piece_id": "bach_wtc1_fugue_02"
+            },
+            {
+              "message": "voice_2 sounds two pitches at 120",
+              "onset_q": "120",
+              "piece_id": "bach_wtc1_fugue_02"
+            }
+          ],
+          "severity": "hard",
+          "total_detections": 53
+        },
+        "voice_overlap": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 23.44,
+          "false_positive_rate": 0.9024,
+          "pieces_firing": 37,
+          "pieces_firing_rate": 0.9024,
+          "samples": [
+            {
+              "message": "voice_4 rises above the previous voice_3 pitch (60 > 58)",
+              "onset_q": "117/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_2 rises above the previous voice_1 pitch (69 > 67)",
+              "onset_q": "16",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_3 rises above the previous voice_2 pitch (62 > 57)",
+              "onset_q": "167/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            }
+          ],
+          "severity": "hard",
+          "total_detections": 503
+        },
+        "voice_participation": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "voice_range": {
+          "category": "hard_constraint",
+          "detections_per_1000_notes": 0.0,
+          "false_positive_rate": 0.0,
+          "pieces_firing": 0,
+          "pieces_firing_rate": 0.0,
+          "samples": [],
+          "severity": "hard",
+          "total_detections": 0
+        },
+        "voice_spacing": {
+          "category": "conditional_constraint",
+          "detections_per_1000_notes": 44.73,
+          "false_positive_rate": 0.7561,
+          "pieces_firing": 31,
+          "pieces_firing_rate": 0.7561,
+          "samples": [
+            {
+              "message": "voice_2-voice_3 spaced 15 semitones (limit 12)",
+              "onset_q": "143/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_2-voice_3 spaced 24 semitones (limit 12)",
+              "onset_q": "23",
+              "piece_id": "bach_chorale_bwv105.06"
+            },
+            {
+              "message": "voice_2-voice_3 spaced 23 semitones (limit 12)",
+              "onset_q": "47/2",
+              "piece_id": "bach_chorale_bwv105.06"
+            }
+          ],
+          "severity": "hard",
+          "total_detections": 960
+        }
+      },
+      "ruleset_hash": "45583f843710d4a7c0038447294a0497ee2fe036f9694588f038dae8e573aed5"
+    }
+  },
+  "stage": "rule_empirical_validation"
+}
