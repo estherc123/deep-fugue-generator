@@ -1,0 +1,76 @@
+{
+  "by_corruption": {
+    "foreign_key_area": 1102,
+    "rhythm_flatten": 854,
+    "segment_shuffle": 1099,
+    "solver_filler": 911,
+    "subject_return_removal": 185
+  },
+  "by_corruption_split_corpus": {
+    "foreign_key_area|test|chorale": 55,
+    "foreign_key_area|test|fugue": 78,
+    "foreign_key_area|train|chorale": 373,
+    "foreign_key_area|train|fugue": 460,
+    "foreign_key_area|validation|chorale": 35,
+    "foreign_key_area|validation|fugue": 101,
+    "rhythm_flatten|test|chorale": 19,
+    "rhythm_flatten|test|fugue": 78,
+    "rhythm_flatten|train|chorale": 178,
+    "rhythm_flatten|train|fugue": 461,
+    "rhythm_flatten|validation|chorale": 17,
+    "rhythm_flatten|validation|fugue": 101,
+    "segment_shuffle|test|chorale": 55,
+    "segment_shuffle|test|fugue": 78,
+    "segment_shuffle|train|chorale": 373,
+    "segment_shuffle|train|fugue": 458,
+    "segment_shuffle|validation|chorale": 35,
+    "segment_shuffle|validation|fugue": 100,
+    "solver_filler|test|chorale": 54,
+    "solver_filler|test|fugue": 35,
+    "solver_filler|train|chorale": 371,
+    "solver_filler|train|fugue": 335,
+    "solver_filler|validation|chorale": 35,
+    "solver_filler|validation|fugue": 81,
+    "subject_return_removal|test|fugue": 14,
+    "subject_return_removal|train|fugue": 150,
+    "subject_return_removal|validation|fugue": 21
+  },
+  "by_split": {
+    "test": 466,
+    "train": 3159,
+    "validation": 526
+  },
+  "duplicates_dropped": 0,
+  "elapsed_s": 48.9,
+  "generator_version": "1.0.0",
+  "output": "data/generated/corrupted/pairs.jsonl",
+  "pairs": 4151,
+  "pieces": 191,
+  "pieces_with_pairs": 191,
+  "rejections": {
+    "foreign_key_area:new_hard_violation": 1,
+    "rhythm_flatten:new_hard_violation": 18,
+    "rhythm_flatten:no_candidates": 231,
+    "segment_shuffle:new_hard_violation": 4,
+    "solver_filler:new_hard_violation": 2,
+    "solver_filler:no_candidates": 190,
+    "subject_return_removal:no_candidates": 918
+  },
+  "rule_penalty_mean": {
+    "foreign_key_area": 0.131,
+    "rhythm_flatten": 0.189,
+    "segment_shuffle": 1.608,
+    "solver_filler": 2.701,
+    "subject_return_removal": 1.254
+  },
+  "rule_penalty_zero_share": {
+    "foreign_key_area": 0.877,
+    "rhythm_flatten": 0.868,
+    "segment_shuffle": 0.379,
+    "solver_filler": 0.252,
+    "subject_return_removal": 0.578
+  },
+  "rule_profile": "bach_empirical",
+  "seed": 20261102,
+  "stage": "generate_corrupted_pairs"
+}

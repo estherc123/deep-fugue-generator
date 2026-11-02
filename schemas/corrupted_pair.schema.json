@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "corrupted_pair",
+  "description": "A real Bach window and a rule-valid corrupted copy. The original is preferred by construction.",
+  "type": "object",
+  "required": ["pair_id", "generator_version", "piece_id", "work_group_id", "corpus",
+               "split", "voice_count", "meter", "window", "local_key", "rule_profile",
+               "preferred", "label_source", "corruption_id", "params", "original",
+               "corrupted", "events_changed", "rule_penalty", "rule_deltas",
+               "hard_original", "hard_corrupted", "candidates_tried",
+               "candidates_rejected"],
+  "properties": {
+    "pair_id": {"type": "string", "pattern": "^corr:[0-9a-f]{16}$"},
+    "generator_version": {"type": "string"},
+    "piece_id": {"type": "string"},
+    "work_group_id": {"type": ["string", "null"]},
+    "corpus": {"enum": ["fugue", "chorale"]},
+    "split": {"enum": ["train", "validation", "test"]},
+    "voice_count": {"type": "integer", "minimum": 2},
+    "meter": {"type": "string", "pattern": "^[0-9]+/[0-9]+$"},
+    "window": {
+      "type": "object",
+      "required": ["start_q", "length_q", "first_bar_index", "n_bars"],
+      "properties": {
+        "start_q": {"type": "string"},
+        "length_q": {"type": "string"},
+        "first_bar_index": {"type": "integer", "minimum": 0},
+        "n_bars": {"type": "integer", "minimum": 1}
+      }
+    },
+    "local_key": {
+      "type": "object",
+      "required": ["tonic_pc", "mode", "fit"],
+      "properties": {
+        "tonic_pc": {"type": "integer", "minimum": 0, "maximum": 11},
+        "mode": {"enum": ["major", "minor"]},
+        "fit": {"type": "number"}
+      }
+    },
+    "rule_profile": {"type": "string"},
+    "preferred": {"const": "original"},
+    "label_source": {"const": "by_construction"},
+    "corruption_id": {"enum": ["segment_shuffle", "foreign_key_area", "solver_filler",
+                               "rhythm_flatten", "subject_return_removal"]},
+    "params": {"type": "object", "required": ["span"]},
+    "original": {"$ref": "#/definitions/compact"},
+    "corrupted": {"$ref": "#/definitions/compact"},
+    "events_changed": {"type": "integer", "minimum": 1},
+    "rule_penalty": {"type": "integer", "minimum": 0},
+    "rule_deltas": {"type": "object", "additionalProperties": {"type": "integer"}},
+    "hard_original": {"type": "object", "additionalProperties": {"type": "integer"}},
+    "hard_corrupted": {"type": "object", "additionalProperties": {"type": "integer"}},
+    "candidates_tried": {"type": "integer", "minimum": 1},
+    "candidates_rejected": {"type": "object", "additionalProperties": {"type": "integer"}}
+  },
+  "definitions": {
+    "compact": {
+      "description": "voice_id -> [[onset_q, duration_q, midi], ...], onsets relative to the window start, tie-merged.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": [{"type": "string"}, {"type": "string"}, {"type": "integer"}],
+          "minItems": 3, "maxItems": 3
+        }
+      }
+    }
+  }
+}

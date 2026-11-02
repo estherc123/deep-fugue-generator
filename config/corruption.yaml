@@ -1,0 +1,36 @@
+# Corrupted-Bach pair generation (src/fugue_data/corruption).
+#
+# Each pair is a real Bach window and a copy damaged by one operator. The copy
+# must pass the hard rules of `rule_profile` (no hard violation the original
+# lacks), so the original wins on musical grounds, not on legality.
+corruption_version: "1.0.0"
+seed: 20261102
+rule_profile: bach_empirical
+corpora: [wtc, bcfb]            # split-manifest corpus names
+output_dir: data/generated/corrupted
+
+windows:
+  bars: 8                       # window length in bars...
+  min_q: 16                     # ...extended until it covers this many quarters (3/8, 6/16)
+  stride_bars: 4                # step between window starts (half-overlapping)
+
+max_candidates: 16              # per window and operator, sampled if more
+min_events_changed: 4
+
+operators:
+  segment_shuffle:
+    region_bars: [3, 4]         # bars permuted (a derangement, all voices together)
+  foreign_key_area:
+    span_bars: [1, 2]
+    shifts: [1, -1, 6, -6]      # semitones; keys a tonal plan does not reach directly
+  solver_filler:
+    span_bars: [1, 2]
+    fragments_per_window: 8
+  rhythm_flatten:
+    span_bars: [1, 2]
+    min_note_reduction: 0.3     # the span must lose at least 30% of its attacks
+  subject_return_removal:
+    donors_per_entry: 6
+    donor_shifts: [-12, -7, -5, 0, 5, 7, 12]
+    max_register_move: 7        # semitones between donor and entry mean pitch
+    min_donor_sounding: 0.6     # donor must sound for >= 60% of the entry

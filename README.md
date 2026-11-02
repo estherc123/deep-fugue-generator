@@ -25,6 +25,7 @@ Collected-dataset record: [`progress/`](progress/README.md).
 | 12–14. Valid & invalid generation | ✅ done — 10,000 + 10,000, all gates pass |
 | 15. Preference candidates & review UI | ✅ built — 3,150 pairs; **labels pending a human** |
 | 16. Exporters, validation, reports | ✅ done — 17/17 gates, build report written |
+| Training phase: corrupted-Bach pairs | ✅ built — 4,151 pairs, 5 corruption types, 0 gate failures (`manifests/corruption_summary.json`) |
 
 **Full 187-piece corpus normalized:** 48 WTC fugues + 139 BCFB chorales (143
 variants) in the canonical rational-time model, schema-validated (0 failures),
@@ -81,6 +82,7 @@ PYTHONPATH=src .venv/bin/python -m fugue_data.cli propose-excerpts
 PYTHONPATH=src .venv/bin/python -m fugue_data.cli generate-valid     # ~59 min
 PYTHONPATH=src .venv/bin/python -m fugue_data.cli generate-invalid
 PYTHONPATH=src .venv/bin/python -m fugue_data.cli generate-pairs
+PYTHONPATH=src .venv/bin/python -m fugue_data.cli generate-corrupted   # ~1 min, 16+ cores
 PYTHONPATH=src .venv/bin/python -m fugue_data.cli export --all
 PYTHONPATH=src .venv/bin/python -m fugue_data.cli validate --all
 PYTHONPATH=src .venv/bin/python -m fugue_data.cli report

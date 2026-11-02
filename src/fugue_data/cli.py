@@ -8,6 +8,7 @@ Currently implemented subcommands:
   tokenize  Derive grid and event model views from canonical scores.
   propose-excerpts / review-excerpts   Real-Bach excerpt proposal and review.
   generate-valid / generate-invalid / generate-pairs / review-pairs
+  generate-corrupted  Real Bach windows vs rule-valid corrupted copies.
   validate  Run the pipeline-wide validation gates and visual QA.
   export    Write the training exports.
   report    Assemble the final build report.
@@ -168,6 +169,17 @@ def cmd_generate_pairs(args) -> int:
     s = generate_pairs(target=args.target)
     return _emit("generate_pairs", s,
                  f"{s['pairs']} candidate pairs pending human labels.")
+
+
+def cmd_generate_corrupted(args) -> int:
+    from .corruption.runner import generate_corrupted
+    if args.dry_run:
+        print("[generate-corrupted] dry run: would write corrupted-Bach pairs for "
+              f"{args.ops or 'every configured operator'}. No files written.")
+        return 0
+    s = generate_corrupted(workers=args.workers, limit=args.limit, ops=args.ops)
+    return _emit("generate_corrupted", s,
+                 f"{s['pairs']} corrupted-Bach pairs over {s['pieces_with_pairs']} pieces.")
 
 
 def cmd_review_pairs(args) -> int:
@@ -432,6 +444,15 @@ def build_parser() -> argparse.ArgumentParser:
                     help="rebuild pairs from existing candidates")
     gp.add_argument("--dry-run", action="store_true")
     gp.set_defaults(func=cmd_generate_pairs)
+
+    gc = sub.add_parser("generate-corrupted",
+                        help="pair real Bach windows with rule-valid corrupted copies")
+    gc.add_argument("--ops", nargs="+", default=None,
+                    help="only these operators (default: all in config/corruption.yaml)")
+    gc.add_argument("--workers", type=int, default=None)
+    gc.add_argument("--limit", type=int, default=None, help="first N pieces only")
+    gc.add_argument("--dry-run", action="store_true")
+    gc.set_defaults(func=cmd_generate_corrupted)
 
     rp = sub.add_parser("review-pairs", help="open the preference review app")
     rp.add_argument("--port", type=int, default=8766)
