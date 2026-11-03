@@ -106,18 +106,15 @@ def voice_events(score: dict) -> dict[str, list[Event]]:
     return out
 
 
-def extract(score: dict, events: dict[str, list[Event]], bars, first_bar: int,
-            n_bars: int) -> Window | None:
-    """Window of `n_bars` starting at bar index `first_bar`, or None past the end."""
-    if first_bar + n_bars > len(bars):
-        return None
+def extract(score: dict, events: dict[str, list[Event]], start: Fraction,
+            n_bars: int, first_bar: int = 0) -> Window | None:
+    """Window of exactly `n_bars` bars of the meter from `start`, or None past the end."""
     total = parse_frac(score.get("quarter_length_total", "0"))
-    start = bars[first_bar][2]
-    end = bars[first_bar + n_bars][2] if first_bar + n_bars < len(bars) else total
-    if end <= start:
-        return None
     mm = (score.get("meter_map") or [{"numerator": 4, "denominator": 4}])[0]
     meter = (mm["numerator"], mm["denominator"])
+    end = start + n_bars * bar_length_q(meter)
+    if end > total:
+        return None
     voices: dict[str, list[Event]] = {}
     for vid, ev in events.items():
         w = []
@@ -138,7 +135,17 @@ def extract(score: dict, events: dict[str, list[Event]], bars, first_bar: int,
 
 
 def windows_for(score: dict, n_bars_min: int, min_q: float, stride_bars: int):
-    """Every bar-aligned window of the piece, stepping `stride_bars`."""
+    """Windows on the meter grid: whole bars of the meter, from a real downbeat.
+
+    The score's own bar table is not a reliable grid. Unfolded repeats split one
+    bar into two short ones (3 + 1 beats), and chorale extracts omit bars in
+    which only the excluded instruments play. Counting table entries therefore
+    gives windows of irregular length, while every operator edits in whole bars
+    of the meter. So windows are laid on the meter grid from the first full bar,
+    and kept only where the score's downbeats agree with that grid: an off-grid
+    bar start is tolerated only as the short half of a split bar, i.e. when the
+    next bar start returns to the grid.
+    """
     bars = measure_table(score)
     if not bars:
         return
@@ -147,13 +154,26 @@ def windows_for(score: dict, n_bars_min: int, min_q: float, stride_bars: int):
     n_bars = bars_for(n_bars_min, min_q, bq)
     stride = max(1, round(stride_bars * n_bars / n_bars_min))
     events = voice_events(score)
-    # Skip a pickup bar as a window start: it is short, so the window would not
-    # be bar-aligned with the meter that every corruption reasons in.
+    total = parse_frac(score.get("quarter_length_total", "0"))
+    # A pickup bar is short; the grid starts at the first full bar.
     first = 1 if len(bars) > 1 and bars[1][2] - bars[0][2] < bq else 0
-    for b in range(first, len(bars) - n_bars + 1, stride):
-        w = extract(score, events, bars, b, n_bars)
-        if w is not None:
-            yield w
+    ref = bars[first][2]
+    starts = [b[2] for b in bars[first:]] + [total]
+    # Bar starts that break the grid: off-grid and not followed by a return to it.
+    broken = [s for s, nxt in zip(starts, starts[1:])
+              if (s - ref) % bq and (nxt - ref) % bq]
+    k = 0
+    while ref + (k + n_bars) * bq <= total:
+        start = ref + k * bq
+        end = start + n_bars * bq
+        if not any(start <= s < end for s in broken):
+            w = extract(score, events, start, n_bars, first_bar=first + k)
+            if w is not None:
+                # The score's own measure number at the window's downbeat.
+                w.meta["start_measure"] = next(
+                    (num for _, num, st in reversed(bars) if st <= start), None)
+                yield w
+        k += stride
 
 
 # --------------------------------------------------------------------------- #
