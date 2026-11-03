@@ -20,3 +20,8 @@ pyarrow==21.0.0           # parquet exports (§20.6)
 # snakemake      # orchestration (§22)
 # verovio        # notation rendering for visual QA (§21.1)
 # streamlit      # optional richer review UI; the built-in reviewer is stdlib-only
+
+# --- modelling (style prior, critic, reward) -----------------------------------
+# CUDA build for RTX 5090 (Blackwell, sm_120 needs CUDA >= 12.8). Install with:
+#   pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cu128
+torch==2.11.0

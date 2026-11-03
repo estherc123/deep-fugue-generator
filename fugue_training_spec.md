@@ -111,6 +111,20 @@ answers change the architecture, not just hyperparameters:
 
 The experiments in §3 are chosen to be useful under *any* of these answers.
 
+**Owner's answers (2026-11-03), recorded verbatim in intent:**
+
+1. **Output scope:** a complete fugue, not a continuation.
+2. **Conditioning:** given a subject. From whatever subject is passed in, the
+   generator writes the rest: the subject entering in the other voices
+   (exposition), then returning from time to time through the piece.
+3. **Required techniques:** modulation (middle entries in related keys) and
+   sequence (episodes built from sequenced material) must be present, along
+   with the other standard devices (countersubject, stretto, pedal, final
+   entry in the tonic).
+4. **Length:** BWV 543 scale, so windows are whole pieces.
+
+What this implies for the generator is tracked in `progress/generator.md`.
+
 ---
 
 ## 3. Experiments, in dependency order

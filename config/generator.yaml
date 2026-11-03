@@ -1,0 +1,26 @@
+# Generator v2: plan-conditioned, time-aware decoder (src/fugue_data/generator).
+#
+# Sized to the data: ~237k training tokens (191 pieces, x12 transposition is
+# augmentation, not new music). Larger models memorise; early stopping on
+# validation perplexity decides when to stop, not max_steps.
+seed: 0
+out: data/models/generator_v2.pt
+plan_dropout: 0.3          # share of planned crops trained as if unplanned
+
+model:
+  d: 384
+  layers: 8
+  heads: 6
+  ctx: 2048                # ~30 bars of 4-voice 4/4 at sixteenth resolution
+  dropout: 0.15
+
+optim:
+  lr: 3.0e-4
+  weight_decay: 0.1
+  warmup: 200
+  batch: 16
+  max_steps: 8000
+
+log_every: 50
+eval_every: 250
+patience: 6                # evals without validation improvement
