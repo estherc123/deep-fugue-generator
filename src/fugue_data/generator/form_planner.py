@@ -179,17 +179,28 @@ def plan_form(subject, meter, mode, tonic, nv, rng, groups=None) -> dict:
         first = _choose(rng, [((9, True), 0.45), ((7, False), 0.35), ((4, True), 0.1), ((2, True), 0.1)])
         pool = [(9, True), (7, False), (4, True), (2, True), (5, False)]
         sub = (5, False)
+    # a counter-exposition (I / V, answer first): Prout counts 13/48; here in
+    # long fugues (5+ groups) only, decided without a random draw so default
+    # plans are unchanged for a given seed
+    counter = groups >= 5
     keys = [first]
     for g in range(1, groups):
         if g == groups - 1 and sub not in keys and rng.random() < 0.45:
             keys.append(sub)
             continue
         cands = [k for k in pool if k not in keys and k != sub]
-        keys.append(cands[int(rng.integers(len(cands)))] if cands else first)
+        if not cands:                     # long fugues revisit keys, never twice running
+            cands = [k for k in pool if k != keys[-1]]
+        keys.append(cands[int(rng.integers(len(cands)))])
+    if counter:
+        keys = [(0, mode == "minor")] + keys
     st_opts = stretto_options(subject, meter, tonic, mode)
-    stretto_group = None
-    if st_opts and groups >= 2 and rng.random() < 0.6:
-        stretto_group = groups - 1 if groups >= 3 else 1
+    stretto_groups = set()
+    if st_opts and len(keys) >= 2 and rng.random() < 0.6:
+        G = len(keys)
+        stretto_groups.add(G - 1 if G >= 3 else 1)
+        if G >= 5:                        # long fugues: a first stretto near 0.4-0.6 too
+            stretto_groups.add(max(1 + int(counter), G // 2))
     invert_first = rng.random() < 0.2
 
     last_voice = order[-1]
@@ -199,7 +210,7 @@ def plan_form(subject, meter, mode, tonic, nv, rng, groups=None) -> dict:
         start = next_slot(t, ep_bars)
         # the group's voices
         cand = [v for v in range(nv) if v != last_voice]
-        if g == 0 and rng.random() < 0.75:
+        if g == int(counter) and rng.random() < 0.75:
             outer = [v for v in cand if v in (0, nv - 1)]
             cand = outer or cand
         v1 = cand[int(rng.integers(len(cand)))]
@@ -207,9 +218,22 @@ def plan_form(subject, meter, mode, tonic, nv, rng, groups=None) -> dict:
             sections.append({"type": "episode", "start": t, "end": start, "to_key": key,
                              "rest_voice": v1 if rng.random() < 0.7 else None})
         grp = []
-        kind = "inverted" if (g == 0 and invert_first) else "subject"
+        if counter and g == 0:
+            # counter-exposition: answer first, then the subject, in two voices
+            grp.append({"voice": v1, "start": start, "kind": "answer", "key": key, "section": "counter"})
+            v2c = [v for v in range(nv) if v != v1]
+            v2 = v2c[int(rng.integers(len(v2c)))]
+            s2 = next_slot(start + S)
+            grp.append({"voice": v2, "start": s2, "kind": "subject", "key": key, "section": "counter"})
+            entries += grp
+            end = s2 + S
+            sections.append({"type": "entries", "start": start, "end": end, "key": key, "counter": True})
+            last_voice = v2
+            t = end
+            continue
+        kind = "inverted" if (g == int(counter) and invert_first) else "subject"
         grp.append({"voice": v1, "start": start, "kind": kind, "key": key, "section": f"group{g}"})
-        if stretto_group == g:
+        if g in stretto_groups:
             delay, iv = st_opts[int(rng.integers(len(st_opts)))]
             v2c = [v for v in range(nv) if v != v1]
             # the follower above the leader when the interval rises
@@ -276,6 +300,7 @@ def plan_form(subject, meter, mode, tonic, nv, rng, groups=None) -> dict:
             "bar": bar, "beat": beat, "subject_steps": S, "order": list(order), "entries": entries,
             "sections": sections, "cadences": cadences, "pedals": pedals, "keys": keys,
             "stretto_options": st_opts[:8], "picardy": picardy, "neapolitan": neapolitan,
+            "counter_exposition": counter,
             "countersubject": countersubject,
             "dim7_into_final": dim7_into_final}
 
@@ -299,7 +324,7 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
             pitches = _place([m for _, _, m in subject], centres[e["voice"]])
             pitches = [m for _, _, m in subject] if abs(np.mean(pitches) - np.mean([m for _, _, m in subject])) < 1 \
                 else pitches
-        elif e["kind"] == "answer" and e["section"] == "exposition":
+        elif e["kind"] == "answer" and e["section"] in ("exposition", "counter"):
             pitches = _place(tonal_answer(subject, tonic, mode, centres[e["voice"]]), centres[e["voice"]])
         elif e["kind"] == "answer":
             # local answer: the subject at the fifth of the group's key
@@ -343,7 +368,7 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
     # ---- keys per step ---------------------------------------------------- #
     key_rel = [(0, mode == "minor")] * n
     for e in form["entries"]:
-        if e["kind"] == "answer" and e["section"] == "exposition":
+        if e["kind"] == "answer" and e["section"] in ("exposition", "counter"):
             for s in range(e["start"], min(n, e["start"] + form["subject_steps"])):
                 key_rel[s] = (7, mode == "minor")
     for sec in form["sections"]:
@@ -591,6 +616,8 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
 
 
 def plan_piece(subject, meter, mode, tonic, nv, seed=0, piece_id="planned", groups=None):
+    """groups: number of middle-section entry groups (default 2-4; 6-8 gives a
+    fugue at the scale of BWV 543)."""
     rng = np.random.default_rng(seed)
     form = plan_form(subject, meter, mode, tonic, nv, rng, groups)
     return realise_plan(form, subject, rng, piece_id)

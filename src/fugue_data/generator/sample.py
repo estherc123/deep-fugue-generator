@@ -683,7 +683,10 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                             b = b | ~in_chord
                     if b.any():
                         stats["masked_choices"] += int(b.sum())
+                        pr_ = torch.softmax(logits[i], -1)[NOTE0:NOTE0 + N_NOTES]
+                        stats["banned_mass"] = stats.get("banned_mass", 0.0) + float(pr_[torch.tensor(b, device=dev)].sum())
                         mask[i, NOTE0:NOTE0 + N_NOTES][torch.tensor(b, device=dev)] = float("-inf")
+                    stats["decisions"] = stats.get("decisions", 0) + 1
                     if repeat_penalty:
                         last = pm.pitch[i, v]
                         if last >= 0:

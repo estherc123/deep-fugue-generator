@@ -54,10 +54,10 @@ def audit_grid(g, p, start, fixed=None):
 
 
 def compose(subject, meter, mode, tonic, nv, name, model_path, samples, seed, out_root,
-            reference=None, **kw):
+            reference=None, groups=None, subject_from=None, **kw):
     dev = "cuda"
     cfg = {**DEFAULTS, **{k: v for k, v in kw.items() if v is not None}}
-    p = plan_piece(subject, meter, mode, tonic, nv, seed=seed, piece_id=name)
+    p = plan_piece(subject, meter, mode, tonic, nv, seed=seed, piece_id=name, groups=groups)
     model, ck = load_model(ROOT / model_path, dev)
     out = out_root / name
     out.mkdir(parents=True, exist_ok=True)
@@ -93,12 +93,20 @@ def compose(subject, meter, mode, tonic, nv, name, model_path, samples, seed, ou
         np.save(out / f"generated_{k}.npy", g)
         audits.append(audit_grid(g, p, prompt, fixed))
     np.save(out / "forced.npy", plan_tokens(p))
+    # the plan as used, so reviews never have to re-create it
+    (out / "plan.json").write_text(json.dumps({
+        "copies": p.get("copies", []), "sequences": p.get("sequences", []),
+        "prompt_steps": p["prompt_steps"], "n_steps": n, "groups": groups,
+        "key": [int(x) for x in p["key"]], "chord": [int(x) for x in p["chord"]],
+        "final_chord": {k: (sorted(v) if isinstance(v, set) else v) for k, v in (p.get("final_chord") or {}).items()},
+        "cadences": p["form"]["cadences"], "climax_step": (p.get("climax") or {}).get("step")}, default=str))
     np.save(out / "plan_key.npy", p["key"])
     if reference is not None:
         render_wav(grid_to_score(reference, f"{name}:bach"), out / "bach.wav")
     meta = {"name": name, "model": model_path, "seed": seed, "n_steps": n, "prompt_steps": prompt,
             "prompt_quarters": prompt / STEPS_PER_Q, "plan_source": "planner", "split": "composed",
-            "voices": nv, "meter": list(meter), "mode": mode, "tonic": tonic, **cfg,
+            "voices": nv, "meter": list(meter), "mode": mode, "tonic": tonic, "groups": groups,
+            "subject_from": subject_from, **cfg,
             "audit": audits, "repaired_notes": repaired, "stats": {k: v for k, v in stats.items() if not isinstance(v, list)}, "form": {k: v for k, v in p["form"].items() if k != "stretto_options"}}
     (out / "meta.json").write_text(json.dumps(meta, indent=1, default=str))
     return out, audits
@@ -123,6 +131,7 @@ def main(argv=None) -> int:
     ap.add_argument("--chord-bias", type=float)
     ap.add_argument("--temperature", type=float)
     ap.add_argument("--copy-bias", type=float, help="0 = write copies in literally")
+    ap.add_argument("--groups", type=int, help="middle-section entry groups (6-8: BWV 543 scale)")
     args = ap.parse_args(argv)
     ref = None
     if args.subject_from:
@@ -137,7 +146,7 @@ def main(argv=None) -> int:
         mode, tonic, nv = args.mode, args.tonic, args.voices
         name = args.name or f"custom_s{args.seed}"
     out, audits = compose(subject, meter, mode, tonic, nv, name, args.model, args.samples, args.seed,
-                          ROOT / args.out, ref, bar_select=args.bar_select, chord_bias=args.chord_bias,
+                          ROOT / args.out, ref, groups=args.groups, subject_from=args.subject_from, bar_select=args.bar_select, chord_bias=args.chord_bias,
                           temperature=args.temperature, copy_bias=args.copy_bias)
     print(out)
     print((out / "plan.txt").read_text())

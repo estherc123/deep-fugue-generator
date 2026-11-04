@@ -28,10 +28,16 @@ BARS = 20
 LEAD_BARS = 4
 
 SETUPS = {
-    "old": {"model": "data/models/generator_v7.pt", "temperature": 1.0, "chord_bias": 0.0},
-    "new": {"model": "data/models/generator_v7_dpo_b.pt", "temperature": 0.85, "chord_bias": 1.5},
+    # what the owner heard before the rule work: v7, free sampling at T 1.0
+    "old": {"model": "data/models/generator_v7.pt", "temperature": 1.0, "key_bias": 3.0,
+            "force_sequences": True, "no_crossing": True, "repeat_penalty": 2.0},
+    # the current pipeline for continuations: research rules masked, bar-by-bar
+    # selection over 8 candidates, chord plan pull 0.75
+    "new": {"model": "data/models/generator_v7_dpo_b.pt", "temperature": 0.85, "key_bias": 1.5,
+            "chord_bias": 0.75, "force_sequences": True, "no_crossing": True, "repeat_penalty": 2.0,
+            "melodic_rules": True, "bar_select": 8, "copy_bias": 8.0, "select_lambda": 0.1},
 }
-COMMON = {"key_bias": 3.0, "force_sequences": True, "no_crossing": True, "repeat_penalty": 2.0}
+COMMON: dict = {}
 
 
 def build(name: str, seed: int = 11) -> None:
@@ -69,9 +75,9 @@ def build(name: str, seed: int = 11) -> None:
             rng.shuffle(sides)
             for label, setup in zip("AB", sides):
                 cfg = SETUPS[setup]
+                kw = {k: v for k, v in cfg.items() if k != "model"}
                 with torch.no_grad():
-                    g, _ = generate(models[setup], q, prompt, 1, "cuda", temperature=cfg["temperature"],
-                                    chord_bias=cfg["chord_bias"], seed=seed, **COMMON)
+                    g, _ = generate(models[setup], q, prompt, 1, "cuda", seed=seed, **kw)
                 np.save(out / "audio" / f"{cid}_{label}.npy", g[0])
                 render_wav(grid_to_score(g[0][lead:], f"{cid}{label}"), out / "audio" / f"{cid}_{label}.wav")
             cases.append({"id": cid, "piece": p["piece_id"], "start": st, "A": sides[0], "B": sides[1],

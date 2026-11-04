@@ -204,6 +204,31 @@ The subject is known, so entries need not be learned at all. Split the job:
   - `compose2.py`: subject -> plan -> generation -> audit; `review_compositions.py`
     checks cadence realisation, chord agreement, copy adherence, density,
     texture and climax position.
+  - Fixes found by reviewing output: the sampler drifted toward sparse music
+    (fewer notes = fewer rule breaks; held notes = more probable) -> density
+    target from the subject's rhythm; a fixed final-chord voicing caused
+    octave leaps and parallels -> pitch-class constraint that overrides other
+    bans; free notes leapt into written-in entries -> look-ahead; unisons 4.8%
+    (Bach 1.5%) -> neighbour-unison penalty (2.1%).
+  - `repair.py`: proofreading pass; tries nearby pitches for the free notes
+    involved in each remaining forbidden break (7 notes changed in 20 fugues).
+  - **Result** (10 held-out subjects x 2 samples, compositions_v3): 1
+    forbidden break in 20 fugues (0.05 per fugue; target 0.2). Strong-beat
+    unresolved dissonance 14.7 / 100 bars (Bach 30.6), cross relations 9.9
+    (10.2), same-direction leaps 2.3 (11.8). Planned cadences realised 82%,
+    countersubject notes kept 66%, sequence notes 74%, density 24.0 vs Bach
+    21.2 notes/bar. Model surprise is flat over the piece (no late drift).
+  - Long form (`--groups 7`, counter-exposition, two strettos when
+    admissible): 107-bar fugue on the BWV 543 subject, 0 forbidden breaks in
+    2 samples, cadences 78-89%, climax at 0.83; mid-piece surprise ~0.8 vs
+    Bach ~0.65, recovering in the final section; density too high (29 vs 19).
+  - Tried and dropped: DPO on rule pairs (clean vs free continuations) did not
+    change the model's unmasked rule-break rate (71 -> 74 / 100 bars); the
+    masks remove only 4.5% of probability mass per decision, so distilling the
+    rules into the model has little to gain.
+  - Owner blind tests ready: http://127.0.0.1:8780 (old v7 T1.0 vs current
+    pipeline, `ab serve --name old_vs_rules --port 8780`); listening page
+    filters "composed v3 (planner, latest)".
 - **Open:**
   - (Done 2026-11-04: tonal answers and countersubjects in form_planner.)
   - Compositions take one template's form: limited variety, and few planned

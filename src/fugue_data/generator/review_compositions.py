@@ -62,9 +62,10 @@ def texture(g, bar):
 
 def review(d: Path) -> list[dict]:
     meta = json.loads((d / "meta.json").read_text())
-    pid = meta["name"].rsplit("_s", 1)[0]
+    pid = meta.get("subject_from") or meta["name"].rsplit("_s", 1)[0]
     sub, meter, mode, tonic, nv = subject_from_piece(pid)
-    p = plan_piece(sub, meter, mode, tonic, nv, seed=meta["seed"], piece_id=meta["name"])
+    p = plan_piece(sub, meter, mode, tonic, nv, seed=meta["seed"], piece_id=meta["name"],
+                   groups=meta.get("groups"))
     fixed = plan_tokens(p) >= 0
     form = p["form"]
     bar, n = form["bar"], p["n_steps"]
