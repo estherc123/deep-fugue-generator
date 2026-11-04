@@ -229,6 +229,22 @@ The subject is known, so entries need not be learned at all. Split the job:
   - Owner blind tests ready: http://127.0.0.1:8780 (old v7 T1.0 vs current
     pipeline, `ab serve --name old_vs_rules --port 8780`); listening page
     filters "composed v3 (planner, latest)".
+- **v4 (latest)**: climax note written into the plan (in window 27/40, was
+  17/40), density target capped (22.1 vs Bach 21.2 notes/bar); 39/40 fugues
+  free of forbidden breaks. No copying: longest run shared with training
+  (model-written notes) median 12 / max 16, held-out Bach median 14 / max 32.
+  Original subjects (compositions_original, 3 subjects x 2): 0 forbidden.
+
+### How to compose
+
+    # from your own subject (pitch:quarters), key given as tonic pitch class
+    CUDA_VISIBLE_DEVICES=0 PYTHONPATH=src python -m fugue_data.generator.compose2 \
+        --subject "D4:1 A4:1 F4:1/2 E4:1/4 D4:1/4 C#4:1/2 D4:1/4 E4:1/4 F4:1/2 G4:1/2 A4:1 D4:1" \
+        --meter 4/4 --mode minor --tonic 2 --voices 4 --samples 2 --name my_fugue
+    # longer form (BWV 543 scale): add --groups 7
+    # from the subject of a corpus fugue: --subject-from bach_wtc1_fugue_02
+    # output: data/review/compositions_v2/<name>/ (wav, mid, plan.txt, meta.json with the audit)
+
 - **Open:**
   - (Done 2026-11-04: tonal answers and countersubjects in form_planner.)
   - Compositions take one template's form: limited variety, and few planned
