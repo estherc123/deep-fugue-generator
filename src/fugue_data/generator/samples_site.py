@@ -90,7 +90,7 @@ def build(sets: list[tuple[str, Path]], root: Path | None = None,
           site: Path | None = None) -> Path:
     root = root or _repo_root()
     site = site or root / "data" / "review" / "corruption_site"
-    corpus = {p["piece_id"]: p for p in load_corpus(root, baroque=True)}
+    corpus = {p["piece_id"]: p for p in load_corpus(root, baroque=True, detect_entries=False)}
     rng = random.Random(5)
     items = []
     (site / "audio").mkdir(parents=True, exist_ok=True)
@@ -101,7 +101,7 @@ def build(sets: list[tuple[str, Path]], root: Path | None = None,
         meta = json.loads((d / "meta.json").read_text())
         if pid not in corpus:
             import re
-            pid = re.sub(r"_s\d+$", "", pid)
+            pid = meta.get("subject_from") or re.sub(r"_s\d+$", "", pid)
         forced = np.load(d / "forced.npy") if (d / "forced.npy").exists() else None
         p = corpus[pid]
         bach = _compact(grid_to_score(p["grid"][:meta["n_steps"]], pid))
