@@ -38,6 +38,11 @@ def _compact(score: dict) -> list[list]:
 
 
 def _desc(label: str, pid: str, meta: dict, plan_txt: str | None = None) -> str:
+    if meta.get("plan_source") == "planner" and not meta.get("subject_from") and pid.startswith("orig"):
+        form = (plan_txt or "").strip().replace("\n", "; ")
+        return (f"{label}. An original subject (not from any Bach piece). Top: the plan's "
+                f"skeleton only (the entries and pedals it wrote in). Bottom: the finished fugue. "
+                f"The form planner chose the form: {form}.")
     if meta.get("plan_source") == "planner":
         form = (plan_txt or "").strip().replace("\n", "; ")
         return (f"{label}. Composed from the subject of {pid} alone (Bach's own fugue on it is on "
@@ -103,11 +108,24 @@ def build(sets: list[tuple[str, Path]], root: Path | None = None,
             import re
             pid = meta.get("subject_from") or re.sub(r"_s\d+$", "", pid)
         forced = np.load(d / "forced.npy") if (d / "forced.npy").exists() else None
-        p = corpus[pid]
-        bach = _compact(grid_to_score(p["grid"][:meta["n_steps"]], pid))
+        if pid in corpus:
+            p = corpus[pid]
+            ref_grid = p["grid"][:meta["n_steps"]]
+            meter_tok = p["meter_tok"]
+            corpus_name = p["corpus"]
+        else:
+            # an original subject: no Bach fugue to compare with, so the top
+            # track is the plan's skeleton (entries and pedals the plan wrote in)
+            from .encode import STOI
+            ref_grid = np.where(forced >= 0, forced, STOI["REST"]).astype(np.int16)
+            meter_tok = "METER_{}_{}".format(*meta["meter"])
+            corpus_name = "fugue"
+            if not (d / "bach.wav").exists():
+                from ..review.export_audio import render_wav
+                render_wav(grid_to_score(ref_grid, pid), d / "bach.wav")
+        bach = _compact(grid_to_score(ref_grid, pid))
         length_q = meta["n_steps"] / STEPS_PER_Q
-        bar_q = float(Fraction(4 * int(p["meter_tok"].split("_")[1]),
-                               int(p["meter_tok"].split("_")[2])))
+        bar_q = float(Fraction(4 * int(meter_tok.split("_")[1]), int(meter_tok.split("_")[2])))
         for k in range(1, 100):
             f = d / f"generated_{k}.npy"
             if not f.exists():
@@ -119,8 +137,8 @@ def build(sets: list[tuple[str, Path]], root: Path | None = None,
             gen = _compact(grid_to_score(g, pid))
             items.append({
                 "key": key, "op": label, "title": f"{label} — generated version {k}",
-                "piece": pid, "split": meta["split"], "corpus": p["corpus"],
-                "meter": p["meter_tok"].replace("METER_", "").replace("_", "/"),
+                "piece": pid, "split": meta["split"], "corpus": corpus_name,
+                "meter": meter_tok.replace("METER_", "").replace("_", "/"),
                 "bars": int(round(length_q / bar_q)), "barQ": bar_q, "startBar": 1,
                 "lengthQ": length_q, "span": [meta["prompt_quarters"], length_q],
                 "spanVoice": None,
