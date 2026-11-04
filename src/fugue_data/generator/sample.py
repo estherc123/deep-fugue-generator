@@ -121,6 +121,10 @@ class ParallelMask:
         # (1: either way, 2: down, the note having been held into the beat)
         self.oblig = np.zeros((n_samples, nv), dtype=np.int8)
         self.pedal = None
+        self.ahead = None
+        self.lastp = np.full((n_samples, nv), -1)       # pitch before a rest
+        self.rest_from = np.full((n_samples, nv), -10 ** 6)
+        self.below_next = None                          # (voice -> upcoming written-in pitch)
         self.beat = max(1, beat_steps)
         self.cands = MIDI_LO + np.arange(N_NOTES)
 
@@ -135,6 +139,9 @@ class ParallelMask:
                     self.pitch[i, v] = MIDI_LO + t - NOTE0
                     self.onset[i, v] = s - 1
                 elif t == STOI["REST"]:
+                    if self.pitch[i, v] >= 0:
+                        self.lastp[i, v] = self.pitch[i, v]
+                        self.rest_from[i, v] = s - 1
                     self.pitch[i, v] = -1
                     self.prev2[i, v] = -1
         self.new[:] = -2
@@ -194,6 +201,13 @@ class ParallelMask:
         now = lambda w: self.new[i, w] if self.new[i, w] != -2 else self.pitch[i, w]
         hi = next((now(u) for u in range(v - 1, -1, -1) if now(u) >= 0), None)
         lo = next((now(w) for w in range(v + 1, nv) if now(w) >= 0), None)
+        if self.below_next is not None:
+            # written-in notes about to start in the neighbours bound us too
+            if v + 1 < nv and self.below_next.get(v + 1, -1) >= 0:
+                lo = max(lo if lo is not None else -1, self.below_next[v + 1])
+            if v - 1 >= 0 and self.below_next.get(v - 1, -1) >= 0:
+                up = self.below_next[v - 1]
+                hi = up if hi is None else min(hi, up)
         if hi is not None:
             out |= self.cands > hi
         if lo is not None:
@@ -202,7 +216,7 @@ class ParallelMask:
 
 
     def copy_from(self, src: int, dst: np.ndarray):
-        for a in (self.pitch, self.onset, self.new, self.prev2, self.oblig):
+        for a in (self.pitch, self.onset, self.new, self.prev2, self.oblig, self.lastp, self.rest_from):
             a[dst] = a[src]
 
     def melodic_rules(self, i: int, v: int, leap_penalty: float = 2.0,
@@ -239,6 +253,11 @@ class ParallelMask:
             pen += 1.5 * ((da == 10) | (da == 6))
         pv = self.pitch[i, v]
         if pv < 0:
+            # after a rest of at most a beat the line continues (bach_rules
+            # counts leaps across it)
+            if self.lastp[i, v] >= 0 and self.s - self.rest_from[i, v] <= self.beat + 1:
+                dl = np.abs(c - self.lastp[i, v])
+                ban |= (dl > 12) | (dl == 11)
             return ban, pen
         d = c - pv
         ban |= (np.abs(d) > 12) | (np.abs(d) == 11)     # ML-1: > octave, major 7th
@@ -275,6 +294,24 @@ class ParallelMask:
             du = self.new[i, top] - self.pitch[i, top]
             if abs(du) > 2:
                 ban |= (np.sign(d) == np.sign(du)) & np.isin(np.abs(self.new[i, top] - c) % 12, (0, 7))
+        highest = not any(now(u) >= 0 for u in range(v))
+        bot = next((w for w in range(nv - 1, v, -1) if now(w) >= 0), None)
+        if highest and bot is not None and self.new[i, bot] >= 0 and self.pitch[i, bot] >= 0:
+            db = self.new[i, bot] - self.pitch[i, bot]
+            # the top voice leaps in the bass's direction into a fifth / octave
+            ban |= (np.sign(d) == np.sign(db)) & (db != 0) & (np.abs(d) > 2) \
+                & np.isin(np.abs(c - self.new[i, bot]) % 12, (0, 7))
+        if self.ahead is not None:
+            # written-in attacks at the next step in this voice and others:
+            # no consecutive fifths / octaves into them
+            fv, others = self.ahead
+            if fv is not None:
+                for w, (xw, fw) in others.items():
+                    if w == v or xw < 0 or xw == fw:
+                        continue
+                    ic = abs(fv - fw) % 12
+                    if ic in (0, 7):
+                        ban |= (np.abs(c - xw) % 12 == ic) & (c != fv)
         return ban, pen
 
 
@@ -343,7 +380,10 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
              force_sequences: bool = False, chords: bool = True,
              no_crossing: bool = False, repeat_penalty: float = 0.0,
              chord_bias: float = 0.0, melodic_rules: bool = False,
-             bar_select: int = 0, select_lambda: float = 0.5) -> tuple[np.ndarray, dict]:
+             bar_select: int = 0, select_lambda: float = 0.5,
+             copies: list | None = None, copy_bias: float = 0.0,
+             density_target: float | None = None, density_weight: float = 0.5,
+             climax: dict | None = None, final_chord: dict | None = None) -> tuple[np.ndarray, dict]:
     """(n_samples, n_steps, nv) grids; the first prompt_steps are Bach's.
 
     With force_entries the plan's subject entries are written in note for note
@@ -383,7 +423,16 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
     fewest rules (weighted, `rules_select.bar_score`), with the model's own
     log-probability as tie-breaker (select_lambda per nat), is copied over
     its group, and generation continues from it. A bad bar is replaced as it
-    happens instead of spoiling what follows.
+    happens instead of spoiling what follows. density_target (attacks per bar,
+    all voices): a bar falling short pays density_weight per missing attack,
+    since fewer notes otherwise always means fewer rule breaks and a more
+    probable (held-note) bar, and selection drifts toward sparse music.
+
+    copy_bias > 0 makes sequence restatements and countersubject copies soft:
+    instead of writing the copied note in, its logit gets +copy_bias, so the
+    model, the rule masks and bar selection can adjust it to the harmony (a
+    literal copy lands in a different harmony and was the main source of
+    unresolved dissonances).
 
     chord_bias > 0 is added to the logits of notes in the planned chord at that
     step: the chord plan re-anchors the harmony every unit. Without it, chord
@@ -433,7 +482,12 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
         for q in (sequences if sequences is not None
                   else find_sequences(p["grid"], beat_steps_of(p))):
             for t in range(q["start"] + q["unit"], q["start"] + q["statements"] * q["unit"]):
-                seq_at[(t, q["voice"])] = (q["unit"], q["step"])
+                seq_at[(t, q["voice"])] = (q["unit"], q["step"], q["voice"], q["start"] + q["unit"])
+    # copies: restate earlier material of another voice (a countersubject),
+    # transposed: {voice, start, length, src_voice, src_start, shift}
+    for q in (copies or []):
+        for t in range(q["start"], min(n, q["start"] + q["length"])):
+            seq_at[(t, q["voice"])] = (q["start"] - q["src_start"], q["shift"], q["src_voice"], q["start"])
     forced = plan_tokens(p) if (force_entries and plan and p["has_plan"]) else None
     den = int(p["meter_tok"].split("_")[2]) if p["meter_tok"] != "METER_other" else 4
     pm = (ParallelMask(n_samples, nv, 16 // den)
@@ -443,6 +497,22 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
         pm.pedal = p.get("pedal")
     key_abs = None
     next_forced = None
+    fixed_res = None
+    if melodic_rules and forced is not None:
+        # (step, voice): a written-in note sounds here and its next written-in
+        # attack is not a step away, so it cannot resolve a dissonance itself
+        fixed_res = np.zeros((n, nv), dtype=bool)
+        for v in range(nv):
+            cur_m, cur_s = None, None
+            atts = [(t, MIDI_LO + int(forced[t, v]) - NOTE0) for t in range(n)
+                    if NOTE0 <= int(forced[t, v]) < NOTE0 + N_NOTES]
+            for k, (t, m) in enumerate(atts):
+                end = atts[k + 1][0] if k + 1 < len(atts) else n
+                nxt = atts[k + 1][1] if k + 1 < len(atts) else None
+                stuck = nxt is None or abs(nxt - m) > 2 or nxt == m
+                if stuck:
+                    span = slice(t, end)
+                    fixed_res[span, v] = forced[span, v] >= 0
     if melodic_rules and forced is not None:
         # for every (step, voice): the next written-in attack within a beat, if any
         next_forced = np.full((n, nv), -1, dtype=np.int64)
@@ -454,7 +524,7 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                 tok = int(forced[t, v])
                 if NOTE0 <= tok < NOTE0 + N_NOTES:
                     nxt_s, nxt_m = t, MIDI_LO + tok - NOTE0
-                if nxt_s is not None and 0 < nxt_s - t <= beat_steps:
+                if nxt_s is not None and 0 < nxt_s - t <= 4 * beat_steps:
                     next_forced[t, v] = nxt_m
     if melodic_rules and plan:
         kk = p["key"][:n]
@@ -480,11 +550,18 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                 toks[:, pos] = forced[s, v]
                 stats["forced_tokens"] += n_samples
                 continue
-            if force_sequences and (s, v) in seq_at and s - seq_at[(s, v)][0] >= 0:
-                D, T = seq_at[(s, v)]
+            if (force_sequences or copies) and not copy_bias and (s, v) in seq_at and s - seq_at[(s, v)][0] >= 0:
+                D, T, vs, c0 = seq_at[(s, v)]
                 ok = np.zeros(n_samples, dtype=bool)
                 for i in range(n_samples):
-                    t0 = int(toks[i, music(s - D, v)])
+                    t0 = int(toks[i, music(s - D, vs)])
+                    if t0 == hold and s == c0:
+                        # the copy starts inside a held note: attack its pitch
+                        for back in range(s - D - 1, -1, -1):
+                            tb = int(toks[i, music(back, vs)])
+                            if tb != hold:
+                                t0 = tb
+                                break
                     prev_t = int(toks[i, pos - nv]) if s > 0 else rest
                     if NOTE0 <= t0 < NOTE0 + N_NOTES:
                         m = _in_scale(MIDI_LO + t0 - NOTE0 + T, T, p, s)
@@ -544,10 +621,25 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                 for i in range(n_samples):
                     b = pm.banned(i, v) if mask_parallels else np.zeros(N_NOTES, dtype=bool)
                     if no_crossing:
+                        pm.below_next = None
+                        if next_forced is not None:
+                            pm.below_next = {w: int(next_forced[s, w]) for w in (v - 1, v + 1)
+                                             if 0 <= w < nv and next_forced[s, w] >= 0}
                         c = pm.crossing_banned(i, v)
                         if not (b | c).all():
                             stats["crossing_masked"] = stats.get("crossing_masked", 0) + int((c & ~b).sum())
                             b = b | c
+                    if melodic_rules and forced is not None and s % pm.beat == 0:
+                        lowest_now = not any(pm.new[i, w] >= 0 or (pm.new[i, w] == -2 and pm.pitch[i, w] >= 0)
+                                             for w in range(v + 1, nv))
+                        if lowest_now:
+                            cands = pm.cands
+                            for u in range(v):
+                                x = pm.new[i, u] if pm.new[i, u] != -2 else pm.pitch[i, u]
+                                if x < 0 or not fixed_res[s, u]:
+                                    continue
+                                diss = np.isin((x - cands) % 12, (1, 2, 5, 6, 10, 11))
+                                logits[i, NOTE0:NOTE0 + N_NOTES] -= 2.5 * torch.tensor(diss, device=dev, dtype=torch.float32)
                     if melodic_rules:
                         kinfo = key_abs[s] if key_abs is not None else None
                         cad = None
@@ -556,11 +648,34 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                                 and ch_root[s - 1] == (ch_root[s] + 7) % 12:
                             cad = ch_root[s]
                         appr = int(next_forced[s, v]) if next_forced is not None and next_forced[s, v] >= 0 else None
+                        pm.ahead = None
+                        if forced is not None and s + 1 < n:
+                            fn = forced[s + 1]
+                            if NOTE0 <= int(fn[v]) < NOTE0 + N_NOTES:
+                                oth = {}
+                                for w in range(nv):
+                                    if w != v and NOTE0 <= int(fn[w]) < NOTE0 + N_NOTES:
+                                        xw = pm.new[i, w] if pm.new[i, w] != -2 else pm.pitch[i, w]
+                                        oth[w] = (int(xw), MIDI_LO + int(fn[w]) - NOTE0)
+                                pm.ahead = (MIDI_LO + int(fn[v]) - NOTE0, oth)
                         mb, mp = pm.melodic_rules(i, v, key=kinfo, cadence_to=cad, approach=appr)
                         if not (b | mb).all():
                             b = b | mb
+                        else:
+                            stats["melodic_relaxed"] = stats.get("melodic_relaxed", 0) + 1
                         if mp.any():
                             logits[i, NOTE0:NOTE0 + N_NOTES] -= torch.tensor(mp, device=dev)
+                    if final_chord is not None and s >= final_chord["from"]:
+                        # the final chord's pitch classes take precedence over
+                        # every other ban: relax among chord tones, never allow
+                        # a note outside the chord
+                        ok_pc = final_chord["bass"] if v == nv - 1 else final_chord["pcs"]
+                        in_chord = np.array([((MIDI_LO + k) % 12) in ok_pc for k in range(N_NOTES)])
+                        if not (in_chord & ~b).any():
+                            b = ~in_chord
+                            stats["final_relaxed"] = stats.get("final_relaxed", 0) + 1
+                        else:
+                            b = b | ~in_chord
                     if b.any():
                         stats["masked_choices"] += int(b.sum())
                         mask[i, NOTE0:NOTE0 + N_NOTES][torch.tensor(b, device=dev)] = float("-inf")
@@ -572,8 +687,46 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                 logits[:, NOTE0:NOTE0 + N_NOTES] += kb[s]
             if cb is not None:
                 logits[:, NOTE0:NOTE0 + N_NOTES] += cb[s]
-            if (s, v) in seq_at:
-                D, T = seq_at[(s, v)]
+            if final_chord is not None and s >= final_chord["from"]:
+                # the last bar: only notes of the final chord, the bass on its root
+                pcs_ok = final_chord["bass"] if v == nv - 1 else final_chord["pcs"]
+                bad_pc = torch.tensor([((MIDI_LO + k) % 12) not in pcs_ok for k in range(N_NOTES)], device=dev)
+                logits[:, NOTE0:NOTE0 + N_NOTES][:, bad_pc] = -1e9
+                if s == final_chord["from"]:
+                    # every voice strikes the chord on the downbeat: no held-over
+                    # note from outside the chord, no rest
+                    logits[:, hold] = -1e9
+                    logits[:, rest] = -1e9
+                elif v == nv - 1:
+                    logits[:, rest] = -1e9                # the bass keeps the root to the end
+            if climax is not None and v == 0:
+                # soprano register: 2 logits per semitone above the ceiling;
+                # near the climax, a small pull toward the top
+                c_ = MIDI_LO + torch.arange(N_NOTES, device=dev)
+                ceil_ = int(climax["ceiling"][s])
+                logits[:, NOTE0:NOTE0 + N_NOTES] -= 3.0 * (c_ - ceil_).clamp(min=0).float()
+                if abs(s - climax["step"]) <= climax.get("window", 32):
+                    logits[:, NOTE0:NOTE0 + N_NOTES] += 2.0 * ((c_ >= climax["peak"] - 3) & (c_ <= climax["peak"])).float()
+            if copy_bias and (s, v) in seq_at and s - seq_at[(s, v)][0] >= 0:
+                D, T, vs, c0 = seq_at[(s, v)]
+                for i in range(n_samples):
+                    t0 = int(toks[i, music(s - D, vs)])
+                    if t0 == hold and s == c0:
+                        for back in range(s - D - 1, -1, -1):
+                            tb = int(toks[i, music(back, vs)])
+                            if tb != hold:
+                                t0 = tb
+                                break
+                    if NOTE0 <= t0 < NOTE0 + N_NOTES:
+                        m = _in_scale(MIDI_LO + t0 - NOTE0 + T, T, p, s)
+                        cand = NOTE0 + m - MIDI_LO
+                        if NOTE0 <= cand < NOTE0 + N_NOTES:
+                            logits[i, cand] += copy_bias
+                    else:
+                        logits[i, t0] += copy_bias
+                stats["copy_steered"] = stats.get("copy_steered", 0) + n_samples
+            if seq_bias and (s, v) in seq_at:
+                D, T, _, _ = seq_at[(s, v)]
                 if s - D >= 0:
                     for i in range(n_samples):
                         t0 = int(toks[i, music(s - D, v)])
@@ -593,6 +746,10 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
             choice = si.gather(-1, torch.multinomial(sp / sp.sum(-1, keepdim=True), 1,
                                                      generator=g))
             ch = choice[:, 0].cpu().numpy()
+            if melodic_rules and pm is not None:
+                bad = (mask[torch.arange(n_samples, device=dev), choice[:, 0]] == float("-inf")).cpu().numpy()
+                if (bad & todo).any():
+                    stats["banned_sampled"] = stats.get("banned_sampled", 0) + int((bad & todo).sum())
             toks[todo, pos] = ch[todo]
             if raw_lp is not None:
                 lp_bar[todo] += raw_lp[torch.arange(n_samples, device=dev), choice[:, 0]].cpu().numpy()[todo]
@@ -605,7 +762,16 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
             grid_now = toks[:, pre_len:pre_len + (s + 1) * nv].reshape(n_samples, s + 1, nv)
             for gi in range(n_out):
                 idx = np.arange(gi * K, (gi + 1) * K)
-                scores = [bar_score(grid_now[i], max(prompt_steps, b0), s + 1, meta) - select_lambda * lp_bar[i]
+                a0 = max(prompt_steps, b0)
+                scale = (s + 1 - b0) / max(1, int(np.searchsorted(bar_of, bar_of[s] + 1)) - b0) if density_target else 1
+                def dens(i):
+                    if not density_target:
+                        return 0.0
+                    seg = grid_now[i][a0:s + 1]
+                    att = int(((seg >= NOTE0) & (seg < NOTE0 + N_NOTES)).sum())
+                    want = density_target * (s + 1 - a0) / max(1, s + 1 - b0) * scale
+                    return density_weight * max(0.0, want - att)
+                scores = [bar_score(grid_now[i], a0, s + 1, meta) - select_lambda * lp_bar[i] + dens(i)
                           for i in idx]
                 best = idx[int(np.argmin(scores))]
                 stats.setdefault("bar_rule_cost", []).append(round(float(min(scores) + select_lambda * lp_bar[best]), 2))

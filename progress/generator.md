@@ -165,8 +165,47 @@ The subject is known, so entries need not be learned at all. Split the job:
   Bach's continuation preferred over the model's (no critic): small further
   gain. Pending owner blind test: data/review/ab_v7_vs_new (v7 T1.0 vs
   v7-DPO T0.85 chord bias 1.5), `python -m fugue_data.generator.ab serve`.
+- **Autonomous session, 2026-11-04** (owner away ~20 h; goals: Bach's rules
+  forbidden except ~once per five fugues; Bach's "icing" baked into a
+  decision model; keep iterating; nothing destructive, nothing posted).
+  - Research (two subagents): research/bach_fugue_rules.md (operational
+    rules, severities, Bach exceptions, the 15 most audible errors) and
+    research/bach_fugue_techniques.md (form proportions, key plans, stretto
+    statistics from McDonald 2019, decision rules for a planner).
+  - `bach_rules.py`: the research rules as a grid checker, calibrated on 134
+    fugues (research/bach_rule_rates.json). FORBIDDEN: parallel 5ths/8ves in
+    any motion, outer hidden 5ths/8ves, unresolved leading tone in outer
+    voices at V-I, augmented 2nd, doubled leading tone, leaps of a major 7th or
+    over an octave, bass crossing, range, final cadence. Others must stay at
+    or under Bach's rate (strong-beat unresolved dissonance, chordal 7ths,
+    minor-7th leaps, same-direction leaps, long crossings, spacing, cross
+    relations).
+  - The old parallel mask was leaky: contrary-motion and off-beat parallels
+    passed (81 / 19 per 100 bars of octaves / fifths). Now strict.
+  - Sampler (`generate`): masks for the forbidden rules, including leaps into
+    written-in notes and parallels into them; step-resolution obligation for
+    beat dissonances; bass consonance with written-in notes that cannot
+    resolve; bar-by-bar selection over K=8 candidates by the weighted rule
+    cost, with a density target (fewer notes otherwise always wins).
+  - `harmony.py`: chord HMM (root rel. local key, quality, inversion) fitted on
+    958 pieces; constrained by cadence formulas, sequence root patterns, pedals.
+  - `form_planner.py`: exposition with a tonal answer; middle entries in related
+    keys with voice rotation; episodes with sequences (descending fifths,
+    rising 5-6, falling 6-3) and the next entry's voice resting; stretto only
+    when the subject passes the checker against itself; inversion; dominant
+    pedal; final entry in an outer voice; tonic-pedal coda; deceptive cadence,
+    Neapolitan, vii°7 into the final entry; Picardy third; written-in final
+    chord; countersubject (the line against the answer) restated against later
+    entries, alternating above/below; soprano climax at 0.80-0.90.
+  - Copies (sequences, countersubject) are soft (+8 logits), not written in:
+    literal copies landed in other harmonies and caused most unresolved
+    dissonances (26 of 41 on one piece); soft copies keep ~75% of countersubject
+    notes and ~64% of sequence notes with dissonance at Bach's rate.
+  - `compose2.py`: subject -> plan -> generation -> audit; `review_compositions.py`
+    checks cadence realisation, chord agreement, copy adherence, density,
+    texture and climax position.
 - **Open:**
-  - Answers are real, not tonal; no countersubject planning.
+  - (Done 2026-11-04: tonal answers and countersubjects in form_planner.)
   - Compositions take one template's form: limited variety, and few planned
     sequences when the template has few (II/19 composition: 1).
   - Density runs ~15–25% above Bach with key bias 3.

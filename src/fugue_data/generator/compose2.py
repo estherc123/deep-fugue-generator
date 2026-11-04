@@ -36,8 +36,9 @@ from .sample import generate, grid_to_score, load_model, plan_tokens
 
 ROOT = Path(__file__).resolve().parents[3]
 
-DEFAULTS = dict(temperature=0.85, key_bias=1.5, chord_bias=1.5, force_sequences=True,
-                no_crossing=True, repeat_penalty=2.0, melodic_rules=True, bar_select=8)
+DEFAULTS = dict(temperature=0.85, key_bias=1.5, chord_bias=0.75, force_sequences=True,
+                no_crossing=True, repeat_penalty=2.0, melodic_rules=True, bar_select=8,
+                copy_bias=8.0, select_lambda=0.1)
 
 
 def audit_grid(g, p, start, fixed=None):
@@ -62,12 +63,29 @@ def compose(subject, meter, mode, tonic, nv, name, model_path, samples, seed, ou
     out.mkdir(parents=True, exist_ok=True)
     (out / "plan.txt").write_text(describe(p["form"]) + "\n")
     prompt = p["prompt_steps"]
+    # density target: the subject's own rhythm, in every voice, a little thinner
+    s_steps = p["form"]["subject_steps"]
+    target = len(subject) / (s_steps / p["form"]["bar"]) * nv * 0.7
+    cfg.setdefault("density_target", target)
     with torch.no_grad():
         grids, stats = generate(model, p, prompt, samples, dev, seed=seed,
-                                sequences=p["sequences"], **cfg)
+                                sequences=p["sequences"], copies=p.get("copies"),
+                                climax=p.get("climax"), final_chord=p.get("final_chord"), **cfg)
     audits = []
     n = p["n_steps"]
     fixed = plan_tokens(p) >= 0
+    # proofreading: correct forbidden breaks the sampler let through
+    from .repair import repair
+    keys = [((tonic + (int(kk) - 1) // 2) % 12, bool((int(kk) - 1) % 2)) if kk > 0
+            else (tonic, mode == "minor") for kk in p["key"]]
+    kw = {"meter": tuple(meter), "tonic": tonic, "mode": mode, "keys": keys}
+    fc = p.get("final_chord") or {}
+    repaired = []
+    for k in range(len(grids)):
+        g2, ch = repair(grids[k], fixed, kw, p["form"]["bar"], start=prompt,
+                        final_from=fc.get("from"), final_pcs=fc.get("pcs"), bass_pcs=fc.get("bass"))
+        grids[k] = g2
+        repaired.append(ch)
     for k, g in enumerate(grids, 1):
         sc = grid_to_score(g, f"{name}:gen{k}")
         render_wav(sc, out / f"generated_{k}.wav")
@@ -81,7 +99,7 @@ def compose(subject, meter, mode, tonic, nv, name, model_path, samples, seed, ou
     meta = {"name": name, "model": model_path, "seed": seed, "n_steps": n, "prompt_steps": prompt,
             "prompt_quarters": prompt / STEPS_PER_Q, "plan_source": "planner", "split": "composed",
             "voices": nv, "meter": list(meter), "mode": mode, "tonic": tonic, **cfg,
-            "audit": audits, "form": {k: v for k, v in p["form"].items() if k != "stretto_options"}}
+            "audit": audits, "repaired_notes": repaired, "stats": {k: v for k, v in stats.items() if not isinstance(v, list)}, "form": {k: v for k, v in p["form"].items() if k != "stretto_options"}}
     (out / "meta.json").write_text(json.dumps(meta, indent=1, default=str))
     return out, audits
 
@@ -104,6 +122,7 @@ def main(argv=None) -> int:
     ap.add_argument("--bar-select", type=int)
     ap.add_argument("--chord-bias", type=float)
     ap.add_argument("--temperature", type=float)
+    ap.add_argument("--copy-bias", type=float, help="0 = write copies in literally")
     args = ap.parse_args(argv)
     ref = None
     if args.subject_from:
@@ -119,7 +138,7 @@ def main(argv=None) -> int:
         name = args.name or f"custom_s{args.seed}"
     out, audits = compose(subject, meter, mode, tonic, nv, name, args.model, args.samples, args.seed,
                           ROOT / args.out, ref, bar_select=args.bar_select, chord_bias=args.chord_bias,
-                          temperature=args.temperature)
+                          temperature=args.temperature, copy_bias=args.copy_bias)
     print(out)
     print((out / "plan.txt").read_text())
     for k, a in enumerate(audits, 1):

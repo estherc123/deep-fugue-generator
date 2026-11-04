@@ -263,6 +263,7 @@ def plan_form(subject, meter, mode, tonic, nv, rng, groups=None) -> dict:
         pedals.append({"start": max(end, n - coda_bars * bar), "end": n, "degree": 0})
     sections.append({"type": "coda", "start": end, "end": n})
     picardy = mode == "minor" and rng.random() < 0.85
+    countersubject = rng.random() < 0.65              # 31/48 WTC fugues have one (Prout)
     cadences.append({"step": n - beat, "type": "final", "key": (0, mode == "minor"), "picardy": picardy})
 
     # sequences in episodes
@@ -275,6 +276,7 @@ def plan_form(subject, meter, mode, tonic, nv, rng, groups=None) -> dict:
             "bar": bar, "beat": beat, "subject_steps": S, "order": list(order), "entries": entries,
             "sections": sections, "cadences": cadences, "pedals": pedals, "keys": keys,
             "stretto_options": st_opts[:8], "picardy": picardy, "neapolitan": neapolitan,
+            "countersubject": countersubject,
             "dim7_into_final": dim7_into_final}
 
 
@@ -510,30 +512,13 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
     p["pedal"] = pedal
     # pedal tones are written into the bass like entries: one held note
     from .encode import MIDI_LO, NOTE0, STOI
-    # the final chord: root-position tonic (Picardy third if planned), held
-    # through the last bar, spaced top-down from the voices' centres
+    # the final chord: root-position tonic (Picardy third if planned). Not
+    # written in: a fixed voicing ignored where the voices were and produced
+    # octave leaps and parallels into it. The sampler keeps the last bar to
+    # the chord's pitch classes, with the bass on the root, and voices it.
     third = 4 if (mode == "major" or form.get("picardy")) else 3
-    fin = n - bar
-    prev = None
-    need = [(tonic + third) % 12, (tonic + 7) % 12]          # still missing, in order
-    for v in range(nv):
-        if v == nv - 1:
-            pcs = [tonic]
-        elif v == 0:
-            pcs = [tonic, (tonic + third) % 12]
-        else:
-            pcs = need[:1] if need else [tonic, (tonic + 7) % 12]
-        cands = [m for m in range(36, 87) if m % 12 in pcs and (prev is None or m < prev)]
-        m = min(cands, key=lambda x: abs(x - centres[v]))
-        if m % 12 in need:
-            need.remove(m % 12)
-        prev = m
-        if (p["pnote"][fin:n, v] > 0).any():
-            continue
-        p["pnote"][fin, v] = 2 + m - MIDI_LO
-        p["pnote"][fin + 1:n, v] = 1
-        p["grid"][fin, v] = NOTE0 + m - MIDI_LO
-        p["grid"][fin + 1:n, v] = STOI["HOLD"]
+    p["final_chord"] = {"from": n - bar, "pcs": {tonic, (tonic + third) % 12, (tonic + 7) % 12},
+                        "bass": {tonic}}
     for q in form["pedals"]:
         pc = (tonic + q["degree"]) % 12
         m = next(x for x in range(36, 48) if x % 12 == pc)
@@ -551,6 +536,53 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
         seq[q["start"] + q["unit"]:q["start"] + q["statements"] * q["unit"], q["voice"]] = 5 + beats
     p["seq"] = seq
     p["sequences"] = seq_list
+    # ---- countersubject: the line against the answer, restated ------------- #
+    copies = []
+    ents = form["entries"]
+    if len(ents) >= 3 and form.get("countersubject"):
+        a1 = ents[1]                                   # the exposition's answer
+        src_voice = ents[0]["voice"]
+        S = form["subject_steps"]
+        side = 1
+        for k in range(2, len(ents)):
+            e = ents[k]
+            if e["kind"] in ("stretto", "inverted") or (k + 1 < len(ents) and ents[k + 1]["kind"] == "stretto"):
+                continue
+            if e["section"] == "exposition":
+                target = ents[k - 1]["voice"]           # the previous entry's voice goes on
+            else:
+                if rng.random() > 0.8:
+                    continue
+                cand = [v for v in range(nv) if v != e["voice"]
+                        and (p["active"][e["start"]:e["start"] + S, v] == 2).all()
+                        and not (p["pnote"][e["start"]:e["start"] + S, v] > 0).any()]
+                if not cand:
+                    continue
+                side = -side                            # alternate above / below the subject
+                pref = [v for v in cand if (v < e["voice"]) == (side > 0)] or cand
+                target = min(pref, key=lambda v: abs(v - e["voice"]))
+            if (p["pnote"][e["start"]:e["start"] + S, target] > 0).any():
+                continue
+            shift = voices_pitch_cache[k][-1] - voices_pitch_cache[1][-1]
+            shift += 12 * round((centres[target] - (centres[src_voice] + shift)) / 12)
+            copies.append({"voice": int(target), "start": int(e["start"]), "length": int(S),
+                           "src_voice": int(src_voice), "src_start": int(a1["start"]), "shift": int(shift)})
+    p["copies"] = copies
+    # ---- climax: the soprano's register ceiling over the piece --------------- #
+    # research §3 F23: highest soprano note at 0.80-0.92; before it the ceiling
+    # rises gradually, after it the line relaxes.
+    peak_at = int(n * float(rng.uniform(0.80, 0.90)))
+    top_entries = [m for k, e in enumerate(form["entries"]) if e["voice"] == 0
+                   for m in voices_pitch_cache[k]]
+    base = max(top_entries) if top_entries else centres[0] + 5
+    peak = min(86, max(base + 2, centres[0] + 9))
+    ceil = np.zeros(n, dtype=np.int16)
+    for s_ in range(n):
+        if s_ <= peak_at:
+            ceil[s_] = int(round(base - 2 + (peak - base + 2) * (s_ / peak_at) ** 1.5))
+        else:
+            ceil[s_] = int(round(peak - 4 * (s_ - peak_at) / max(1, n - peak_at)))
+    p["climax"] = {"step": peak_at, "peak": int(peak), "ceiling": ceil}
     p["plan_source"] = "planner"
     p["form"] = form
     p["prompt_steps"] = form["entries"][0]["start"] + form["subject_steps"]
@@ -587,6 +619,7 @@ def describe(form) -> str:
                    f"{q['start'] / bar + 1:.1f}-{q['end'] / bar + 1:.1f}")
     if form["mode"] == "minor":
         out.append(f"  Picardy third: {form['picardy']}; Neapolitan before the last V: {form.get('neapolitan')}")
+    out.append(f"  countersubject restated against later entries: {form.get('countersubject')}")
     out.append(f"  diminished 7th into the final entry: {form.get('dim7_into_final')}; "
                f"deceptive cadence before the coda: {any(c['type'] == 'DC' for c in form['cadences'])}")
     return "\n".join(out)

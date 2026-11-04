@@ -199,3 +199,15 @@ def test_harmony_planner_honours_cadence():
     allowed[U - 2] = harmony.state_ids(7, ("maj", "dom7"), (0,))
     st = harmony.plan_chords(U, [(0, False)] * U, [set()] * U, allowed, rng)
     assert st[-1][:2] == (0, "maj") and st[-2][0] == 7
+
+
+def test_repair_fixes_parallel_fifths():
+    from fugue_data.generator.bach_rules import check
+    from fugue_data.generator.repair import repair
+    # free parallel fifths C5/F4 -> D5/G4; the repair must move one of the notes
+    g = _grid([[(0, 4, 72), (4, 8, 74), (8, 12, 72)], [(0, 4, 65), (4, 8, 67), (8, 12, 65)]], 12)
+    fixed = np.zeros(g.shape, dtype=bool)
+    kw = {"meter": (4, 4), "tonic": 5, "mode": "major", "keys": None}
+    g2, changed = repair(g, fixed, kw, 16)
+    assert changed >= 1
+    assert not any(r in ("par5", "par8") for r, _, _ in check(g2))
