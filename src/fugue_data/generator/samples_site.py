@@ -37,7 +37,15 @@ def _compact(score: dict) -> list[list]:
              for n in v["notes"]] for v in score["voices"]]
 
 
-def _desc(label: str, pid: str, meta: dict) -> str:
+def _desc(label: str, pid: str, meta: dict, plan_txt: str | None = None) -> str:
+    if meta.get("plan_source") == "planner":
+        form = (plan_txt or "").strip().replace("\n", "; ")
+        return (f"{label}. Composed from the subject of {pid} alone (Bach's own fugue on it is on "
+                f"top; it was held out of training). The form planner chose the form: {form}. "
+                f"Entries (tonal answer in the exposition) and pedal tones are written in "
+                f"(outlined); a chord for every beat comes from the harmony planner; the model "
+                f"writes the rest with forbidden voice-leading masked and {meta.get('bar_select')} "
+                f"candidates per bar, keeping the one with the fewest rule breaks.")
     if meta.get("plan_source") == "template":
         return (f"{label}. Composed from the subject alone. Top: Bach's own fugue on this "
                 f"subject ({pid}, held out from training). Bottom: the generator's "
@@ -91,6 +99,9 @@ def build(sets: list[tuple[str, Path]], root: Path | None = None,
     for label, d in dirs:
         pid = d.name
         meta = json.loads((d / "meta.json").read_text())
+        if pid not in corpus:
+            import re
+            pid = re.sub(r"_s\d+$", "", pid)
         forced = np.load(d / "forced.npy") if (d / "forced.npy").exists() else None
         p = corpus[pid]
         bach = _compact(grid_to_score(p["grid"][:meta["n_steps"]], pid))
@@ -101,7 +112,7 @@ def build(sets: list[tuple[str, Path]], root: Path | None = None,
             f = d / f"generated_{k}.npy"
             if not f.exists():
                 break
-            key = f"gen_{label}_{pid}_{k}"
+            key = f"gen_{label}_{d.name}_{k}".replace(" ", "_")
             shutil.copy(d / "bach.wav", site / "audio" / f"{key}_original.wav")
             shutil.copy(d / f"generated_{k}.wav", site / "audio" / f"{key}_corrupted.wav")
             g = np.load(f)
@@ -113,7 +124,8 @@ def build(sets: list[tuple[str, Path]], root: Path | None = None,
                 "bars": int(round(length_q / bar_q)), "barQ": bar_q, "startBar": 1,
                 "lengthQ": length_q, "span": [meta["prompt_quarters"], length_q],
                 "spanVoice": None,
-                "desc": _desc(label, pid, meta),
+                "desc": _desc(label, pid, meta, (d / "plan.txt").read_text()
+                              if (d / "plan.txt").exists() else None),
                 "pairId": key, "original": bach, "corrupted": gen,
                 "changed": _changed(g, forced),
                 "blindFlip": rng.random() < 0.5,

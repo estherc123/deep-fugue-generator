@@ -147,3 +147,55 @@ def test_critic_window_grid():
     assert g.shape == (8, 2)
     assert g[0, 0] == NOTE0 + 72 - MIDI_LO and g[4, 0] == NOTE0 + 74 - MIDI_LO
     assert g[6, 0] == STOI["REST"] and (g[1:8, 1] == STOI["HOLD"]).all()
+
+
+# --------------------------------------------------------------------------- #
+# Rules, tonal answer, harmony planner
+# --------------------------------------------------------------------------- #
+def _grid(lines, n):
+    """lines: per voice [(start, end, midi)] -> token grid."""
+    g = np.full((n, len(lines)), STOI["REST"], dtype=np.int16)
+    for v, ev in enumerate(lines):
+        for s, e, m in ev:
+            g[s, v] = NOTE0 + m - MIDI_LO
+            g[s + 1:e, v] = STOI["HOLD"]
+    return g
+
+
+def test_bach_rules_parallels_and_resolution():
+    from fugue_data.generator.bach_rules import check
+    # C5/F4 -> D5/G4: parallel fifths, similar motion
+    g = _grid([[(0, 4, 72), (4, 8, 74)], [(0, 4, 65), (4, 8, 67)]], 8)
+    assert any(r == "par5" for r, _, _ in check(g))
+    # contrary octaves C5/C4 -> G5/G3 are consecutive octaves too
+    g = _grid([[(0, 4, 72), (4, 8, 79)], [(0, 4, 60), (4, 8, 55)]], 8)
+    assert any(r == "par8" for r, _, _ in check(g))
+    # suspension: F held over a C bass into the beat, resolving down to E: fine
+    g = _grid([[(0, 8, 65), (8, 12, 64)], [(0, 4, 57), (4, 12, 48)]], 12)
+    assert not any(r == "strong_diss" for r, _, _ in check(g))
+    # the same F leaping away instead of resolving: an unresolved dissonance
+    g = _grid([[(0, 8, 65), (8, 12, 72)], [(0, 4, 57), (4, 12, 48)]], 12)
+    assert any(r == "strong_diss" for r, _, _ in check(g))
+
+
+def test_tonal_answer_swaps_head_dominant():
+    from fractions import Fraction as Fr
+    from fugue_data.generator.form_planner import tonal_answer
+    # C major subject G4 C5 B4 C5 D5: the head's G (degree 5) is answered by C, not D
+    subj = [(Fr(k), Fr(1), m) for k, m in enumerate([67, 72, 71, 72, 74])]
+    ans = tonal_answer(subj, 0, "major", 74)
+    assert ans[0] % 12 == 0          # G -> C (tonal), not G -> D (real)
+    assert ans[1] % 12 == 7          # C -> G
+
+
+def test_harmony_planner_honours_cadence():
+    from fugue_data.generator import harmony
+    if not harmony.MODEL.exists():
+        pytest.skip("harmony model not fitted")
+    rng = np.random.default_rng(0)
+    U = 8
+    allowed = [None] * U
+    allowed[U - 1] = harmony.state_ids(0, ("maj",), (0,))
+    allowed[U - 2] = harmony.state_ids(7, ("maj", "dom7"), (0,))
+    st = harmony.plan_chords(U, [(0, False)] * U, [set()] * U, allowed, rng)
+    assert st[-1][:2] == (0, "maj") and st[-2][0] == 7

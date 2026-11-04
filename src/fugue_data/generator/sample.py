@@ -113,6 +113,14 @@ class ParallelMask:
         self.pitch = np.full((n_samples, nv), -1)       # sounding before this step
         self.onset = np.zeros((n_samples, nv), dtype=int)
         self.new = np.full((n_samples, nv), -2)         # decided at this step (-2 = not yet)
+        self.prev2 = np.full((n_samples, nv), -1)       # the pitch before the last attack
+        # strict: consecutive fifths/octaves in any motion and at any metric
+        # position (bach_rules par5/par8), not only similar motion on the beat
+        self.strict = False
+        # dissonance on a beat obliges the voice's next note to move by step
+        # (1: either way, 2: down, the note having been held into the beat)
+        self.oblig = np.zeros((n_samples, nv), dtype=np.int8)
+        self.pedal = None
         self.beat = max(1, beat_steps)
         self.cands = MIDI_LO + np.arange(N_NOTES)
 
@@ -122,12 +130,33 @@ class ParallelMask:
             for v in range(prev_tokens.shape[1]):
                 t = int(prev_tokens[i, v])
                 if NOTE0 <= t < NOTE0 + N_NOTES:
+                    if self.onset[i, v] != s - 1 or self.pitch[i, v] != MIDI_LO + t - NOTE0:
+                        self.prev2[i, v] = self.pitch[i, v]
                     self.pitch[i, v] = MIDI_LO + t - NOTE0
                     self.onset[i, v] = s - 1
                 elif t == STOI["REST"]:
                     self.pitch[i, v] = -1
+                    self.prev2[i, v] = -1
         self.new[:] = -2
         self.s = s
+        for i in range(prev_tokens.shape[0]):
+            for v in range(prev_tokens.shape[1]):
+                if NOTE0 <= int(prev_tokens[i, v]) < NOTE0 + N_NOTES or int(prev_tokens[i, v]) == STOI["REST"]:
+                    self.oblig[i, v] = 0
+        b = s - 1
+        if b >= 0 and b % self.beat == 0 and not (self.pedal is not None and self.pedal[min(b, len(self.pedal) - 1)] == 2):
+            for i in range(prev_tokens.shape[0]):
+                live = [v for v in range(prev_tokens.shape[1]) if self.pitch[i, v] >= 0]
+                if len(live) < 2:
+                    continue
+                B = min(self.pitch[i, v] for v in live)
+                pcs = {int(self.pitch[i, v]) % 12 for v in live}
+                if len(pcs) == 4 and _is_seventh(pcs):
+                    continue
+                for v in live:
+                    x = self.pitch[i, v]
+                    if x != B and (x - B) % 12 in (1, 2, 5, 6, 10, 11):
+                        self.oblig[i, v] = 2 if self.onset[i, v] < b else 1
 
     def decide(self, i: int, v: int, tok: int):
         self.new[i, v] = (MIDI_LO + tok - NOTE0 if NOTE0 <= tok < NOTE0 + N_NOTES
@@ -146,11 +175,12 @@ class ParallelMask:
             ic = abs(pv - pw) % 12
             if ic not in (0, 7):
                 continue
-            if self.s % self.beat and max(self.onset[i, v], self.onset[i, w]) % self.beat:
-                continue                        # neither attack on a beat
+            if not self.strict:
+                if self.s % self.beat and max(self.onset[i, v], self.onset[i, w]) % self.beat:
+                    continue                    # neither attack on a beat
             c = self.cands
-            out |= ((np.abs(c - nw) % 12 == ic) & (c != pv)
-                    & (np.sign(c - pv) == np.sign(nw - pw)))
+            same_dir = (np.sign(c - pv) == np.sign(nw - pw)) if not self.strict else True
+            out |= (np.abs(c - nw) % 12 == ic) & (c != pv) & same_dir
         return out
 
 
@@ -169,6 +199,91 @@ class ParallelMask:
         if lo is not None:
             out |= self.cands < lo
         return out
+
+
+    def copy_from(self, src: int, dst: np.ndarray):
+        for a in (self.pitch, self.onset, self.new, self.prev2, self.oblig):
+            a[dst] = a[src]
+
+    def melodic_rules(self, i: int, v: int, leap_penalty: float = 2.0,
+                      tritone_penalty: float = 1.5, key: tuple | None = None,
+                      cadence_to: int | None = None,
+                      approach: int | None = None) -> tuple[np.ndarray, np.ndarray]:
+        """(banned, penalty) over the 88 notes for a new attack in voice v.
+
+        Banned (Bach: ~2-3 per 100 bars, rule audit): a leap larger than an
+        octave; similar motion into a fifth or octave with the top voice when v
+        is the lowest sounding voice and the top voice leaps (direct / hidden
+        fifths and octaves in the outer voices).
+        Penalised (Bach bends these regularly, so not banned): after a leap of
+        a fifth or more, anything but a step back the other way; a tritone leap.
+        """
+        ban = np.zeros(N_NOTES, dtype=bool)
+        pen = np.zeros(N_NOTES, dtype=np.float32)
+        c = self.cands
+        ban |= (c < 36) | (c > 86)                      # keyboard compass (ML-5)
+        nv = self.pitch.shape[1]
+        now = lambda w: self.new[i, w] if self.new[i, w] != -2 else self.pitch[i, w]
+        if key is not None:
+            kt, minor = key
+            lt = (kt + 11) % 12
+            # no doubled leading tone on the beat (HC-1)
+            if self.s % self.beat == 0 and any(now(w) >= 0 and now(w) % 12 == lt
+                                               for w in range(nv) if w != v):
+                ban |= (c % 12 == lt)
+        if approach is not None:
+            # a written-in note follows within a beat: the free note before it
+            # must not make a forbidden leap into it either
+            da = np.abs(approach - c)
+            ban |= (da > 12) | (da == 11)
+            pen += 1.5 * ((da == 10) | (da == 6))
+        pv = self.pitch[i, v]
+        if pv < 0:
+            return ban, pen
+        d = c - pv
+        ban |= (np.abs(d) > 12) | (np.abs(d) == 11)     # ML-1: > octave, major 7th
+        if self.oblig[i, v]:                             # §3.0: resolve by step
+            ok = (np.abs(d) >= 1) & (np.abs(d) <= 2)
+            if self.oblig[i, v] == 2:
+                ok &= d < 0
+            pen += 3.0 * (~ok)
+        if key is not None:
+            kt, minor = key
+            if minor and (pv - kt) % 12 in (8, 11):     # ML-1: augmented 2nd b6 <-> #7
+                other = (kt + (11 if (pv - kt) % 12 == 8 else 8)) % 12
+                ban |= (np.abs(d) == 3) & (c % 12 == other)
+            lowest = not any(now(w) >= 0 for w in range(v + 1, nv))
+            highest = not any(now(u) >= 0 for u in range(v))
+            # §3.10: the leading tone in an outer voice rises to the tonic at V -> I
+            if cadence_to is not None and (highest or lowest) and pv % 12 == (cadence_to + 11) % 12:
+                ban |= (c != pv + 1)
+        pen += tritone_penalty * (np.abs(d) == 6)
+        p2 = self.prev2[i, v]
+        if p2 >= 0 and abs(pv - p2) >= 7:
+            back = (np.sign(d) == -np.sign(pv - p2)) & (np.abs(d) >= 1) & (np.abs(d) <= 2)
+            pen += leap_penalty * (~back)
+        if p2 >= 0 and abs(pv - p2) > 2:                # ML-3: two leaps one way
+            d0 = pv - p2
+            span = np.abs(d0 + d)
+            bad = (np.sign(d) == np.sign(d0)) & (np.abs(d) > 2) & \
+                ((span > 12) | np.isin(span % 12, (1, 2, 6, 10, 11)))
+            pen += leap_penalty * bad
+        pen += 0.75 * (np.abs(d) == 10)                 # ML-1: minor 7th (A)
+        lowest = not any(now(w) >= 0 for w in range(v + 1, nv))
+        top = next((u for u in range(v) if now(u) >= 0), None)
+        if lowest and top is not None and self.new[i, top] >= 0 and self.pitch[i, top] >= 0:
+            du = self.new[i, top] - self.pitch[i, top]
+            if abs(du) > 2:
+                ban |= (np.sign(d) == np.sign(du)) & np.isin(np.abs(self.new[i, top] - c) % 12, (0, 7))
+        return ban, pen
+
+
+def _is_seventh(pcs) -> bool:
+    for r in pcs:
+        for tones in ((0, 4, 7, 10), (0, 3, 6, 9), (0, 3, 6, 10), (0, 3, 7, 10), (0, 4, 7, 11)):
+            if {(r + t) % 12 for t in tones} == set(pcs):
+                return True
+    return False
 
 
 def _in_scale(m: int, T: int, p: dict, s: int) -> int:
@@ -227,7 +342,8 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
              sequences: list[dict] | None = None,
              force_sequences: bool = False, chords: bool = True,
              no_crossing: bool = False, repeat_penalty: float = 0.0,
-             chord_bias: float = 0.0) -> tuple[np.ndarray, dict]:
+             chord_bias: float = 0.0, melodic_rules: bool = False,
+             bar_select: int = 0, select_lambda: float = 0.5) -> tuple[np.ndarray, dict]:
     """(n_samples, n_steps, nv) grids; the first prompt_steps are Bach's.
 
     With force_entries the plan's subject entries are written in note for note
@@ -258,6 +374,17 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
     pitch the voice is sounding now (or just sounded): Bach's fugues repeat 4%
     of their notes, the samples 6-18%.
 
+    melodic_rules: ban leaps over an octave and hidden fifths/octaves in the
+    outer voices; penalise unrecovered leaps and tritone leaps
+    (`ParallelMask.melodic_rules`).
+
+    bar_select = K > 1: sequential selection by bar. Each requested sample is
+    K particles; at every barline the particle whose last bar breaks the
+    fewest rules (weighted, `rules_select.bar_score`), with the model's own
+    log-probability as tie-breaker (select_lambda per nat), is copied over
+    its group, and generation continues from it. A bad bar is replaced as it
+    happens instead of spoiling what follows.
+
     chord_bias > 0 is added to the logits of notes in the planned chord at that
     step: the chord plan re-anchors the harmony every unit. Without it, chord
     agreement with the plan falls from ~75% to ~55% over 20 bars (drift.py).
@@ -269,6 +396,14 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
     """
     g = torch.Generator(device=dev).manual_seed(seed)
     n, nv = p["n_steps"], p["nv"]
+    K = max(1, bar_select)
+    n_out = n_samples
+    n_samples = n_out * K
+    lp_bar = np.zeros(n_samples)
+    if K > 1:
+        from .rules_select import bar_score_v2 as bar_score, piece_meta_v2
+        meta = piece_meta_v2(p)
+        bar_of = p["feats"]["bar"]
     ctx = model.ctx
     # Prefix and per-position features never depend on the notes, so build the
     # whole-piece sequence once; only the music tokens change while sampling.
@@ -302,7 +437,31 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
     forced = plan_tokens(p) if (force_entries and plan and p["has_plan"]) else None
     den = int(p["meter_tok"].split("_")[2]) if p["meter_tok"] != "METER_other" else 4
     pm = (ParallelMask(n_samples, nv, 16 // den)
-          if (mask_parallels or no_crossing or repeat_penalty) else None)
+          if (mask_parallels or no_crossing or repeat_penalty or melodic_rules) else None)
+    if pm is not None and melodic_rules:
+        pm.strict = True
+        pm.pedal = p.get("pedal")
+    key_abs = None
+    next_forced = None
+    if melodic_rules and forced is not None:
+        # for every (step, voice): the next written-in attack within a beat, if any
+        next_forced = np.full((n, nv), -1, dtype=np.int64)
+        beat_steps = max(1, 16 // den) * (3 if den >= 8 and int(p["meter_tok"].split("_")[1]) % 3 == 0 else 1) \
+            if p["meter_tok"] != "METER_other" else 4
+        for v in range(nv):
+            nxt_s, nxt_m = None, -1
+            for t in range(n - 1, -1, -1):
+                tok = int(forced[t, v])
+                if NOTE0 <= tok < NOTE0 + N_NOTES:
+                    nxt_s, nxt_m = t, MIDI_LO + tok - NOTE0
+                if nxt_s is not None and 0 < nxt_s - t <= beat_steps:
+                    next_forced[t, v] = nxt_m
+    if melodic_rules and plan:
+        kk = p["key"][:n]
+        key_abs = [((p["tonic"] + (int(k) - 1) // 2) % 12, bool((int(k) - 1) % 2)) if k > 0
+                   else (p["tonic"], p["mode"] == "minor") for k in kk]
+        ch_root = [None if int(c) < 2 else (p["tonic"] + (int(c) - 2) % 12) % 12
+                   for c in (p["chord"][:n] if "chord" in p else np.zeros(n))]
     stats = {"forced_tokens": 0, "masked_choices": 0}
     music = lambda s, v: pre_len + s * nv + v
     for s in range(prompt_steps, n):
@@ -334,6 +493,12 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                             continue
                         if pm is not None and mask_parallels and pm.banned(i, v)[cand - NOTE0]:
                             continue
+                        if pm is not None and no_crossing and pm.crossing_banned(i, v)[cand - NOTE0]:
+                            continue
+                        if pm is not None and melodic_rules:
+                            mb, _ = pm.melodic_rules(i, v, key=key_abs[s] if key_abs is not None else None)
+                            if mb[cand - NOTE0]:
+                                continue
                     elif t0 == hold:
                         if prev_t == rest:
                             continue
@@ -383,6 +548,19 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                         if not (b | c).all():
                             stats["crossing_masked"] = stats.get("crossing_masked", 0) + int((c & ~b).sum())
                             b = b | c
+                    if melodic_rules:
+                        kinfo = key_abs[s] if key_abs is not None else None
+                        cad = None
+                        if key_abs is not None and s > 0 and ch_root[s] is not None \
+                                and ch_root[s - 1] is not None and ch_root[s] != ch_root[s - 1] \
+                                and ch_root[s - 1] == (ch_root[s] + 7) % 12:
+                            cad = ch_root[s]
+                        appr = int(next_forced[s, v]) if next_forced is not None and next_forced[s, v] >= 0 else None
+                        mb, mp = pm.melodic_rules(i, v, key=kinfo, cadence_to=cad, approach=appr)
+                        if not (b | mb).all():
+                            b = b | mb
+                        if mp.any():
+                            logits[i, NOTE0:NOTE0 + N_NOTES] -= torch.tensor(mp, device=dev)
                     if b.any():
                         stats["masked_choices"] += int(b.sum())
                         mask[i, NOTE0:NOTE0 + N_NOTES][torch.tensor(b, device=dev)] = float("-inf")
@@ -407,6 +585,7 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                         else:
                             logits[i, t0] += seq_bias
                     stats["seq_steered"] = stats.get("seq_steered", 0) + n_samples
+            raw_lp = torch.log_softmax(logits + mask, -1) if K > 1 else None
             logits = (logits + mask) / temperature
             probs = torch.softmax(logits, -1)
             sp, si = probs.sort(-1, descending=True)
@@ -415,10 +594,31 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                                                      generator=g))
             ch = choice[:, 0].cpu().numpy()
             toks[todo, pos] = ch[todo]
+            if raw_lp is not None:
+                lp_bar[todo] += raw_lp[torch.arange(n_samples, device=dev), choice[:, 0]].cpu().numpy()[todo]
             if pm is not None:
                 for i in np.flatnonzero(todo):
                     pm.decide(i, v, int(toks[i, pos]))
-    return toks[:, pre_len:pre_len + n * nv].reshape(n_samples, n, nv), stats
+        # ---- bar-level selection ------------------------------------------- #
+        if K > 1 and (s + 1 == n or bar_of[s + 1] != bar_of[s]):
+            b0 = int(np.searchsorted(bar_of, bar_of[s]))
+            grid_now = toks[:, pre_len:pre_len + (s + 1) * nv].reshape(n_samples, s + 1, nv)
+            for gi in range(n_out):
+                idx = np.arange(gi * K, (gi + 1) * K)
+                scores = [bar_score(grid_now[i], max(prompt_steps, b0), s + 1, meta) - select_lambda * lp_bar[i]
+                          for i in idx]
+                best = idx[int(np.argmin(scores))]
+                stats.setdefault("bar_rule_cost", []).append(round(float(min(scores) + select_lambda * lp_bar[best]), 2))
+                others = idx[idx != best]
+                toks[others, pre_len:pre_len + (s + 1) * nv] = toks[best, pre_len:pre_len + (s + 1) * nv]
+                if pm is not None:
+                    pm.copy_from(best, others)
+            lp_bar[:] = 0
+    out = toks[:, pre_len:pre_len + n * nv].reshape(n_samples, n, nv)
+    if K > 1:
+        out = out[::K]
+        stats["bar_select"] = K
+    return out, stats
 
 
 def first_entry_end(p: dict) -> int:
@@ -462,6 +662,10 @@ def main(argv=None) -> int:
     ap.add_argument("--n-best", type=int, default=0,
                     help="generate this many and keep the --samples best by the critic")
     ap.add_argument("--critic", default="data/models/critic_v1.pt")
+    ap.add_argument("--melodic-rules", action="store_true",
+                    help="ban leaps > octave and outer hidden 5ths/8ves; penalise unrecovered leaps")
+    ap.add_argument("--bar-select", type=int, default=0,
+                    help="K candidates per bar; keep the one breaking the fewest rules")
     ap.add_argument("--chord-bias", type=float, default=0.0,
                     help="logit bonus for notes of the planned chord")
     ap.add_argument("--no-chords", action="store_true",
@@ -493,7 +697,8 @@ def main(argv=None) -> int:
                              key_bias=args.key_bias, seq_bias=args.seq_bias,
                              force_sequences=args.force_sequences, chords=not args.no_chords,
                              no_crossing=args.no_crossing, repeat_penalty=args.repeat_penalty,
-                             chord_bias=args.chord_bias)
+                             chord_bias=args.chord_bias, melodic_rules=args.melodic_rules,
+                             bar_select=args.bar_select)
     critic_scores = None
     if args.n_best > args.samples:
         from .critic import load_critic, score_grid
@@ -523,7 +728,8 @@ def main(argv=None) -> int:
             "force_entries": not args.no_force_entries, "guidance": args.guidance, "key_bias": args.key_bias, "seq_bias": args.seq_bias, "force_sequences": args.force_sequences, "mask_parallels": not args.no_mask,
             "chords": not args.no_chords, "no_crossing": args.no_crossing,
             "repeat_penalty": args.repeat_penalty, "n_best": args.n_best,
-            "chord_bias": args.chord_bias,
+            "chord_bias": args.chord_bias, "melodic_rules": args.melodic_rules,
+            "bar_select": args.bar_select,
             "critic_scores": critic_scores,
             "plan_source": p.get("plan_source"), **gstats}
     (out / "meta.json").write_text(json.dumps(meta, indent=2))

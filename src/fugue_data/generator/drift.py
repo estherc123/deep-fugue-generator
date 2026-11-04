@@ -39,7 +39,7 @@ def _cut(p, end):
 
 
 def gen(model_path: str, temperature: float, n: int, tag: str, chord_bias: float = 0.0,
-        key_bias: float = 3.0) -> None:
+        key_bias: float = 3.0, melodic_rules: bool = False, bar_select: int = 0) -> None:
     from .encode import load_corpus
     from .sample import generate, load_model
     pieces = [p for p in load_corpus(ROOT, baroque=True, labels=True)
@@ -60,7 +60,8 @@ def gen(model_path: str, temperature: float, n: int, tag: str, chord_bias: float
         with torch.no_grad():
             grids, _ = generate(model, q, prompt, n, "cuda", temperature=temperature, key_bias=key_bias,
                                 seed=3, force_sequences=True, no_crossing=True, repeat_penalty=2.0,
-                                chord_bias=chord_bias)
+                                chord_bias=chord_bias, melodic_rules=melodic_rules,
+                                bar_select=bar_select)
         np.savez_compressed(d / f"{p['piece_id']}.npz", generated=grids, real=q["grid"],
                             prompt_steps=prompt)
         print(tag, p["piece_id"], flush=True)
@@ -176,11 +177,13 @@ def main(argv=None) -> int:
     ap.add_argument("--tag", default=None)
     ap.add_argument("--chord-bias", type=float, default=0.0)
     ap.add_argument("--key-bias", type=float, default=3.0)
+    ap.add_argument("--melodic-rules", action="store_true")
+    ap.add_argument("--bar-select", type=int, default=0)
     ap.add_argument("--tags", nargs="*", default=["t1.0"])
     args = ap.parse_args(argv)
     if args.cmd == "gen":
         gen(args.model, args.temperature, args.n, args.tag or f"t{args.temperature}",
-            args.chord_bias, args.key_bias)
+            args.chord_bias, args.key_bias, args.melodic_rules, args.bar_select)
     else:
         report(args.model, args.tags)
     return 0
