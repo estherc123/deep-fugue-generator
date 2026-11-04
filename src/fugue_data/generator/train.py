@@ -52,7 +52,9 @@ def _music_arrays(p: dict, plan: bool):
         f[k][:] = np.repeat(p["feats"][k], nv)
     f["seg"][:] = SEG["music"]
     if plan:
-        f["key"][:] = np.repeat(p["key"], nv)
+        for k in ("key", "next_key", "to_key"):
+            f[k][:] = np.repeat(p[k], nv)
+        f["seq"][:] = p["seq"].reshape(-1)
     if plan and p["has_plan"]:
         f["role"][:] = p["role"].reshape(-1)
         f["pnote"][:] = p["pnote"].reshape(-1)

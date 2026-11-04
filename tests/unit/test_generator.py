@@ -65,3 +65,20 @@ def test_memorisation_index_finds_copied_run():
     other = np.full((64, 1), STOI["REST"])
     other[:, 0] = NOTE0 + 30 + rng.integers(0, 20, 64)
     assert score_grid(idx, other, run=12)["longest_run"] < 6
+
+
+def _line_grid(pitches_per_step):
+    g = np.full((len(pitches_per_step), 1), STOI["REST"])
+    for s, m in enumerate(pitches_per_step):
+        g[s, 0] = STOI["HOLD"] if m is None else NOTE0 + m - MIDI_LO
+    return g
+
+
+def test_sequence_detector_finds_descending_sequence_not_scale():
+    from fugue_data.generator.sequences import coverage, find_sequences
+    unit = [72, 74, 71, 72]                       # turn figure, one beat of 16ths
+    seq = sum(([m - 2 * k for m in unit] for k in range(3)), []) + [60] * 4
+    q = find_sequences(_line_grid(seq), beat_steps=4)
+    assert q and q[0]["statements"] == 3 and q[0]["step"] == -2
+    scale = list(range(72, 56, -1))               # a plain run is not a sequence
+    assert coverage(_line_grid(scale), beat_steps=4) == 0.0

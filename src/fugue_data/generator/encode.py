@@ -53,7 +53,8 @@ NOTE0 = STOI[NOTES[0]]
 # Feature tables: name -> number of embedding rows (index 0 = n/a or unknown).
 FEATURES = {"voice": 7, "sub": 17, "beat": 17, "bar": 257, "prog": 33,
             "role": 6, "to_entry": 17, "to_cad": 17, "cad_key": 16, "pedal": 3,
-            "seg": 4, "pnote": 90, "epc": 13, "key": 25}
+            "seg": 4, "pnote": 90, "epc": 13, "key": 25,
+            "next_key": 25, "to_key": 17, "seq": 10}
 ROLE = {"free": 1, "subject": 2, "answer": 3, "countersubject": 4}
 SEG = {"prefix": 1, "subject": 2, "music": 3}
 CAD_KEYS = ["I", "i", "II", "ii", "III", "iii", "IV", "iv", "V", "v", "VI", "vi",
@@ -121,6 +122,38 @@ def local_keys(grid: np.ndarray, bar_steps: int, tonic: int) -> np.ndarray:
                 if r > best[0]:
                     best = (r, 1 + 2 * ((t - tonic) % 12) + mi)
         out[b0:b0 + bar_steps] = best[1]
+    return out
+
+
+def key_lookahead(key: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """For each step: the next key region's key, and steps until it starts.
+
+    The current key alone tells the model nothing it can't hear; what it needs
+    in order to prepare a modulation is warning that one is coming.
+    """
+    n = len(key)
+    nxt = np.zeros(n, dtype=np.int16)
+    dist = np.full(n, 16, dtype=np.int16)
+    k_next, s_next = 0, None
+    for s in range(n - 1, -1, -1):
+        if s + 1 < n and key[s + 1] != key[s]:
+            k_next, s_next = int(key[s + 1]), s + 1
+        if s_next is not None:
+            nxt[s] = k_next
+            dist[s] = _bucket(s_next - s)
+    return nxt, dist
+
+
+def sequence_feature(grid: np.ndarray, beat_steps: int) -> np.ndarray:
+    """(n_steps, nv): 1 = not in a sequence; 2-5 = first statement of a unit of
+    1-4 beats; 6-9 = a restatement of such a unit (copy it, transposed)."""
+    from .sequences import find_sequences
+    out = np.ones(grid.shape, dtype=np.int16)
+    for q in find_sequences(grid, beat_steps):
+        a, D, v = q["start"], q["unit"], q["voice"]
+        beats = min(4, max(1, D // max(1, beat_steps)))
+        out[a:a + D, v] = 1 + beats
+        out[a + D:a + q["statements"] * D, v] = 5 + beats
     return out
 
 
@@ -263,6 +296,9 @@ def encode_piece(score: dict, split_row: dict, annotations: list[dict] | None):
             if len(col) and len(col) <= 128:
                 subject_line = col
 
+    key = local_keys(grid, int(bar_q * STEPS_PER_Q), tonic_here)
+    next_key, to_key = key_lookahead(key)
+    seq = sequence_feature(grid, int(beat_q * STEPS_PER_Q))
     return {
         "piece_id": score["piece_id"], "split": split_row["split"],
         "corpus": "fugue" if score.get("movement_type") == "fugue" else "chorale",
@@ -272,7 +308,7 @@ def encode_piece(score: dict, split_row: dict, annotations: list[dict] | None):
         "to_cad": to_cad, "cad_key": cad_key, "pedal": pedal,
         "has_plan": has_plan, "subject": subject_line, "dropped_notes": dropped,
         "pnote": pnote, "epc": epc,
-        "key": local_keys(grid, int(bar_q * STEPS_PER_Q), tonic_here),
+        "key": key, "next_key": next_key, "to_key": to_key, "seq": seq,
         "plan_source": ("labels" if has_plan and not any(
             a.get("source_name") == "detected" for a in acc) else
             "detected" if has_plan else None),

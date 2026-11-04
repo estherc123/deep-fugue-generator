@@ -38,6 +38,14 @@ def _compact(score: dict) -> list[list]:
 
 
 def _desc(label: str, pid: str, meta: dict) -> str:
+    if meta.get("plan_source") == "template":
+        return (f"{label}. Composed from the subject alone. Top: Bach's own fugue on this "
+                f"subject ({pid}, held out from training). Bottom: the generator's "
+                f"fugue: the subject is given, the form (entries, key path, sequences) "
+                f"is planned from the training fugue {meta['template']}, entries are "
+                f"written in (outlined), planned sequences restate the model's own "
+                f"material, and the model writes the rest. Key bias {meta['key_bias']}, "
+                f"parallels masked, temperature {meta['temperature']}.")
     plan = ("Bach's plan for this piece" if meta.get("plan_source") != "detected"
             else "the detected entry plan for this piece")
     entries = ("Subject entries are written in from the plan (outlined); the model "

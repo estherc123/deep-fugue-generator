@@ -41,7 +41,7 @@ def load_model(path: Path, dev: str):
     ck = torch.load(path, map_location=dev, weights_only=False)
     m = ck["config"]["model"]
     model = FugueGenerator(len(ck["vocab"]), m["d"], m["layers"], m["heads"],
-                           m["ctx"], 0.0).to(dev)
+                           m["ctx"], 0.0, ck.get("features")).to(dev)
     model.load_state_dict(ck["state"])
     model.eval()
     return model, ck
@@ -154,17 +154,69 @@ class ParallelMask:
         return out
 
 
+def _in_scale(m: int, T: int, p: dict, s: int) -> int:
+    """Snap m to the planned key's scale at step s (harmonic-minor 7th allowed),
+    moving one semitone in the sequence's direction first."""
+    k = int(p["key"][min(s, len(p["key"]) - 1)])
+    if k <= 0:
+        return m
+    deg, minor = (k - 1) // 2, (k - 1) % 2
+    t = (p["tonic"] + deg) % 12
+    scale = {(t + x) % 12 for x in ([0, 2, 3, 5, 7, 8, 10, 11] if minor else [0, 2, 4, 5, 7, 9, 11])}
+    if m % 12 in scale:
+        return m
+    d = -1 if T < 0 else 1
+    return m + d if (m + d) % 12 in scale else m - d
+
+
+def key_bias_table(p: dict) -> np.ndarray:
+    """(n_steps, 88): log Krumhansl-Kessler weight of each note in the planned key."""
+    from ..corruption.windows import _KK_MAJOR, _KK_MINOR
+    prof = [np.log(np.array(x) / np.mean(x)) for x in (_KK_MAJOR, _KK_MINOR)]
+    pcs = (MIDI_LO + np.arange(N_NOTES)) % 12
+    out = np.zeros((p["n_steps"], N_NOTES), dtype=np.float32)
+    for s, k in enumerate(p["key"][:p["n_steps"]]):
+        if k > 0:
+            deg, minor = (int(k) - 1) // 2, (int(k) - 1) % 2
+            tpc = (p["tonic"] + deg) % 12
+            out[s] = prof[minor][(pcs - tpc) % 12]
+    return out
+
+
 @torch.no_grad()
 def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
              temperature: float = 1.0, top_p: float = 0.95, plan: bool = True,
              seed: int = 0, force_entries: bool = True,
-             mask_parallels: bool = True) -> tuple[np.ndarray, dict]:
+             mask_parallels: bool = True, guidance: float = 1.0,
+             key_bias: float = 0.0, seq_bias: float = 0.0,
+             sequences: list[dict] | None = None,
+             force_sequences: bool = False) -> tuple[np.ndarray, dict]:
     """(n_samples, n_steps, nv) grids; the first prompt_steps are Bach's.
 
     With force_entries the plan's subject entries are written in note for note
     and the model writes everything else; with mask_parallels no free note may
     form a parallel fifth or octave against a voice already decided at that
     step (entries included).
+
+    guidance > 1 is classifier-free guidance on the plan: logits are pushed
+    away from the plan-free prediction, toward what the plan asks for
+    (u + w * (c - u) on log-probabilities). Plan dropout in training is what
+    makes the plan-free prediction available from the same model.
+
+    key_bias > 0 adds key_bias * log(Krumhansl profile weight) of the plan's
+    local key to every NOTE_ON logit: a soft pull toward the planned key that
+    leaves chromatic notes possible.
+
+    seq_bias > 0: inside a planned sequence restatement (`sequences`, default
+    the ones found in the plan's source piece), the token this voice wrote one
+    unit earlier, transposed by the sequence step, gets +seq_bias (and +-1
+    semitone half that, for diatonic adjustment). It steers toward
+    restating the model's *own* unit, not Bach's.
+
+    force_sequences: the same, as a write-in. Each planned restatement copies
+    the model's own previous unit, transposed by the sequence step and snapped
+    to the planned key's scale (a diatonic sequence). Where the copy is not
+    playable (HOLD after a rest) or would form a parallel, the model samples.
     """
     g = torch.Generator(device=dev).manual_seed(seed)
     n, nv = p["n_steps"], p["nv"]
@@ -179,6 +231,23 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
     room_steps = (ctx - pre_len) // nv - 1
     hold, rest = STOI["HOLD"], STOI["REST"]
     feats_t = {k: torch.tensor(v, device=dev) for k, v in feats0.items()}
+    use_cfg = guidance != 1.0 and plan
+    if use_cfg:
+        seq_u, feats_u, loss_u = build_sequence(p, 0, full_ctx, 0, False)
+        pre_u = int((~loss_u).sum())
+        toks_u = np.repeat(seq_u[None], n_samples, axis=0)
+        feats_ut = {k: torch.tensor(v, device=dev) for k, v in feats_u.items()}
+    kb = key_bias_table(p) * key_bias if (key_bias and plan) else None
+    if kb is not None:
+        kb = torch.tensor(kb, device=dev, dtype=torch.float32)
+    seq_at = {}
+    if (seq_bias or force_sequences) and plan:
+        from .sequences import find_sequences
+        from .report import beat_steps_of
+        for q in (sequences if sequences is not None
+                  else find_sequences(p["grid"], beat_steps_of(p))):
+            for t in range(q["start"] + q["unit"], q["start"] + q["statements"] * q["unit"]):
+                seq_at[(t, q["voice"])] = (q["unit"], q["step"])
     forced = plan_tokens(p) if (force_entries and plan and p["has_plan"]) else None
     den = int(p["meter_tok"].split("_")[2]) if p["meter_tok"] != "METER_other" else 4
     pm = ParallelMask(n_samples, nv, 16 // den) if mask_parallels else None
@@ -200,6 +269,35 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                 toks[:, pos] = forced[s, v]
                 stats["forced_tokens"] += n_samples
                 continue
+            if force_sequences and (s, v) in seq_at and s - seq_at[(s, v)][0] >= 0:
+                D, T = seq_at[(s, v)]
+                ok = np.zeros(n_samples, dtype=bool)
+                for i in range(n_samples):
+                    t0 = int(toks[i, music(s - D, v)])
+                    prev_t = int(toks[i, pos - nv]) if s > 0 else rest
+                    if NOTE0 <= t0 < NOTE0 + N_NOTES:
+                        m = _in_scale(MIDI_LO + t0 - NOTE0 + T, T, p, s)
+                        cand = NOTE0 + m - MIDI_LO
+                        if not (NOTE0 <= cand < NOTE0 + N_NOTES):
+                            continue
+                        if pm is not None and pm.banned(i, v)[cand - NOTE0]:
+                            continue
+                    elif t0 == hold:
+                        if prev_t == rest:
+                            continue
+                        cand = hold
+                    else:
+                        cand = rest
+                    toks[i, pos] = cand
+                    ok[i] = True
+                    if pm is not None:
+                        pm.decide(i, v, cand)
+                stats["seq_forced"] = stats.get("seq_forced", 0) + int(ok.sum())
+                if ok.all():
+                    continue
+                todo = ~ok
+            else:
+                todo = np.ones(n_samples, dtype=bool)
             a = pre_len + start * nv
             idx = np.concatenate([np.arange(pre_len), np.arange(a, pos)])
             x = torch.tensor(toks[:, idx], device=dev)
@@ -207,6 +305,17 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
             fx = {k: t[fidx].unsqueeze(0).expand(n_samples, -1) for k, t in feats_t.items()}
             with torch.autocast("cuda", dtype=torch.bfloat16, enabled=dev == "cuda"):
                 logits = model(x, fx)[:, -1].float()
+            if use_cfg:
+                pos_u = pre_u + s * nv + v
+                toks_u[:, pre_u:pos_u] = toks[:, pre_len:pos]
+                idx_u = np.concatenate([np.arange(pre_u), np.arange(pre_u + start * nv, pos_u)])
+                xu = torch.tensor(toks_u[:, idx_u], device=dev)
+                fiu = torch.tensor(idx_u + 1, device=dev)
+                fxu = {k: t[fiu].unsqueeze(0).expand(n_samples, -1) for k, t in feats_ut.items()}
+                with torch.autocast("cuda", dtype=torch.bfloat16, enabled=dev == "cuda"):
+                    lu = model(xu, fxu)[:, -1].float()
+                lc, lu = logits.log_softmax(-1), lu.log_softmax(-1)
+                logits = lu + guidance * (lc - lu)
             # Grammar: only REST / HOLD / NOTE_ON are music; HOLD needs a sounding voice.
             mask = torch.full_like(logits, float("-inf"))
             mask[:, rest] = 0
@@ -220,15 +329,31 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                     if b.any():
                         stats["masked_choices"] += int(b.sum())
                         mask[i, NOTE0:NOTE0 + N_NOTES][torch.tensor(b, device=dev)] = float("-inf")
+            if kb is not None:
+                logits[:, NOTE0:NOTE0 + N_NOTES] += kb[s]
+            if (s, v) in seq_at:
+                D, T = seq_at[(s, v)]
+                if s - D >= 0:
+                    for i in range(n_samples):
+                        t0 = int(toks[i, music(s - D, v)])
+                        if NOTE0 <= t0 < NOTE0 + N_NOTES:
+                            tgt = t0 + T
+                            for off, w in ((0, 1.0), (-1, 0.5), (1, 0.5)):
+                                if NOTE0 <= tgt + off < NOTE0 + N_NOTES:
+                                    logits[i, tgt + off] += w * seq_bias
+                        else:
+                            logits[i, t0] += seq_bias
+                    stats["seq_steered"] = stats.get("seq_steered", 0) + n_samples
             logits = (logits + mask) / temperature
             probs = torch.softmax(logits, -1)
             sp, si = probs.sort(-1, descending=True)
             sp = sp * ((sp.cumsum(-1) - sp) < top_p)
             choice = si.gather(-1, torch.multinomial(sp / sp.sum(-1, keepdim=True), 1,
                                                      generator=g))
-            toks[:, pos] = choice[:, 0].cpu().numpy()
+            ch = choice[:, 0].cpu().numpy()
+            toks[todo, pos] = ch[todo]
             if pm is not None:
-                for i in range(n_samples):
+                for i in np.flatnonzero(todo):
                     pm.decide(i, v, int(toks[i, pos]))
     return toks[:, pre_len:pre_len + n * nv].reshape(n_samples, n, nv), stats
 
@@ -259,6 +384,14 @@ def main(argv=None) -> int:
     ap.add_argument("--no-force-entries", action="store_true",
                     help="let the model write the entries itself (v1 behaviour)")
     ap.add_argument("--no-mask", action="store_true", help="no parallel-5th/8ve masking")
+    ap.add_argument("--guidance", type=float, default=1.0,
+                    help="classifier-free guidance weight on the plan (1 = off)")
+    ap.add_argument("--key-bias", type=float, default=0.0,
+                    help="soft pull toward the plan's local key (0 = off)")
+    ap.add_argument("--seq-bias", type=float, default=0.0,
+                    help="pull toward restating the model's own unit in planned sequences")
+    ap.add_argument("--force-sequences", action="store_true",
+                    help="write planned sequence restatements in from the model's own unit")
     ap.add_argument("--out", default="data/review/generator_samples")
     args = ap.parse_args(argv)
 
@@ -278,7 +411,9 @@ def main(argv=None) -> int:
     grids, gstats = generate(model, p, prompt, args.samples, dev, args.temperature,
                              args.top_p, plan=not args.no_plan, seed=args.seed,
                              force_entries=not args.no_force_entries,
-                             mask_parallels=not args.no_mask)
+                             mask_parallels=not args.no_mask, guidance=args.guidance,
+                             key_bias=args.key_bias, seq_bias=args.seq_bias,
+                             force_sequences=args.force_sequences)
 
     out = root / args.out / args.piece
     out.mkdir(parents=True, exist_ok=True)
@@ -297,7 +432,7 @@ def main(argv=None) -> int:
             "prompt_quarters": prompt / STEPS_PER_Q, "n_steps": p["n_steps"],
             "plan": not args.no_plan, "temperature": args.temperature,
             "top_p": args.top_p, "seed": args.seed,
-            "force_entries": not args.no_force_entries, "mask_parallels": not args.no_mask,
+            "force_entries": not args.no_force_entries, "guidance": args.guidance, "key_bias": args.key_bias, "seq_bias": args.seq_bias, "force_sequences": args.force_sequences, "mask_parallels": not args.no_mask,
             "plan_source": p.get("plan_source"), **gstats}
     (out / "meta.json").write_text(json.dumps(meta, indent=2))
     print(json.dumps(meta))

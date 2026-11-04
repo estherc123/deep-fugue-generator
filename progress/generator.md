@@ -65,7 +65,26 @@ The subject is known, so entries need not be learned at all. Split the job:
     Checked by the rule engine: 0 parallels in all v2 samples (v1: 5–8).
   - Memorisation: held-out Bach shares runs of median 10 / max 14 intervals
     with training; v2 samples 5–9. No copying.
+- **Steps 5–6 started** (2026-11-03):
+  - v3 adds key look-ahead features (next key, distance to it); v4 adds
+    per-voice sequence roles (`sequences.py`: unit of 1–4 beats stated 3+
+    times at a consistent step; Bach's fugues: median 15% of the time).
+  - Decoding: soft key bias (`--key-bias`; 3 is best so far) and forced
+    sequence restatements (`--force-sequences`: the model's *own* unit,
+    transposed diatonically). Plan-only CFG did not help.
+  - On Bach's plans (v4, key bias 3, forced sequences): bars the plan puts
+    away from home match 33–67% (v2: 0–33%); sequences cover 9–24% (v2: 0%;
+    Bach 24–25%). Still 0 parallels; longest shared run 7–9.
+  - `plan.py` + `compose.py`: a fugue from a subject alone. The form comes
+    from a training fugue with similar subject length, rescaled; entries are
+    the subject moved degree-for-degree into each entry's key. Tested on the
+    held-out subjects of I/2 and II/19.
 - **Open:**
+  - Answers are real, not tonal; no countersubject planning.
+  - Compositions take one template's form: limited variety, and few planned
+    sequences when the template has few (II/19 composition: 1).
+  - Density runs ~15–25% above Bach with key bias 3.
+  - Older open items below.
   - R3 is weak: samples follow the planned key path in only ~30–50% of bars
     and drift home (II/17: Bach visits vi, iii, ii; samples mostly stay in I).
     Next: classifier-free guidance on the plan (plan dropout already trains

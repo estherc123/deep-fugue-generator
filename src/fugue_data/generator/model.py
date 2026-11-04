@@ -44,12 +44,15 @@ class Block(nn.Module):
 
 class FugueGenerator(nn.Module):
     def __init__(self, vocab: int, d: int = 384, layers: int = 8, heads: int = 6,
-                 ctx: int = 2048, drop: float = 0.15):
+                 ctx: int = 2048, drop: float = 0.15, features: dict | None = None):
         super().__init__()
         self.ctx = ctx
         self.tok = nn.Embedding(vocab, d)
         self.pos = nn.Embedding(ctx, d)
-        self.feat = nn.ModuleDict({k: nn.Embedding(n, d) for k, n in FEATURES.items()})
+        # A checkpoint carries its own feature table, so older models keep
+        # loading after the encoder gains features; extra inputs are ignored.
+        self.feat = nn.ModuleDict({k: nn.Embedding(n, d)
+                                   for k, n in (features or FEATURES).items()})
         self.drop = nn.Dropout(drop)
         self.blocks = nn.ModuleList([Block(d, heads, drop) for _ in range(layers)])
         self.ln = nn.LayerNorm(d)
