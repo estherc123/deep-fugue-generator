@@ -102,6 +102,45 @@ def chord_pcs(state, tonic):
     return {(tonic + r + t) % 12 for t in QUALS[q]}
 
 
+# Chords at home in a key: the diatonic ones plus the chromatic chords Bach
+# uses routinely (secondary dominants and leading-tone chords, the
+# Neapolitan; in minor the major V and the raised-6th chords of the melodic
+# minor). (root relative to the tonic, qualities). Others are penalised by
+# OUT_OF_KEY so they appear only when a constraint asks for them: the chord
+# labels the model was fitted on are ~75% accurate, and sampling from the raw
+# table produced E minor in G minor and B major in E-flat major.
+VOCAB = {
+    "major": {0: ("maj", "maj7", "dom7"), 2: ("min", "min7", "maj", "dom7"),
+              4: ("min", "min7", "maj", "dom7"), 5: ("maj", "maj7", "min"),
+              7: ("maj", "dom7"), 9: ("min", "min7", "maj", "dom7"),
+              11: ("dim", "hdim7", "dim7"), 1: ("maj",), 6: ("dim", "dim7", "hdim7"),
+              8: ("dim7",)},
+    "minor": {0: ("min", "maj", "dom7"), 2: ("dim", "hdim7", "maj", "dom7", "min"),
+              3: ("maj", "maj7"), 5: ("min", "min7", "maj"), 7: ("maj", "dom7", "min"),
+              8: ("maj", "maj7"), 10: ("maj", "dom7"), 11: ("dim", "dim7", "hdim7"),
+              1: ("maj",), 6: ("dim", "dim7", "hdim7"), 9: ("dim", "hdim7")},
+}
+OUT_OF_KEY = -6.0
+MINOR_V = -1.5            # v (minor) as the dominant of a minor key: Bach uses V
+_PRIOR = {}
+
+
+def key_prior(minor: bool) -> np.ndarray:
+    if minor not in _PRIOR:
+        voc = VOCAB["minor" if minor else "major"]
+        pr = np.zeros(len(STATES))
+        for i, st in enumerate(STATES):
+            if st is None:
+                continue
+            r, q, _ = st
+            if q not in voc.get(r, ()):
+                pr[i] = OUT_OF_KEY
+            elif minor and r == 7 and q == "min":
+                pr[i] = MINOR_V
+        _PRIOR[minor] = pr
+    return _PRIOR[minor]
+
+
 def plan_chords(n_units: int, keys: list, fixed_notes: list, allowed: list | None,
                 rng: np.random.Generator, temperature: float = 1.0) -> list:
     """Sample one state per unit.
@@ -126,6 +165,7 @@ def plan_chords(n_units: int, keys: list, fixed_notes: list, allowed: list | Non
             for pc in fixed_notes[u]:
                 if pc not in pcs:
                     emit[u, i] += np.log(EMIT_NCT)
+        emit[u] += key_prior(bool(minor))
         if allowed is not None and allowed[u] is not None:
             mask = np.full(S, -np.inf)
             mask[list(allowed[u])] = 0

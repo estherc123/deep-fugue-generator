@@ -235,6 +235,20 @@ The subject is known, so entries need not be learned at all. Split the job:
   (model-written notes) median 12 / max 16, held-out Bach median 14 / max 32.
   Original subjects (compositions_original, 3 subjects x 2): 0 forbidden.
 
+- **v5: keys after the first entry** (owner: "the keys are a bit off right
+  after the intro subject"). Two bugs in the chord plans: (1) sequential
+  episodes wrote their chain in the target key's scale but applied it relative
+  to the previous key, shifting every chord by the key distance (I/2: B major
+  and A-flat minor planned in E-flat major); (2) the chord HMM, fitted on ~75%
+  accurate labels, sampled out-of-key chords (E minor in G minor, minor v as
+  the dominant). Fixes: chain roots converted to the local key frame and
+  sequential episodes pivot at their start; a key vocabulary prior (diatonic +
+  secondary dominants / leading-tone chords / Neapolitan; V not v in minor);
+  the tonal answer's head harmonised in the tonic. Music chords in the
+  planned key 86.5% -> 90.0% (Bach 84.6%), in the 6 bars after the first entry
+  83.9% -> 87.5%; 40/40 fugues free of forbidden breaks; cross relations 8.8
+  -> 6.2 per 100 bars.
+
 ### How to compose
 
     # from your own subject (pitch:quarters), key given as tonic pitch class

@@ -369,7 +369,10 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
     key_rel = [(0, mode == "minor")] * n
     for e in form["entries"]:
         if e["kind"] == "answer" and e["section"] in ("exposition", "counter"):
-            for s in range(e["start"], min(n, e["start"] + form["subject_steps"])):
+            # a tonal answer's head stays in the tonic (that is what answering
+            # 5 with 1 does); the rest is in the dominant
+            head = form["subject_steps"] // 4
+            for s in range(e["start"] + head, min(n, e["start"] + form["subject_steps"])):
                 key_rel[s] = (7, mode == "minor")
     for sec in form["sections"]:
         if sec["type"] == "entries":
@@ -377,7 +380,9 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
                 key_rel[s] = sec["key"]
         elif sec["type"] == "episode":
             prev = key_rel[sec["start"] - 1] if sec["start"] > 0 else (0, mode == "minor")
-            mid = sec["start"] + (sec["end"] - sec["start"]) // 2
+            # a sequential episode pivots to the next key from its start (its
+            # chain is written in that key); a free one modulates at its middle
+            mid = sec["start"] if sec.get("sequence") else sec["start"] + (sec["end"] - sec["start"]) // 2
             for s in range(sec["start"], sec["end"]):
                 key_rel[s] = prev if s < mid else sec["to_key"]
     p["key"] = np.array([1 + 2 * d + int(mn) for d, mn in key_rel], dtype=np.int16)
@@ -476,7 +481,11 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
             q = "maj" if third == 4 and fifth == 7 else "min" if third == 3 and fifth == 7 else \
                 "dim" if third == 3 and fifth == 6 else "aug"
             for u in range(s_a // unit, min(U, max(s_a // unit + 1, s_b // unit))):
-                put(u, S_(r, (q,), (inv,)))
+                # the chain is in the target key; chord states are relative to
+                # the key in force at that unit
+                local = key_rel[min(n - 1, u * unit)][0]
+                r_loc = (sec["to_key"][0] + r - local) % 12
+                put(u, S_(r_loc, (q,), (inv,)))
         # the melodic restatement: top and bottom active voices
         active = [v for v in range(nv) if v != sec.get("rest_voice")]
         unit_steps = bar if kind != "falling63" else 2 * beat
