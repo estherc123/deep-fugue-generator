@@ -607,7 +607,38 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
             ceil[s_] = int(round(base - 2 + (peak - base + 2) * (s_ / peak_at) ** 1.5))
         else:
             ceil[s_] = int(round(peak - 4 * (s_ - peak_at) / max(1, n - peak_at)))
-    p["climax"] = {"step": peak_at, "peak": int(peak), "ceiling": ceil}
+    # write the climax note in: the soft pull reached the planned peak in only
+    # 5 of 40 compositions. A chord tone of the planned harmony at or just under
+    # the peak, on a beat where the soprano is free, held for a beat.
+    from .labels import QUALS
+    from .encode import MIDI_LO as _LO, NOTE0 as _N0, STOI as _ST
+    placed = None
+    for off in sorted(range(-2 * bar, 2 * bar + 1, beat), key=abs):
+        t = peak_at + off
+        t -= t % beat
+        if t < form["entries"][0]["start"] + form["subject_steps"] or t + beat > n - bar:
+            continue
+        if (p["pnote"][max(0, t - beat):t + 2 * beat, 0] > 0).any() or (p["active"][t:t + beat, 0] != 2).all():
+            continue
+        if any(q["voice"] == 0 and q["start"] <= t < q["start"] + q["length"] for q in copies):
+            continue
+        code = int(p["chord"][t])
+        if code < 2:
+            continue
+        qi, r = divmod(code - 2, 12)
+        pcs = {(tonic + r + x) % 12 for x in QUALS[QUAL_NAMES[qi]]}
+        cands = [m for m in range(peak - 3, peak + 1) if m % 12 in pcs]
+        if not cands:
+            continue
+        m = max(cands)
+        p["pnote"][t, 0] = 2 + m - _LO
+        p["pnote"][t + 1:t + beat, 0] = 1
+        p["grid"][t, 0] = _N0 + m - _LO
+        p["grid"][t + 1:t + beat, 0] = _ST["HOLD"]
+        placed = (t, m)
+        break
+    p["climax"] = {"step": placed[0] if placed else peak_at, "peak": int(placed[1] if placed else peak),
+                   "ceiling": ceil, "written": placed is not None}
     p["plan_source"] = "planner"
     p["form"] = form
     p["prompt_steps"] = form["entries"][0]["start"] + form["subject_steps"]

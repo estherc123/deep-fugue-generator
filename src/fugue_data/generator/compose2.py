@@ -66,6 +66,9 @@ def compose(subject, meter, mode, tonic, nv, name, model_path, samples, seed, ou
     # density target: the subject's own rhythm, in every voice, a little thinner
     s_steps = p["form"]["subject_steps"]
     target = len(subject) / (s_steps / p["form"]["bar"]) * nv * 0.7
+    # ...capped at 1.6 attacks per voice per quarter: a subject in running
+    # sixteenths (organ fugues) does not mean every voice runs all the time
+    target = min(target, 1.6 * nv * p["form"]["bar"] / STEPS_PER_Q)
     cfg.setdefault("density_target", target)
     with torch.no_grad():
         grids, stats = generate(model, p, prompt, samples, dev, seed=seed,
