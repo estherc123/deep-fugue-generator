@@ -251,6 +251,11 @@ class ParallelMask:
             da = np.abs(approach - c)
             ban |= (da > 12) | (da == 11)
             pen += 1.5 * ((da == 10) | (da == 6))
+        # unisons with a neighbouring voice: Bach 1.5% of sounding pairs,
+        # generated 4.8%; two voices on one pitch thin the texture
+        for w in (v - 1, v + 1):
+            if 0 <= w < nv and now(w) >= 0:
+                pen += 1.5 * (c == now(w))
         pv = self.pitch[i, v]
         if pv < 0:
             # after a rest of at most a beat the line continues (bach_rules

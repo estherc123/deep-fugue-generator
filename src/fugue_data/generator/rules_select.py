@@ -82,6 +82,7 @@ def rule_weights():
     from .bach_rules import FORBIDDEN, RULES
     w = {r: (20.0 if r in FORBIDDEN else 1.0) for r in RULES}
     w["strong_diss"] = 3.0
+    w["cross_rel"] = 2.0
     w["final_cadence"] = 0.0          # judged on whole pieces, not bars
     return w
 

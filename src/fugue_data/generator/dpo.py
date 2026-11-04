@@ -48,10 +48,10 @@ def _cut(p, end):
             **{k: p[k][:end] for k in KEYS}}
 
 
-def load_pairs(ctx: int) -> list[dict]:
+def load_pairs(ctx: int, pairs_dir: Path | None = None) -> list[dict]:
     pieces = {p["piece_id"]: p for p in load_corpus(ROOT, baroque=True, labels=True)}
     out = []
-    for f in sorted((ROOT / "data" / "generated" / "critic_negatives").glob("*.npz")):
+    for f in sorted((pairs_dir or ROOT / "data" / "generated" / "critic_negatives").glob("*.npz")):
         pid = f.stem.split("@")[0]
         if pid not in pieces:
             continue
@@ -122,6 +122,8 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--base", default="data/models/generator_v7.pt")
     ap.add_argument("--out", default="data/models/generator_v7_dpo.pt")
+    ap.add_argument("--pairs-dir", default=None,
+                    help="npz pairs (real = chosen, generated = rejected); default critic_negatives")
     ap.add_argument("--beta", type=float, default=0.1)
     ap.add_argument("--alpha", type=float, default=1.0)
     ap.add_argument("--lr", type=float, default=5e-6)
@@ -138,7 +140,7 @@ def main(argv=None) -> int:
         p_.requires_grad_(False)
     policy.train()
     ctx = policy.ctx
-    pairs = load_pairs(ctx)
+    pairs = load_pairs(ctx, ROOT / args.pairs_dir if args.pairs_dir else None)
     tr = [p for p in pairs if p["split"] == "train"]
     va = [p for p in pairs if p["split"] == "validation"]
     print(json.dumps({"pairs_train": len(tr), "pairs_val": len(va)}), flush=True)
