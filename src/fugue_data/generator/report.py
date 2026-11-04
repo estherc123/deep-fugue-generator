@@ -12,6 +12,13 @@ Per sample directory (from `sample.py`), against Bach's piece and its plan:
   notes only (R5; held-out Bach is the baseline).
 - `seq_cover`: share of the piece where some voice is inside a melodic
   sequence (R4; Bach's fugues: median 0.15).
+- `chord_root` / `chord_bass`: share of harmonic units whose detected chord
+  root / bass matches the chord plan (Bach's chords, `labels.chords`). Bach's
+  own row is 1 by construction; models without the chord layer show the
+  chance-plus-key baseline.
+
+The memorisation index covers every training piece, the Baroque expansion
+included.
 
     PYTHONPATH=src python -m fugue_data.generator.report data/review/generator_samples_v2/*
 """
@@ -60,18 +67,25 @@ def beat_steps_of(p: dict) -> int:
 
 
 def report(dirs: list[Path], root: Path) -> list[dict]:
-    pieces = {p["piece_id"]: p for p in load_corpus(root)}
+    from .labels import chords as chords_of, harmonic_unit, notes_from_grid
+    pieces = {p["piece_id"]: p for p in load_corpus(root, baroque=True, labels=True)}
     index = Index([p["grid"] for p in pieces.values() if p["split"] == "train"])
     prof = load_profile("bach_empirical")
     rows = []
     for d in dirs:
         pid = d.name
         p = pieces[pid]
-        canon = json.loads((root / "data" / "canonical" / f"{pid}.json").read_text())
+        cf = root / "data" / "canonical" / f"{pid}.json"
+        if not cf.exists():
+            cf = root / "data" / "canonical_baroque" / f"{pid}.json"
+        canon = json.loads(cf.read_text())
+        mm = (canon.get("meter_map") or [{"numerator": 4, "denominator": 4}])[0]
+        unit = harmonic_unit((mm["numerator"], mm["denominator"]))
         meta = json.loads((d / "meta.json").read_text())
         n = meta["n_steps"]
         bs = bar_steps(p)
         composed = (d / "plan_key.npy").exists()
+        plan_ch = chords_of(notes_from_grid(p["grid"][:n]), n, unit, bs)
         plan_keys = (np.load(d / "plan_key.npy") if composed else p["key"][:n])[::bs]
         forced = np.load(d / "forced.npy") if (d / "forced.npy").exists() else None
         # For a composition, Bach's own fugue on the same subject is the
@@ -86,6 +100,9 @@ def report(dirs: list[Path], root: Path) -> list[dict]:
             match = len(keys) == len(plan_keys)
             away = (plan_keys != 1) & (plan_keys != 2) & (plan_keys != 0)
             notes = int(((g >= NOTE0) & (g < NOTE0 + 88)).sum())
+            ch = chords_of(notes_from_grid(g[:n]), min(n, len(g)), unit, bs) if not composed else None
+            lo = (meta.get("prompt_steps") or 0) // unit       # generated region only
+            pairs = [(a, b) for a, b in zip(plan_ch[lo:], ch[lo:]) if a["root"] is not None] if ch else []
             rows.append({
                 "dir": str(d), "piece": pid, "sample": name,
                 "guidance": meta.get("guidance", 1.0),
@@ -96,6 +113,8 @@ def report(dirs: list[Path], root: Path) -> list[dict]:
                 "par5": c["parallel_fifths"], "par8": c["parallel_octaves"],
                 "longest_run": score_grid(index, g, 12, skip)["longest_run"],
                 "seq_cover": round(coverage(g, beat_steps_of(p)), 3),
+                "chord_root": round(sum(a["root"] == b["root"] for a, b in pairs) / len(pairs), 3) if pairs else None,
+                "chord_bass": round(sum(a["bass"] == b["bass"] for a, b in pairs) / len(pairs), 3) if pairs else None,
             })
     return rows
 
@@ -110,7 +129,8 @@ def main(argv=None) -> int:
         print(f'{r["dir"]:55s} {r["sample"]:12s} key_agree {ka}  '
               f'away {r["key_away"] if r["key_away"] is not None else "-"}  '
               f'notes/bar {r["notes_per_bar"]:5.1f}  par5 {r["par5"]} par8 {r["par8"]}  '
-              f'longest_run {r["longest_run"]:2d}  seq_cover {r["seq_cover"]:.2f}')
+              f'longest_run {r["longest_run"]:2d}  seq_cover {r["seq_cover"]:.2f}  '
+              f'chord root {r["chord_root"]} bass {r["chord_bass"]}')
     return 0
 
 

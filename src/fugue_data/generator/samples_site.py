@@ -51,11 +51,17 @@ def _desc(label: str, pid: str, meta: dict) -> str:
     entries = ("Subject entries are written in from the plan (outlined); the model "
                "writes every other note." if meta.get("force_entries")
                else "The model writes the entries itself.")
+    chords = ("" if "chords" not in meta else
+              " The model also follows Bach's chord per beat and which voices sound per bar (v5)."
+              if meta["chords"] else " No chord plan (v5 with the chord layer switched off).")
+    extras = (f" Key pull {meta.get('key_bias', 0)}"
+              + (", planned sequences written in." if meta.get("force_sequences") else ".")
+              if "key_bias" in meta else "")
     rules = ("Parallel fifths/octaves are masked during sampling."
              if meta.get("mask_parallels") else "No counterpoint rules enforced.")
     return (f"{label}. Prompted with Bach's first {meta['prompt_quarters']:g} quarters "
             f"(the opening subject entry), then generated under {plan}. {entries} "
-            f"{rules} {pid} is a {meta['split']} piece: the model never trained on it. "
+            f"{rules}{chords}{extras} {pid} is a {meta['split']} piece: the model never trained on it. "
             f"Sampling: temperature {meta['temperature']}, top-p {meta['top_p']}.")
 
 
@@ -76,7 +82,7 @@ def build(sets: list[tuple[str, Path]], root: Path | None = None,
           site: Path | None = None) -> Path:
     root = root or _repo_root()
     site = site or root / "data" / "review" / "corruption_site"
-    corpus = {p["piece_id"]: p for p in load_corpus(root)}
+    corpus = {p["piece_id"]: p for p in load_corpus(root, baroque=True)}
     rng = random.Random(5)
     items = []
     (site / "audio").mkdir(parents=True, exist_ok=True)

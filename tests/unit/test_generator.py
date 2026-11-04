@@ -82,3 +82,68 @@ def test_sequence_detector_finds_descending_sequence_not_scale():
     assert q and q[0]["statements"] == 3 and q[0]["step"] == -2
     scale = list(range(72, 56, -1))               # a plain run is not a sequence
     assert coverage(_line_grid(scale), beat_steps=4) == 0.0
+
+
+# --------------------------------------------------------------------------- #
+# Form / harmony labels (labels.py)
+# --------------------------------------------------------------------------- #
+def test_chords_cadence_and_pedal():
+    from fugue_data.generator.labels import cadences, chords, pedals
+    S = 4                                        # steps per quarter
+    bar = 16
+    # Four voices, one chord per quarter: | C C F G7 | C C C C |, with the bass
+    # holding a tonic pedal under bar 3's I-IV-V7-I.
+    prog = [("C", 48, (60, 64, 67)), ("C", 48, (60, 64, 67)), ("F", 53, (60, 65, 69)),
+            ("G7", 43, (59, 62, 65)), ("C", 48, (64, 67, 72)), ("C", 48, (55, 64, 72)),
+            ("C", 48, (60, 64, 67)), ("C", 48, (60, 64, 67)),
+            ("C", 36, (60, 64, 67)), ("F", 36, (60, 65, 69)), ("G7", 36, (59, 65, 67)),
+            ("C", 36, (60, 64, 67)), ("F", 36, (60, 65, 69)), ("G7", 36, (59, 62, 65)),
+            ("C", 36, (60, 64, 72)), ("C", 36, (60, 64, 72))]
+    voices = [[], [], [], []]
+    for i, (_, b, upper) in enumerate(prog):
+        s = i * S
+        for v, m in enumerate(sorted(upper, reverse=True)):
+            voices[v].append((s, s + S, m))
+        if i >= 8:                               # pedal: one long C2
+            if i == 8:
+                voices[3].append((s, s + 8 * S, b))
+        else:
+            voices[3].append((s, s + S, b))
+    n = len(prog) * S
+    ch = chords(voices, n, S, bar)
+    roots = [c["root"] for c in ch[:8]]
+    assert roots == [0, 0, 5, 7, 0, 0, 0, 0]
+    assert ch[3]["qual"] == "dom7"
+    cads = cadences(ch, voices, S, bar, (4, 4), 0)
+    assert any(c["step"] == 4 * S and c["type"] == "PAC" and c["key_area"] == "I" for c in cads)
+    peds = pedals(voices, ch, S, bar, 0)
+    assert any(p["start"] == 8 * S and p["degree"] == "I" for p in peds)
+
+
+def test_dcml_key_arithmetic():
+    from fugue_data.generator.labels import _local_tonic
+    assert _local_tonic("F", "I") == (5, False)
+    assert _local_tonic("F", "V") == (0, False)
+    assert _local_tonic("g", "III") == (10, False)      # B-flat major in G minor
+    assert _local_tonic("C", "vi") == (9, True)
+    assert _local_tonic("C", "V/V") == (2, False)
+
+
+def test_crossing_mask_bounds_by_neighbours():
+    pm = ParallelMask(1, 3, 4)
+    row = np.array([[NOTE0 + 72 - MIDI_LO, NOTE0 + 64 - MIDI_LO, NOTE0 + 55 - MIDI_LO]])
+    pm.start_step(row, 1)
+    b = pm.crossing_banned(0, 1)                  # middle voice: between 55 and 72
+    allowed = MIDI_LO + np.flatnonzero(~b)
+    assert allowed.min() == 55 and allowed.max() == 72
+    pm.decide(0, 0, NOTE0 + 67 - MIDI_LO)         # top voice moves down to 67 first
+    assert (MIDI_LO + np.flatnonzero(~pm.crossing_banned(0, 1))).max() == 67
+
+
+def test_critic_window_grid():
+    from fugue_data.generator.critic import window_grid
+    g = window_grid({"voice_1": [["0", "1", 72], ["1", "1/2", 74]],
+                     "voice_2": [["0", "2", 60]]}, __import__("fractions").Fraction(2))
+    assert g.shape == (8, 2)
+    assert g[0, 0] == NOTE0 + 72 - MIDI_LO and g[4, 0] == NOTE0 + 74 - MIDI_LO
+    assert g[6, 0] == STOI["REST"] and (g[1:8, 1] == STOI["HOLD"]).all()

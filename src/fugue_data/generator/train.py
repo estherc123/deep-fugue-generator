@@ -42,7 +42,10 @@ def _repo_root() -> Path:
 # --------------------------------------------------------------------------- #
 # Building one training/eval sequence
 # --------------------------------------------------------------------------- #
-def _music_arrays(p: dict, plan: bool):
+CHORD_FEATS = ("chord", "next_chord", "bass", "active")
+
+
+def _music_arrays(p: dict, plan: bool, chords: bool = True):
     """Flatten a piece time-major into tokens + per-position features."""
     n, nv = p["n_steps"], p["nv"]
     tok = p["grid"].reshape(-1).astype(np.int64)
@@ -55,6 +58,15 @@ def _music_arrays(p: dict, plan: bool):
         for k in ("key", "next_key", "to_key"):
             f[k][:] = np.repeat(p[k], nv)
         f["seq"][:] = p["seq"].reshape(-1)
+        if chords:
+            for k in ("chord", "next_chord", "bass"):
+                if k in p:
+                    f[k][:] = np.repeat(p[k], nv)
+            if "active" in p:
+                f["active"][:] = p["active"].reshape(-1)
+        if p.get("cad_from") == "detected":
+            for k in ("to_cad", "cad_key", "pedal"):
+                f[k][:] = np.repeat(p[k], nv)
     if plan and p["has_plan"]:
         f["role"][:] = p["role"].reshape(-1)
         f["pnote"][:] = p["pnote"].reshape(-1)
@@ -64,7 +76,8 @@ def _music_arrays(p: dict, plan: bool):
     return tok, f
 
 
-def build_sequence(p: dict, start_step: int, ctx: int, shift: int, plan: bool):
+def build_sequence(p: dict, start_step: int, ctx: int, shift: int, plan: bool,
+                   chords: bool = True):
     """(tokens, features, loss_mask) of length <= ctx + 1, starting at a step."""
     tonic = (p["tonic"] + shift) % 12
     use_plan = plan and p["has_plan"]
@@ -77,7 +90,7 @@ def build_sequence(p: dict, start_step: int, ctx: int, shift: int, plan: bool):
     pre += [STOI["<SEP>"]]
     pre_seg += [SEG["prefix"]]
 
-    tok, f = _music_arrays(p, plan)
+    tok, f = _music_arrays(p, plan, chords)
     nv = p["nv"]
     room = ((ctx + 1 - len(pre)) // nv) * nv
     a = start_step * nv
@@ -130,7 +143,7 @@ def collate(items, ctx: int, dev):
 
 # --------------------------------------------------------------------------- #
 @torch.no_grad()
-def evaluate(model, pieces, ctx, dev, plan=True, bs=16, free_only=False):
+def evaluate(model, pieces, ctx, dev, plan=True, bs=16, free_only=False, chords=True):
     """Perplexity over music tokens. free_only scores only notes outside planned
     entries (identical positions with or without the plan), i.e. the
     counterpoint the model has to invent rather than copy from the plan."""
@@ -139,7 +152,7 @@ def evaluate(model, pieces, ctx, dev, plan=True, bs=16, free_only=False):
     for p in pieces:
         step = 0
         while step < p["n_steps"]:
-            seq, feats, loss = build_sequence(p, step, ctx, 0, plan)
+            seq, feats, loss = build_sequence(p, step, ctx, 0, plan, chords)
             used_tok = int(loss.sum())
             if free_only:
                 a = step * p["nv"]
@@ -184,10 +197,13 @@ def train(cfg: dict, root: Path | None = None) -> dict:
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     torch.backends.cuda.matmul.allow_tf32 = True
 
-    pieces = load_corpus(root)
+    pieces = load_corpus(root, baroque=cfg.get("baroque", False),
+                         labels=cfg.get("labels", False),
+                         exclude_sources=tuple(cfg.get("exclude_sources", ())))
     by = {s: [p for p in pieces if p["split"] == s] for s in ("train", "validation", "test")}
     tr = by["train"]
-    weights = np.array([p["n_steps"] * p["nv"] for p in tr], dtype=float)
+    cw = cfg.get("corpus_weight", {})
+    weights = np.array([p["n_steps"] * p["nv"] * cw.get(p["corpus"], 1.0) for p in tr], dtype=float)
     weights /= weights.sum()
 
     m = cfg["model"]
@@ -234,7 +250,8 @@ def train(cfg: dict, root: Path | None = None) -> dict:
             if not _shift_ok(p, shift):
                 shift = 0
             plan = rng.random() >= cfg["plan_dropout"]
-            items.append(build_sequence(p, start, ctx, shift, plan))
+            chords = rng.random() >= cfg.get("chord_dropout", 0.0)
+            items.append(build_sequence(p, start, ctx, shift, plan, chords))
         x, fx, y = collate(items, ctx, dev)
         for g in opt.param_groups:
             g["lr"] = lr_at(step)
@@ -270,7 +287,7 @@ def train(cfg: dict, root: Path | None = None) -> dict:
     for name, ps in (("validation", by["validation"]), ("test", by["test"])):
         ppl, n = evaluate(model, ps, ctx, dev)
         final[f"{name}_ppl"] = round(ppl, 4)
-        for corpus in ("fugue", "chorale"):
+        for corpus in ("fugue", "chorale", "other"):
             sub = [p for p in ps if p["corpus"] == corpus]
             if sub:
                 final[f"{name}_ppl_{corpus}"] = round(evaluate(model, sub, ctx, dev)[0], 4)
@@ -280,6 +297,12 @@ def train(cfg: dict, root: Path | None = None) -> dict:
             final[f"{name}_ppl_planned_plan_dropped"] = round(evaluate(model, planned, ctx, dev, False)[0], 4)
             final[f"{name}_ppl_planned_free_with_plan"] = round(evaluate(model, planned, ctx, dev, True, free_only=True)[0], 4)
             final[f"{name}_ppl_planned_free_plan_dropped"] = round(evaluate(model, planned, ctx, dev, False, free_only=True)[0], 4)
+            final[f"{name}_ppl_planned_free_no_chords"] = round(evaluate(model, planned, ctx, dev, True, free_only=True, chords=False)[0], 4)
+        wtc = [p for p in ps if p["piece_id"].startswith("bach_wtc")]
+        if wtc:
+            final[f"{name}_ppl_wtc"] = round(evaluate(model, wtc, ctx, dev)[0], 4)
+            final[f"{name}_ppl_wtc_free"] = round(evaluate(model, wtc, ctx, dev, free_only=True)[0], 4)
+            final[f"{name}_ppl_wtc_free_no_chords"] = round(evaluate(model, wtc, ctx, dev, free_only=True, chords=False)[0], 4)
 
     torch.save({"state": model.state_dict(), "config": cfg, "vocab": VOCAB,
                 "features": FEATURES, "params": params, "steps_run": step,

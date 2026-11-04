@@ -1,0 +1,30 @@
+# Generator v5: expanded Baroque corpus + chord / texture plan (step 2 of the
+# hierarchical plan, progress/generator.md).
+#
+# 938 pieces (191 original + 747 Baroque with clean voices), about 5x the
+# training tokens of v4. Same architecture as v4 so the comparison is about data
+# and conditioning, not size.
+seed: 0
+out: data/models/generator_v5.pt
+baroque: true
+labels: true
+plan_dropout: 0.3          # share of crops trained with no plan at all
+chord_dropout: 0.3         # of the planned crops, share trained without chords/texture
+
+model:
+  d: 384
+  layers: 8
+  heads: 6
+  ctx: 2048
+  dropout: 0.15
+
+optim:
+  lr: 3.0e-4
+  weight_decay: 0.1
+  warmup: 300
+  batch: 16
+  max_steps: 30000
+
+log_every: 100
+eval_every: 500
+patience: 6

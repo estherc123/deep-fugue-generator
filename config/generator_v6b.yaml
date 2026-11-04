@@ -1,0 +1,32 @@
+# Generator v6b: v6 data (no Vivaldi/Corelli, fugues x3) at v5 model size.
+# fugues weighted up, and a larger model for the larger corpus.
+#
+# Left out of the note model (kept for harmony/form statistics):
+#   vivaldi-op6   orchestral doubling: 27% unisons, 23% repeated notes
+#   dcml-corelli  trio-sonata violins cross 13.6% of the time (WTC fugues 1.1%)
+seed: 0
+out: data/models/generator_v6b.pt
+baroque: true
+labels: true
+exclude_sources: [vivaldi-op6, dcml-corelli]
+corpus_weight: {fugue: 3.0}
+plan_dropout: 0.3
+chord_dropout: 0.3
+
+model:
+  d: 384
+  layers: 8
+  heads: 6
+  ctx: 2048
+  dropout: 0.15
+
+optim:
+  lr: 3.0e-4
+  weight_decay: 0.1
+  warmup: 400
+  batch: 16
+  max_steps: 40000
+
+log_every: 100
+eval_every: 500
+patience: 8

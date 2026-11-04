@@ -46,7 +46,9 @@ META = (["CORPUS_fugue", "CORPUS_chorale"] + [f"NV_{k}" for k in range(1, 7)]
                                             "SUBJ", "/SUBJ"])
 METERS = ["2_2", "2_4", "3_2", "3_4", "3_8", "4_2", "4_4", "6_4", "6_8", "6_16",
           "9_8", "12_8", "12_16", "other"]
-VOCAB = SPECIAL + NOTES + META + [f"METER_{m}" for m in METERS]
+# CORPUS_other (Baroque pieces that are neither fugue nor chorale) is appended
+# last so token ids of older checkpoints stay valid.
+VOCAB = SPECIAL + NOTES + META + [f"METER_{m}" for m in METERS] + ["CORPUS_other"]
 STOI = {t: i for i, t in enumerate(VOCAB)}
 NOTE0 = STOI[NOTES[0]]
 
@@ -54,7 +56,12 @@ NOTE0 = STOI[NOTES[0]]
 FEATURES = {"voice": 7, "sub": 17, "beat": 17, "bar": 257, "prog": 33,
             "role": 6, "to_entry": 17, "to_cad": 17, "cad_key": 16, "pedal": 3,
             "seg": 4, "pnote": 90, "epc": 13, "key": 25,
-            "next_key": 25, "to_key": 17, "seq": 10}
+            "next_key": 25, "to_key": 17, "seq": 10,
+            "chord": 110, "next_chord": 110, "bass": 14, "active": 3}
+# chord / next_chord: 0 unknown, 1 silence, 2 + 12 * quality + root (relative
+# to the home tonic; qualities as labels.QUAL_NAMES). bass: 0 unknown, 1 none,
+# 2 + pitch class relative to the tonic. active (per voice): 0 unknown, 1 the
+# voice rests this bar, 2 it sounds (labels.texture).
 ROLE = {"free": 1, "subject": 2, "answer": 3, "countersubject": 4}
 SEG = {"prefix": 1, "subject": 2, "music": 3}
 CAD_KEYS = ["I", "i", "II", "ii", "III", "iii", "IV", "iv", "V", "v", "VI", "vi",
@@ -157,8 +164,54 @@ def sequence_feature(grid: np.ndarray, beat_steps: int) -> np.ndarray:
     return out
 
 
-def encode_piece(score: dict, split_row: dict, annotations: list[dict] | None):
-    """Arrays for one piece. Returns None if it cannot be represented."""
+def label_arrays(lab: dict, n_steps: int, nv: int, tonic: int) -> dict:
+    """Per-step plan arrays from a `labels.label_piece` result: chords, bass,
+    texture, and detected cadences and pedals."""
+    from .labels import QUAL_NAMES
+    unit, bar = lab["unit_steps"], lab["bar_steps"]
+    codes, basses = [], []
+    for r, q, b in lab["chords"]:
+        codes.append(1 if r is None else 2 + 12 * QUAL_NAMES.index(q) + (r - tonic) % 12)
+        basses.append(1 if b is None else 2 + (b - tonic) % 12)
+    codes = np.array(codes + [1], dtype=np.int16)
+    basses = np.array(basses + [1], dtype=np.int16)
+    idx = np.minimum(np.arange(n_steps) // unit, len(codes) - 2)
+    chord = codes[idx]
+    # the next different chord, so the model can prepare its voice-leading
+    nxt = np.empty(len(codes), dtype=np.int16)
+    cur = 1
+    for i in range(len(codes) - 1, -1, -1):
+        nxt[i] = cur
+        if i and codes[i] != codes[i - 1]:
+            cur = codes[i]
+    active = np.zeros((n_steps, nv), dtype=np.int16)
+    tex = np.array(lab["texture"], dtype=np.int16).reshape(-1, nv) if lab["texture"] else None
+    if tex is not None and tex.shape[1] == nv:
+        bidx = np.minimum(np.arange(n_steps) // bar, len(tex) - 1)
+        active[:] = 1 + tex[bidx]
+    to_cad = np.full(n_steps, 16, dtype=np.int16)
+    cad_key = np.zeros(n_steps, dtype=np.int16)
+    cs = sorted((c["step"], CAD_KEYS.index(c["key_area"]) + 1) for c in lab["cadences"])
+    ci = 0
+    for k in range(n_steps):
+        while ci < len(cs) and cs[ci][0] < k:
+            ci += 1
+        if ci < len(cs):
+            to_cad[k] = _bucket(cs[ci][0] - k)
+            cad_key[k] = cs[ci][1]
+    pedal = np.ones(n_steps, dtype=np.int16)
+    for q in lab["pedals"]:
+        pedal[q["start"]:q["end"]] = 2
+    return {"chord": chord, "next_chord": nxt[idx], "bass": basses[idx], "active": active,
+            "to_cad": to_cad, "cad_key": cad_key, "pedal": pedal}
+
+
+def encode_piece(score: dict, split_row: dict, annotations: list[dict] | None,
+                 labels: dict | None = None):
+    """Arrays for one piece. Returns None if it cannot be represented.
+
+    `labels` (data/labels/<piece>.json) adds the chord/texture plan, and the
+    detected cadences and pedals where no expert labels exist."""
     mm = (score.get("meter_map") or [{"numerator": 4, "denominator": 4}])[0]
     meter = (mm["numerator"], mm["denominator"])
     bar_q = Fraction(4 * meter[0], meter[1])
@@ -296,12 +349,19 @@ def encode_piece(score: dict, split_row: dict, annotations: list[dict] | None):
             if len(col) and len(col) <= 128:
                 subject_line = col
 
+    lab = None
+    if labels is not None and labels.get("n_steps"):
+        lab = label_arrays(labels, n_steps, nv, tonic_here)
+        expert_cads = any(a["type"] == "cadence" for a in acc)
+        if not expert_cads:              # no expert cadences / pedals: use detected
+            to_cad, cad_key, pedal = lab["to_cad"], lab["cad_key"], lab["pedal"]
     key = local_keys(grid, int(bar_q * STEPS_PER_Q), tonic_here)
     next_key, to_key = key_lookahead(key)
     seq = sequence_feature(grid, int(beat_q * STEPS_PER_Q))
     return {
         "piece_id": score["piece_id"], "split": split_row["split"],
-        "corpus": "fugue" if score.get("movement_type") == "fugue" else "chorale",
+        "corpus": {"fugue": "fugue", "chorale": "chorale"}.get(
+            score.get("movement_type"), "other" if split_row.get("kind") else "chorale"),
         "nv": nv, "meter_tok": _meter_tok(meter), "mode": mode,
         "tonic": tonic_pc(km["fifths"], mode), "n_steps": n_steps,
         "grid": grid, "feats": feats, "role": role, "to_entry": to_entry,
@@ -309,6 +369,12 @@ def encode_piece(score: dict, split_row: dict, annotations: list[dict] | None):
         "has_plan": has_plan, "subject": subject_line, "dropped_notes": dropped,
         "pnote": pnote, "epc": epc,
         "key": key, "next_key": next_key, "to_key": to_key, "seq": seq,
+        "chord": lab["chord"] if lab else np.zeros(n_steps, dtype=np.int16),
+        "next_chord": lab["next_chord"] if lab else np.zeros(n_steps, dtype=np.int16),
+        "bass": lab["bass"] if lab else np.zeros(n_steps, dtype=np.int16),
+        "active": lab["active"] if lab else np.zeros((n_steps, nv), dtype=np.int16),
+        "cad_from": ("labels" if any(a["type"] == "cadence" for a in acc)
+                     else "detected" if lab else None),
         "plan_source": ("labels" if has_plan and not any(
             a.get("source_name") == "detected" for a in acc) else
             "detected" if has_plan else None),
@@ -323,27 +389,39 @@ def prefix_tokens(p: dict, tonic: int, plan: bool) -> list[int]:
     return [STOI[t] for t in toks]
 
 
-def load_corpus(root: Path, detect_entries: bool = True) -> list[dict]:
-    """All pieces. Fugues without labels get entries from the detector."""
+def load_corpus(root: Path, detect_entries: bool = True, baroque: bool = False,
+                labels: bool = False, exclude_sources: tuple = ()) -> list[dict]:
+    """All pieces. Fugues without labels get entries from the detector.
+
+    baroque: also the expanded corpus (manifests/baroque_splits.jsonl), pieces
+    whose voices are clean enough for the note model. labels: attach the
+    chord / texture / cadence / pedal plan from data/labels. exclude_sources:
+    Baroque source names to leave out (manifests/baroque_splits.jsonl `corpus`)."""
     from .entries import as_annotations, detect
-    splits = {}
+    rows = []
     for line in (root / "manifests" / "splits.jsonl").read_text().splitlines():
         if line.strip():
             r = json.loads(line)
-            splits[r["piece_id"]] = r
+            rows.append((root / "data" / "canonical" / f"{r['piece_id']}.json", r))
+    if baroque:
+        for line in (root / "manifests" / "baroque_splits.jsonl").read_text().splitlines():
+            r = json.loads(line)
+            if r["note_model"] and r["corpus"] not in exclude_sources:
+                rows.append((root / "data" / "canonical_baroque" / f"{r['piece_id']}.json", r))
     out = []
-    for f in sorted((root / "data" / "canonical").glob("*.json")):
-        if f.name.endswith(".invalid.json"):
+    for f, row in rows:
+        if not f.exists():
             continue
         score = json.loads(f.read_text())
-        row = splits.get(score["piece_id"])
-        if row is None:
-            continue
         ap = root / "data" / "annotations" / f"{score['piece_id']}.json"
         ann = json.loads(ap.read_text())["annotations"] if ap.exists() else None
         if ann is None and score.get("movement_type") == "fugue" and detect_entries:
             ann = as_annotations(detect(score), score["piece_id"]) or None
-        p = encode_piece(score, row, ann)
+        lab = None
+        lp = root / "data" / "labels" / f"{score['piece_id']}.json"
+        if labels and lp.exists():
+            lab = json.loads(lp.read_text())
+        p = encode_piece(score, row, ann, lab)
         if p is not None:
             out.append(p)
     return out

@@ -79,6 +79,92 @@ The subject is known, so entries need not be learned at all. Split the job:
     from a training fugue with similar subject length, rescaled; entries are
     the subject moved degree-for-degree into each entry's key. Tested on the
     held-out subjects of I/2 and II/19.
+- **Hierarchical plan, steps 1–2 started** (2026-11-03). The owner judged
+  the output still very bad and asked for a decision layer that chooses the
+  big events (entries, sequences, modulations, other devices). Diagnosis: v2/v4
+  samples generated under *Bach's own* plan also sound bad, so the bar-to-bar
+  writing is the main problem, not only the form. Plan: three levels, each
+  deciding for the one below: form planner (sections, entries, keys, cadences,
+  texture) -> harmony planner (chord + bass per beat) -> note model.
+  With ~130 fugues there is not enough data to learn the form level with a
+  network; it will be fugue-form rules with choice probabilities counted from
+  the corpus.
+  - **Corpus expansion** (`src/fugue_data/baroque/`, owner's request): 15
+    public repositories pinned by commit. 947 new pieces parse, 747 have voices
+    clean enough for the note model, including **86 new fugues** (51 organ
+    fugues by J.S. Bach, W.F. Bach, Krebs, Kellner, van Noordt; 16 Art of
+    Fugue; 13 Frescobaldi; 2 Musical Offering; 4 Couperin): 134 fugues in all.
+    Also Inventions and Sinfonias, 289 more chorales, Corelli, Vivaldi, Bach
+    suites, Couperin. MuseData Corelli left out (restrictive licence);
+    kern.humdrum.org was down. Training tokens 237k -> 1.42M. BWV 543 is test.
+  - **Step 1: labels** (`labels.py`, data/labels/): chords per beat, cadences,
+    pedals, texture, entries with stretto, countersubjects, sections. Checked
+    against expert labels:
+    | detector | reference | result |
+    | --- | --- | --- |
+    | chord root / bass | DCML Corelli (20.8k beats) | 74% / 88% |
+    | chord root / bass | DCML Frescobaldi | 70% / 91% |
+    | chord root / bass | DCML all (incl. solo violin/cello, 2-voice suites) | 59% / 72% |
+    | cadences | Algomus WTC I (102) | precision 48%, recall 65% |
+    | pedal points | Algomus WTC I (19) | precision 75%, recall 68% |
+    | countersubjects | Algomus WTC I (174) | precision 52%, recall 59% |
+    Weak where harmony is implied by one line (solo violin/cello: 39%).
+  - **Step 2: chord layer in the note model** (v5): per-step chord, next chord,
+    bass (relative to the tonic) and per-voice bar texture as plan features;
+    detected cadences/pedals where no expert labels exist; chord dropout 0.3
+    so the same model runs without the chord layer.
+  - **v5 results.** Held-out WTC fugues, perplexity on free notes (outside
+    entries): v4 3.22 -> v5 1.79 with chords, 2.01 without. Sampling under
+    Bach's plan (I/2, II/17, BWV 543 bars 1-40; 3 samples each):
+    | | chord root / bass match | key match (away bars) | notes/bar vs Bach |
+    | --- | --- | --- | --- |
+    | v4, key pull 3 | 0.22-0.31 / 0.29-0.37 | 0.33-0.67 | +0-25% |
+    | v5 no chords, key pull 3 | 0.19-0.35 / 0.34-0.40 | 0.44-0.68 | -25 to +32% |
+    | v5 chords, no key pull | 0.45-0.58 / 0.53-0.72 | 0.30-0.89 | -42 to +2% |
+    | v5 chords, key pull 3 | 0.47-0.63 / 0.62-0.75 | 0.56-0.89 | -26 to +23% |
+    The chord layer is followed: root agreement roughly doubles. Still 0
+    parallels. Longest shared runs 7-17; one of 24 is a repeated pedal note
+    (the memorisation metric should skip repeated-note runs). Density: too
+    sparse on BWV 543 (11-17 vs 19.6), still too busy on II/17 with key pull.
+  - Note: GPU 1's fan was unplugged during v5 training (93 C peak). After
+    reconnecting: VRAM pattern test, compute check and load test clean (peak
+    60 C), but one Xid 8 hang at 23:13 on 2026-11-03 during the first load test;
+    9 later sampling jobs ran without errors. Watch for recurrence.
+- **Voice crossing / repeated notes** (owner: "voice crossing ... a lot of
+  repeated notes at once"). Not caused by the parallel mask (without it all
+  three get worse). Causes: Corelli (violins cross 13.6%; WTC fugues 1.1%),
+  Vivaldi (27% unisons, 23% repeats), and the key pull (repeats 5.6% -> 10.3%).
+  Fix at decoding: `--no-crossing` (a free note stays between its sounding
+  neighbours) and `--repeat-penalty 2`: crossings 3.8% -> 0.9%, repeats
+  10.3% -> 2.9% (Bach 1.1% / 3.9%), key and chord agreement kept, density
+  at Bach's level. Unisons still 4-5% (Bach 1.5%).
+- **Models.** Held-out WTC free-note perplexity: v5 1.79; v6 (d512, without
+  Corelli/Vivaldi, fugues x3) 1.90; v6b (v5 size, same data) 2.01; **v7
+  (v5 data, d512) 1.76**. Dropping data hurt; the larger model helped.
+- **Critic / reward model** (`critic.py`). Pairwise-trained encoder, real vs
+  worse version of the same bars: 3,982 corrupted pairs + the generator's own
+  continuations (`critic_negatives.py`, incl. continuations from the middle of
+  each fugue). critic_v2: v5 fugue output vs Bach 74% (validation, ~200
+  pairs; v1 with fewer fugue examples: 53%); corrupted test pairs 75%.
+  Plan agreed with the owner: (1) critic held-out check, (2) blind A/B of the
+  critic's best vs worst of 8 (`critic_ab.py`, 16 cases on test fugues), (3)
+  DPO with critic-chosen pairs + Bach continuations, KL to the reference,
+  (4) refresh the critic on the new model's output and repeat; GRPO only
+  after the critic survives a refresh.
+- **Blind test of the critic** (owner, 16 cases): the critic's pick was
+  preferred 9/16 (p = 0.40). The critic does not match the owner's ear and is
+  not used for training. Owner's notes: 16B "really good", clear improvement
+  over earlier versions, but even the better side often has awkward places;
+  continuations start close to Bach and get progressively worse.
+- **Drift** (`drift.py`, 10 test fugues x 4 samples, 24 bars from mid-piece):
+  chord agreement with the plan falls from ~75% to ~55% over 20 bars and the
+  model's own surprise rises above its level on Bach; lower temperature does
+  not stop the harmonic drift. Fixes: `--chord-bias` (notes of the planned
+  chord get a bonus) holds agreement at 66–86% (1.5) / 72–95% (3) through 24
+  bars, with fewer harsh dissonances than Bach at 3; and DPO (`dpo.py`) with
+  Bach's continuation preferred over the model's (no critic): small further
+  gain. Pending owner blind test: data/review/ab_v7_vs_new (v7 T1.0 vs
+  v7-DPO T0.85 chord bias 1.5), `python -m fugue_data.generator.ab serve`.
 - **Open:**
   - Answers are real, not tonal; no countersubject planning.
   - Compositions take one template's form: limited variety, and few planned

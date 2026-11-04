@@ -154,6 +154,23 @@ class ParallelMask:
         return out
 
 
+    def crossing_banned(self, i: int, v: int) -> np.ndarray:
+        """Boolean over the 88 notes: True = above the nearest sounding voice
+        over v, or below the nearest sounding voice under it (voices are
+        ordered highest first). Voices already decided at this step count with
+        their new pitch, the others with what they are sounding now."""
+        out = np.zeros(N_NOTES, dtype=bool)
+        nv = self.pitch.shape[1]
+        now = lambda w: self.new[i, w] if self.new[i, w] != -2 else self.pitch[i, w]
+        hi = next((now(u) for u in range(v - 1, -1, -1) if now(u) >= 0), None)
+        lo = next((now(w) for w in range(v + 1, nv) if now(w) >= 0), None)
+        if hi is not None:
+            out |= self.cands > hi
+        if lo is not None:
+            out |= self.cands < lo
+        return out
+
+
 def _in_scale(m: int, T: int, p: dict, s: int) -> int:
     """Snap m to the planned key's scale at step s (harmonic-minor 7th allowed),
     moving one semitone in the sequence's direction first."""
@@ -183,6 +200,24 @@ def key_bias_table(p: dict) -> np.ndarray:
     return out
 
 
+def chord_bias_table(p: dict) -> np.ndarray:
+    """(n_steps, 88): 1 for notes of the planned chord at that step, else 0
+    (from the `chord` plan feature; 0 everywhere where there is no chord)."""
+    from .labels import QUALS, QUAL_NAMES
+    pcs = (MIDI_LO + np.arange(N_NOTES)) % 12
+    out = np.zeros((p["n_steps"], N_NOTES), dtype=np.float32)
+    if "chord" not in p:
+        return out
+    for s, c in enumerate(p["chord"][:p["n_steps"]]):
+        c = int(c)
+        if c >= 2:
+            q, r = divmod(c - 2, 12)
+            root = (p["tonic"] + r) % 12
+            tones = {(root + t) % 12 for t in QUALS[QUAL_NAMES[q]]}
+            out[s] = np.isin(pcs, list(tones))
+    return out
+
+
 @torch.no_grad()
 def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
              temperature: float = 1.0, top_p: float = 0.95, plan: bool = True,
@@ -190,7 +225,9 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
              mask_parallels: bool = True, guidance: float = 1.0,
              key_bias: float = 0.0, seq_bias: float = 0.0,
              sequences: list[dict] | None = None,
-             force_sequences: bool = False) -> tuple[np.ndarray, dict]:
+             force_sequences: bool = False, chords: bool = True,
+             no_crossing: bool = False, repeat_penalty: float = 0.0,
+             chord_bias: float = 0.0) -> tuple[np.ndarray, dict]:
     """(n_samples, n_steps, nv) grids; the first prompt_steps are Bach's.
 
     With force_entries the plan's subject entries are written in note for note
@@ -213,6 +250,18 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
     semitone half that, for diatonic adjustment). It steers toward
     restating the model's *own* unit, not Bach's.
 
+    no_crossing: a free note may not rise above the nearest sounding voice
+    over it or fall below the nearest one under it (forced entries may still
+    cross; if every note is banned the ban is lifted for that choice).
+
+    repeat_penalty > 0 is subtracted from the logit of striking again the
+    pitch the voice is sounding now (or just sounded): Bach's fugues repeat 4%
+    of their notes, the samples 6-18%.
+
+    chord_bias > 0 is added to the logits of notes in the planned chord at that
+    step: the chord plan re-anchors the harmony every unit. Without it, chord
+    agreement with the plan falls from ~75% to ~55% over 20 bars (drift.py).
+
     force_sequences: the same, as a write-in. Each planned restatement copies
     the model's own previous unit, transposed by the sequence step and snapped
     to the planned key's scale (a diatonic sequence). Where the copy is not
@@ -224,7 +273,7 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
     # Prefix and per-position features never depend on the notes, so build the
     # whole-piece sequence once; only the music tokens change while sampling.
     full_ctx = 10 ** 9
-    seq0, feats0, loss0 = build_sequence(p, 0, full_ctx, 0, plan)
+    seq0, feats0, loss0 = build_sequence(p, 0, full_ctx, 0, plan, chords)
     pre_len = int((~loss0).sum())
     toks = np.repeat(seq0[None], n_samples, axis=0)
     toks[:, pre_len + prompt_steps * nv:] = STOI["<PAD>"]
@@ -240,6 +289,8 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
     kb = key_bias_table(p) * key_bias if (key_bias and plan) else None
     if kb is not None:
         kb = torch.tensor(kb, device=dev, dtype=torch.float32)
+    cb = (torch.tensor(chord_bias_table(p) * chord_bias, device=dev, dtype=torch.float32)
+          if (chord_bias and plan) else None)
     seq_at = {}
     if (seq_bias or force_sequences) and plan:
         from .sequences import find_sequences
@@ -250,7 +301,8 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                 seq_at[(t, q["voice"])] = (q["unit"], q["step"])
     forced = plan_tokens(p) if (force_entries and plan and p["has_plan"]) else None
     den = int(p["meter_tok"].split("_")[2]) if p["meter_tok"] != "METER_other" else 4
-    pm = ParallelMask(n_samples, nv, 16 // den) if mask_parallels else None
+    pm = (ParallelMask(n_samples, nv, 16 // den)
+          if (mask_parallels or no_crossing or repeat_penalty) else None)
     stats = {"forced_tokens": 0, "masked_choices": 0}
     music = lambda s, v: pre_len + s * nv + v
     for s in range(prompt_steps, n):
@@ -280,7 +332,7 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
                         cand = NOTE0 + m - MIDI_LO
                         if not (NOTE0 <= cand < NOTE0 + N_NOTES):
                             continue
-                        if pm is not None and pm.banned(i, v)[cand - NOTE0]:
+                        if pm is not None and mask_parallels and pm.banned(i, v)[cand - NOTE0]:
                             continue
                     elif t0 == hold:
                         if prev_t == rest:
@@ -325,12 +377,23 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
             mask[sounding, hold] = 0
             if pm is not None:
                 for i in range(n_samples):
-                    b = pm.banned(i, v)
+                    b = pm.banned(i, v) if mask_parallels else np.zeros(N_NOTES, dtype=bool)
+                    if no_crossing:
+                        c = pm.crossing_banned(i, v)
+                        if not (b | c).all():
+                            stats["crossing_masked"] = stats.get("crossing_masked", 0) + int((c & ~b).sum())
+                            b = b | c
                     if b.any():
                         stats["masked_choices"] += int(b.sum())
                         mask[i, NOTE0:NOTE0 + N_NOTES][torch.tensor(b, device=dev)] = float("-inf")
+                    if repeat_penalty:
+                        last = pm.pitch[i, v]
+                        if last >= 0:
+                            logits[i, NOTE0 + last - MIDI_LO] -= repeat_penalty
             if kb is not None:
                 logits[:, NOTE0:NOTE0 + N_NOTES] += kb[s]
+            if cb is not None:
+                logits[:, NOTE0:NOTE0 + N_NOTES] += cb[s]
             if (s, v) in seq_at:
                 D, T = seq_at[(s, v)]
                 if s - D >= 0:
@@ -392,28 +455,53 @@ def main(argv=None) -> int:
                     help="pull toward restating the model's own unit in planned sequences")
     ap.add_argument("--force-sequences", action="store_true",
                     help="write planned sequence restatements in from the model's own unit")
+    ap.add_argument("--no-crossing", action="store_true",
+                    help="free notes may not cross the neighbouring voices")
+    ap.add_argument("--repeat-penalty", type=float, default=0.0,
+                    help="logit penalty on re-striking the voice's current pitch")
+    ap.add_argument("--n-best", type=int, default=0,
+                    help="generate this many and keep the --samples best by the critic")
+    ap.add_argument("--critic", default="data/models/critic_v1.pt")
+    ap.add_argument("--chord-bias", type=float, default=0.0,
+                    help="logit bonus for notes of the planned chord")
+    ap.add_argument("--no-chords", action="store_true",
+                    help="plan without the chord / texture layer (v5+ models)")
     ap.add_argument("--out", default="data/review/generator_samples")
     args = ap.parse_args(argv)
 
     root = _repo_root()
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     model, ck = load_model(root / args.model, dev)
-    p = next(x for x in load_corpus(root) if x["piece_id"] == args.piece)
+    p = next(x for x in load_corpus(root, baroque=True, labels=True)
+             if x["piece_id"] == args.piece)
     if p["split"] == "train":
         print(f"warning: {args.piece} is a TRAINING piece; this is not a held-out test")
     if args.bars:
         steps = int(np.searchsorted(p["feats"]["bar"], p["feats"]["bar"][0] + args.bars))
         p = {**p, "n_steps": steps, "grid": p["grid"][:steps],
              "feats": {k: v[:steps] for k, v in p["feats"].items()},
-             **{k: p[k][:steps] for k in ("role", "to_entry", "to_cad", "cad_key", "pedal")}}
+             **{k: p[k][:steps] for k in ("role", "to_entry", "to_cad", "cad_key", "pedal",
+                                          "pnote", "epc", "key", "next_key", "to_key", "seq",
+                                          "chord", "next_chord", "bass", "active") if k in p}}
 
     prompt = first_entry_end(p) if args.prompt == "first_entry" and p["has_plan"] else 0
-    grids, gstats = generate(model, p, prompt, args.samples, dev, args.temperature,
+    n_gen = max(args.samples, args.n_best)
+    grids, gstats = generate(model, p, prompt, n_gen, dev, args.temperature,
                              args.top_p, plan=not args.no_plan, seed=args.seed,
                              force_entries=not args.no_force_entries,
                              mask_parallels=not args.no_mask, guidance=args.guidance,
                              key_bias=args.key_bias, seq_bias=args.seq_bias,
-                             force_sequences=args.force_sequences)
+                             force_sequences=args.force_sequences, chords=not args.no_chords,
+                             no_crossing=args.no_crossing, repeat_penalty=args.repeat_penalty,
+                             chord_bias=args.chord_bias)
+    critic_scores = None
+    if args.n_best > args.samples:
+        from .critic import load_critic, score_grid
+        critic = load_critic(root / args.critic, dev)
+        sc = [score_grid(critic, g, prompt, dev) for g in grids]
+        order = np.argsort(sc)[::-1][:args.samples]
+        critic_scores = {"all": [round(x, 4) for x in sc], "kept": [int(i) for i in order]}
+        grids = grids[order]
 
     out = root / args.out / args.piece
     out.mkdir(parents=True, exist_ok=True)
@@ -433,6 +521,10 @@ def main(argv=None) -> int:
             "plan": not args.no_plan, "temperature": args.temperature,
             "top_p": args.top_p, "seed": args.seed,
             "force_entries": not args.no_force_entries, "guidance": args.guidance, "key_bias": args.key_bias, "seq_bias": args.seq_bias, "force_sequences": args.force_sequences, "mask_parallels": not args.no_mask,
+            "chords": not args.no_chords, "no_crossing": args.no_crossing,
+            "repeat_penalty": args.repeat_penalty, "n_best": args.n_best,
+            "chord_bias": args.chord_bias,
+            "critic_scores": critic_scores,
             "plan_source": p.get("plan_source"), **gstats}
     (out / "meta.json").write_text(json.dumps(meta, indent=2))
     print(json.dumps(meta))
