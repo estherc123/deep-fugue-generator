@@ -252,10 +252,12 @@ class ParallelMask:
             ban |= (da > 12) | (da == 11)
             pen += 1.5 * ((da == 10) | (da == 6))
         # unisons with a neighbouring voice: Bach 1.5% of sounding pairs,
-        # generated 4.8%; two voices on one pitch thin the texture
+        # generated 4.8% at weight 1.5, 3.1% at 1.5 with the later rules; two
+        # voices on one pitch thin the texture (worst when a free voice
+        # shadows an entry squeezed into its register: II/22 bars 32-33)
         for w in (v - 1, v + 1):
             if 0 <= w < nv and now(w) >= 0:
-                pen += 1.5 * (c == now(w))
+                pen += UNISON_PEN * (c == now(w))
         pv = self.pitch[i, v]
         if pv < 0:
             # after a rest of at most a beat the line continues (bach_rules
@@ -375,6 +377,7 @@ def chord_bias_table(p: dict) -> np.ndarray:
     return out
 
 
+UNISON_PEN = 3.5
 _EXT = {0: [0, 2, 4, 5, 7, 9, 11], 1: [0, 2, 3, 5, 7, 8, 9, 10, 11]}   # minor: all three forms
 
 

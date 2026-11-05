@@ -316,3 +316,21 @@ bar, beat, time). The owner marked 7 spots that sounded off-key or dissonant, mo
 | chord agreement with plan | 0.57 | — | 0.65 | |
 | cross relations / 100 bars | 6.2 | 4.8 | 2.6 | 10.2 |
 | forbidden breaks | 0 | 1 | 1 | |
+
+## v7c: unisons (2026-11-05)
+
+Owner: II/22 seed 1 bars 29-32 "sounds really weird". At bar 32 the alto's entry sits in the
+tenor's register (Ab3-Db4); the tenor, not allowed to cross, shadowed it in unison (17.5% of
+neighbouring pairs in bars 32-33) while two voices rested. Generated unisons were 3.1% of
+neighbouring sounding pairs over 40 fugues, Bach 1.55%. `UNISON_PEN` 1.5 -> 3.5.
+
+| 40 fugues | v7b | v7c | Bach |
+|---|---|---|---|
+| neighbour-pair unisons | 3.1% | 2.0% | 1.55% |
+| semitone clash per beat | 6.3% | 6.4% | 7.0% |
+| chords in planned key | 92.8% | 92.3% | 84.6% |
+| forbidden breaks / fugue | 0.03 | 0.07 | target <= 0.2 |
+
+Still open in that passage: the episode jumps to VII at its first bar (sequential episodes pivot
+at their start), and the texture is denser than Bach's (22.5 vs 17.3 notes per bar; inner voices
+rest 9-14% vs 20-32%).
