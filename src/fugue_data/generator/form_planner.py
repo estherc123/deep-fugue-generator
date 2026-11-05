@@ -79,6 +79,19 @@ def tonal_answer(subject, home, mode, near):
     return out
 
 
+def tonal_head(subject, home, mode) -> int:
+    """How many leading notes the tonal answer changes (0: a real answer)."""
+    sc = _scale(mode)
+    k_last = 0
+    for k, (_, _, m) in enumerate(subject[:4]):
+        d, alt = _to_degree(m, home, sc)
+        if d % 7 == 4 and alt == 0:
+            k_last = k + 1
+        elif d % 7 not in (0, 4):
+            break
+    return k_last
+
+
 def inverted(subject, home, mode):
     sc = _scale(mode)
     degs = [_to_degree(m, home, sc) for _, _, m in subject]
@@ -370,8 +383,11 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
     for e in form["entries"]:
         if e["kind"] == "answer" and e["section"] in ("exposition", "counter"):
             # a tonal answer's head stays in the tonic (that is what answering
-            # 5 with 1 does); the rest is in the dominant
-            head = form["subject_steps"] // 4
+            # 5 with 1 does): only the notes it changed; the rest, and all of a
+            # real answer, is in the dominant
+            k = tonal_head(subject, tonic, mode)
+            head = 0 if k == 0 or k >= len(subject) else \
+                int((subject[k][0] - subject[0][0]) * STEPS_PER_Q)
             for s in range(e["start"] + head, min(n, e["start"] + form["subject_steps"])):
                 key_rel[s] = (7, mode == "minor")
     for sec in form["sections"]:
@@ -393,9 +409,10 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
     unit = harmonic_unit(meter)
     U = n // unit
     fixed = [set() for _ in range(U)]
+    weak = [set() for _ in range(U)]           # entry notes struck inside a unit
     for s, m in entry_notes:
-        if s % unit == 0 and s // unit < U:
-            fixed[s // unit].add(m % 12)
+        if s // unit < U:
+            (fixed if s % unit == 0 else weak)[s // unit].add(m % 12)
     for q in form["pedals"]:
         for u in range(q["start"] // unit, min(U, q["end"] // unit)):
             fixed[u].add((tonic + q["degree"]) % 12)
@@ -494,7 +511,8 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
             for v in (active[0], active[-1]):
                 seq_list.append({"voice": v, "start": a, "unit": unit_steps, "statements": int(stm),
                                  "step": step})
-    states = harmony.plan_chords(U, [keys_abs[min(n - 1, u * unit)] for u in range(U)], fixed, allowed, rng)
+    states = harmony.plan_chords(U, [keys_abs[min(n - 1, u * unit)] for u in range(U)], fixed, allowed, rng,
+                                 weak_notes=weak)
     chord = np.ones(n, dtype=np.int16)
     bass = np.ones(n, dtype=np.int16)
     for u, st in enumerate(states):

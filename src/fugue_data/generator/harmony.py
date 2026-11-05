@@ -35,7 +35,9 @@ from .labels import QUALS, QUAL_NAMES
 
 ROOT = Path(__file__).resolve().parents[3]
 MODEL = ROOT / "data" / "models" / "harmony.json"
-EMIT_NCT = 0.15
+EMIT_NCT = 0.05          # a fixed note struck on the unit that is not a chord tone
+EMIT_WEAK_NCT = 0.5
+AUG2_CLASH = -3.0      # one struck inside the unit (passing or neighbour tones are normal)
 STATES = [(r, q, inv) for r in range(12) for q in QUAL_NAMES for inv in (0, 1)] + [None]
 SIDX = {s: i for i, s in enumerate(STATES)}
 
@@ -103,22 +105,23 @@ def chord_pcs(state, tonic):
 
 
 # Chords at home in a key: the diatonic ones plus the chromatic chords Bach
-# uses routinely (secondary dominants and leading-tone chords, the
-# Neapolitan; in minor the major V and the raised-6th chords of the melodic
+# uses routinely (secondary dominants and leading-tone chords;
+# in minor the major V and the raised-6th chords of the melodic
 # minor). (root relative to the tonic, qualities). Others are penalised by
-# OUT_OF_KEY so they appear only when a constraint asks for them: the chord
+# OUT_OF_KEY so they appear only when a constraint asks for them (the
+# Neapolitan, a Picardy third): the chord
 # labels the model was fitted on are ~75% accurate, and sampling from the raw
 # table produced E minor in G minor and B major in E-flat major.
 VOCAB = {
     "major": {0: ("maj", "maj7", "dom7"), 2: ("min", "min7", "maj", "dom7"),
               4: ("min", "min7", "maj", "dom7"), 5: ("maj", "maj7", "min"),
               7: ("maj", "dom7"), 9: ("min", "min7", "maj", "dom7"),
-              11: ("dim", "hdim7", "dim7"), 1: ("maj",), 6: ("dim", "dim7", "hdim7"),
+              11: ("dim", "hdim7", "dim7"), 6: ("dim", "dim7", "hdim7"),
               8: ("dim7",)},
-    "minor": {0: ("min", "maj", "dom7"), 2: ("dim", "hdim7", "maj", "dom7", "min"),
+    "minor": {0: ("min", "dom7"), 2: ("dim", "hdim7", "maj", "dom7", "min"),
               3: ("maj", "maj7"), 5: ("min", "min7", "maj"), 7: ("maj", "dom7", "min"),
               8: ("maj", "maj7"), 10: ("maj", "dom7"), 11: ("dim", "dim7", "hdim7"),
-              1: ("maj",), 6: ("dim", "dim7", "hdim7"), 9: ("dim", "hdim7")},
+              6: ("dim", "dim7", "hdim7")},
 }
 OUT_OF_KEY = -6.0
 MINOR_V = -1.5            # v (minor) as the dominant of a minor key: Bach uses V
@@ -142,12 +145,14 @@ def key_prior(minor: bool) -> np.ndarray:
 
 
 def plan_chords(n_units: int, keys: list, fixed_notes: list, allowed: list | None,
-                rng: np.random.Generator, temperature: float = 1.0) -> list:
+                rng: np.random.Generator, temperature: float = 1.0,
+                weak_notes: list | None = None) -> list:
     """Sample one state per unit.
 
     keys[u] = (tonic_pc, minor); fixed_notes[u] = pitch classes the plan fixes
     at unit u (may be empty); allowed[u] = None or a set of state indices the
-    unit must take (cadences, sequences, pedals)."""
+    unit must take (cadences, sequences, pedals); weak_notes[u] = pitch
+    classes the plan fixes inside unit u, after its first step."""
     m = load()
     S = len(STATES)
     emit = np.zeros((n_units, S))
@@ -165,6 +170,13 @@ def plan_chords(n_units: int, keys: list, fixed_notes: list, allowed: list | Non
             for pc in fixed_notes[u]:
                 if pc not in pcs:
                     emit[u, i] += np.log(EMIT_NCT)
+            for pc in (weak_notes[u] if weak_notes else ()):
+                if pc not in pcs:
+                    emit[u, i] += np.log(EMIT_WEAK_NCT)
+                    # the leading tone against a chord holding the 6th degree
+                    # (F# over E-flat in G minor): an augmented 2nd
+                    if minor and (pc - kt) % 12 == 11 and (kt + 8) % 12 in pcs:
+                        emit[u, i] += AUG2_CLASH
         emit[u] += key_prior(bool(minor))
         if allowed is not None and allowed[u] is not None:
             mask = np.full(S, -np.inf)

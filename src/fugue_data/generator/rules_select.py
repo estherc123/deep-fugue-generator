@@ -105,7 +105,29 @@ def bar_score_v2(grid: np.ndarray, a: int, b: int, meta: dict) -> float:
     # a dissonance at the bar's last beat may resolve in the next bar: do not
     # charge strong_diss on the final beat of the window
     last_beat = (b - w0) - meta["beat"]
-    return float(sum(_W[r] for r, s, _ in hits if not (r == "strong_diss" and s >= last_beat)))
+    cost = float(sum(_W[r] for r, s, _ in hits if not (r == "strong_diss" and s >= last_beat)))
+    return cost + EXPOSED_W * exposed_dissonance(grid, a, b, meta["beat"])
+
+
+# Two voices alone have nothing to cover a clash: Bach's beat onsets with
+# exactly two voices sounding are dissonant 17.8% of the time (train fugues),
+# the generator's were 20-30% (most right after the answer enters).
+EXPOSED_W = 1.5
+_DISS = {1, 2, 5, 6, 10, 11}
+
+
+def exposed_dissonance(grid: np.ndarray, a: int, b: int, beat: int) -> int:
+    from .bach_rules import sounding
+    snd, _ = sounding(grid[max(0, a - 4 * beat):b])
+    off = min(a, 4 * beat)
+    n = 0
+    for t in range(off, len(snd)):
+        if (a + t - off) % beat:
+            continue
+        ps = sorted(int(x) for x in snd[t] if x >= 0)
+        if len(ps) == 2 and (ps[1] - ps[0]) % 12 in _DISS:
+            n += 1
+    return n
 
 
 def piece_meta_v2(p: dict) -> dict:

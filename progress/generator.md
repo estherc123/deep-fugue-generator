@@ -272,3 +272,24 @@ The subject is known, so entries need not be learned at all. Split the job:
   - R4 not started (sequence detection + feature).
   - R1/R2 for a *new* subject need the plan generator (step 5); today's
     entries come from a Bach piece's plan.
+
+## v6: the answer entry (2026-11-04)
+
+Owner: "right after the subject entry, when the second voice joined, it becomes very dissonant".
+Causes found in the I/2 plan: (1) the answer's opening was kept in the tonic for a fixed quarter
+of the subject even when the answer is real, so the free voice used B natural against the
+answer's F#; (2) chord planning only checked entry notes struck on the beat (B-flat and E-flat
+chords under G-F#-G); (3) the raised-6th, Neapolitan and major-tonic chords in the vocabulary.
+Fixes: `tonal_head` (the tonic covers only the notes the tonal answer changed), off-beat entry
+notes scored (`EMIT_WEAK_NCT`, `AUG2_CLASH` for the leading tone over the 6th degree),
+`EMIT_NCT` 0.15 -> 0.05, a narrower minor/major vocabulary, and a bar-selection cost
+(`EXPOSED_W` 1.5) for dissonant beats when exactly two voices sound.
+
+| 40 fugues | v5 | v6 (plan only) | v6x (+ exposed cost) | Bach |
+|---|---|---|---|---|
+| answer region, strong beats dissonant | 0.34 | 0.30 | 0.21 | 0.20 |
+| two-voice beat onsets dissonant (whole piece) | 0.21 | 0.20 | 0.06 | 0.18 |
+| chords in planned key | 90.0% | 89.6% | 90.9% | 84.6% |
+| forbidden breaks | 0 | 1 | 1 | |
+
+Two-voice consonance now overshoots Bach (0.06 vs 0.18); lower `EXPOSED_W` if it sounds bland.
