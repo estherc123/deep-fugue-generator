@@ -375,6 +375,39 @@ def chord_bias_table(p: dict) -> np.ndarray:
     return out
 
 
+_EXT = {0: [0, 2, 4, 5, 7, 9, 11], 1: [0, 2, 3, 5, 7, 8, 9, 10, 11]}   # minor: all three forms
+
+
+def out_of_key_table(p: dict) -> np.ndarray:
+    """(n_steps, 88): 1 for notes outside the planned key's scale (minor: the
+    natural, harmonic and melodic forms together), the planned chord, and the
+    key one quarter ahead (so a modulation can be approached); else 0.
+
+    The Krumhansl profile behind key_bias barely separates these in minor (a
+    B natural in G minor cost 0.5 logits), which is where the music sounded
+    off-key."""
+    from .labels import QUALS, QUAL_NAMES
+    pcs = (MIDI_LO + np.arange(N_NOTES)) % 12
+    n = p["n_steps"]
+    out = np.zeros((n, N_NOTES), dtype=np.float32)
+
+    def scale(k):
+        k = int(k)
+        if k <= 0:
+            return set(range(12))
+        deg, minor = (k - 1) // 2, (k - 1) % 2
+        t = (p["tonic"] + deg) % 12
+        return {(t + x) % 12 for x in _EXT[minor]}
+    for s in range(n):
+        ok = scale(p["key"][s]) | scale(p["key"][min(n - 1, s + STEPS_PER_Q)])
+        c = int(p["chord"][s]) if "chord" in p else 0
+        if c >= 2:
+            q, r = divmod(c - 2, 12)
+            ok |= {(p["tonic"] + r + t) % 12 for t in QUALS[QUAL_NAMES[q]]}
+        out[s] = ~np.isin(pcs, list(ok))
+    return out
+
+
 @torch.no_grad()
 def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
              temperature: float = 1.0, top_p: float = 0.95, plan: bool = True,
@@ -388,7 +421,8 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
              bar_select: int = 0, select_lambda: float = 0.5,
              copies: list | None = None, copy_bias: float = 0.0,
              density_target: float | None = None, density_weight: float = 0.5,
-             climax: dict | None = None, final_chord: dict | None = None) -> tuple[np.ndarray, dict]:
+             climax: dict | None = None, final_chord: dict | None = None,
+             scale_penalty: float = 0.0, beat_chord_bias: float = 0.0) -> tuple[np.ndarray, dict]:
     """(n_samples, n_steps, nv) grids; the first prompt_steps are Bach's.
 
     With force_entries the plan's subject entries are written in note for note
@@ -476,6 +510,13 @@ def generate(model, p: dict, prompt_steps: int, n_samples: int, dev: str,
         toks_u = np.repeat(seq_u[None], n_samples, axis=0)
         feats_ut = {k: torch.tensor(v, device=dev) for k, v in feats_u.items()}
     kb = key_bias_table(p) * key_bias if (key_bias and plan) else None
+    if scale_penalty and plan:
+        kb = (kb if kb is not None else 0) - scale_penalty * out_of_key_table(p)
+    if beat_chord_bias and plan:
+        # the planned chord pulls harder on quarter-note onsets, where a clash
+        # with an entry is heard most
+        on = (np.arange(p["n_steps"]) % STEPS_PER_Q == 0)[:, None]
+        kb = (kb if kb is not None else 0) + beat_chord_bias * on * chord_bias_table(p)
     if kb is not None:
         kb = torch.tensor(kb, device=dev, dtype=torch.float32)
     cb = (torch.tensor(chord_bias_table(p) * chord_bias, device=dev, dtype=torch.float32)

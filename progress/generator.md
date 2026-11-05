@@ -293,3 +293,26 @@ notes scored (`EMIT_WEAK_NCT`, `AUG2_CLASH` for the leading tone over the 6th de
 | forbidden breaks | 0 | 1 | 1 | |
 
 Two-voice consonance now overshoots Bach (0.06 vs 0.18); lower `EXPOSED_W` if it sounds bland.
+
+## v7: the owner's marked spots (2026-11-04)
+
+The listening page's play line is now draggable, with a readout (set, piece/seed, version,
+bar, beat, time). The owner marked 7 spots that sounded off-key or dissonant, mostly in minor fugues:
+
+| Spot | Cause | Fix |
+|---|---|---|
+| O08C bar 29 | a middle-section answer is written in the dominant of the group key, but the key plan said the group key (A minor entry against D minor voices) | local answers' spans planned in the dominant |
+| I/2 bar 29 | stretto follower transposed chromatically (B-flat minor against F minor) | `diatonic_shift`: the follower moves by scale steps in the leader's key (also in `stretto_options`) |
+| I/2 bar 3, II/22 bar 17 | stray chromatic notes (B natural in G minor, G natural in D-flat): the Krumhansl key pull barely penalises them in minor | `scale_penalty` 3.0: notes outside the key's scale (all three minor forms), the planned chord and the key a quarter ahead |
+| I/2 bar 5 | bass ignoring the planned chord under the subject (F under B natural) | `beat_chord_bias` 0.75 on quarter onsets |
+| I/2 bar 4.9 | entry on a pickup with a B natural under a planned B-flat chord | `CHROM_CLASH`: chords a semitone from a foreign entry note |
+
+| 40 fugues | v5 | v6x | v7b | Bach |
+|---|---|---|---|---|
+| beat onsets with a semitone clash | 7.4% | 7.9% | 6.3% | 7.0% |
+| free notes outside the planned key | — | 0.9% | 0.4% | 5.9% (vs labelled keys) |
+| music chords in planned key | 90.0% | 90.9% | 92.8% | 84.6% |
+| in-key, 6 bars after first entry | 87.5% | 88.6% | 92.8% | |
+| chord agreement with plan | 0.57 | — | 0.65 | |
+| cross relations / 100 bars | 6.2 | 4.8 | 2.6 | 10.2 |
+| forbidden breaks | 0 | 1 | 1 | |

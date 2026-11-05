@@ -318,7 +318,7 @@ function rollFor(item, side, label) {
     draw(canvas, item, side, q);
     if (q === null) { readout.textContent = ""; return; }
     const bar = Math.floor(q / item.barQ), beat = (q - bar * item.barQ) + 1;
-    readout.textContent = `${item.piece} · ${item.title.split(" — ").pop()} · ${lab.textContent} · ` +
+    readout.textContent = `${item.where || item.piece + " · " + item.title.split(" — ").pop()} · ${lab.textContent} · ` +
       `bar ${bar + item.startBar} beat ${beat.toFixed(1)} · ${fmt(q * QSEC)}`;
   }
   function setPos(q) { posQ = q; show(q); }

@@ -99,6 +99,26 @@ def inverted(subject, home, mode):
     return [_from_degree(2 * D0 - D, 0, home, sc) for D, _ in degs]
 
 
+_DIA_STEPS = {12: 7, -12: -7, 7: 4, -5: -3, 5: 3, -7: -4, 0: 0}
+
+
+def diatonic_shift(pitches, key_pc, minor, iv):
+    """Move a line by scale steps inside one key (a stretto at the fifth stays
+    in the leader's key, as Bach's do, instead of sounding a second key against
+    it). Alterations are dropped except the leading tone into the tonic."""
+    sc = MINOR if minor else MAJOR
+    st = _DIA_STEPS[iv]
+    degs = [_to_degree(m, key_pc, sc) for m in pitches]
+    out = []
+    for i, (D, a) in enumerate(degs):
+        T = D + st
+        alt = a if st % 7 == 0 else 0
+        if minor and T % 7 == 6 and i + 1 < len(degs) and (degs[i + 1][0] + st) % 7 == 0:
+            alt = 1
+        out.append(_from_degree(T, alt, key_pc, sc))
+    return out
+
+
 def _place(pitches, centre):
     """Octave-shift so the line's mean sits nearest the voice's centre."""
     mean = sum(pitches) / len(pitches)
@@ -116,6 +136,8 @@ def stretto_options(subject, meter, home, mode):
     from .encode import MIDI_LO, NOTE0, STOI
     s_on = subject[0][0]
     rel = [(int((o - s_on) * STEPS_PER_Q), int(d * STEPS_PER_Q), m) for o, d, m in subject]
+    shifted = {iv: diatonic_shift([m for _, _, m in subject], home, mode == "minor", iv)
+               for iv in (12, -12, 7, -5, 5, -7)}
     L = rel[-1][0] + rel[-1][1]
     beat = int(_beat_q(meter) * STEPS_PER_Q)
     bar = int(Fraction(4 * meter[0], meter[1]) * STEPS_PER_Q)
@@ -125,9 +147,9 @@ def stretto_options(subject, meter, home, mode):
             n = L + delay
             g = np.full((n, 2), STOI["REST"], dtype=np.int16)
             lead_hi = iv < 0                     # the leader is the upper voice
-            for (s, d, m) in rel:
+            for j, (s, d, m) in enumerate(rel):
                 for (vv, off, tr) in ((0 if lead_hi else 1, 0, 0), (1 if lead_hi else 0, delay, iv)):
-                    mm = m + tr
+                    mm = shifted[iv][j] if tr else m
                     g[s + off, vv] = NOTE0 + mm - MIDI_LO
                     g[s + off + 1:s + off + d, vv] = STOI["HOLD"]
             hits = check(g, meter=meter, tonic=home, mode=mode, start=delay)
@@ -351,7 +373,7 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
         elif e["kind"] == "stretto":
             lead = form["entries"][e["leader"]]
             lp = voices_pitch_cache[e["leader"]]
-            pitches = [m + e["interval"] for m in lp]
+            pitches = diatonic_shift(lp, (tonic + kd) % 12, kmin, e["interval"])
         else:
             pitches = _place(realise(subject, tonic, mode, kd, kmode, centres[e["voice"]]),
                              centres[e["voice"]])
@@ -401,6 +423,14 @@ def realise_plan(form: dict, subject, rng, piece_id="planned") -> dict:
             mid = sec["start"] if sec.get("sequence") else sec["start"] + (sec["end"] - sec["start"]) // 2
             for s in range(sec["start"], sec["end"]):
                 key_rel[s] = prev if s < mid else sec["to_key"]
+    for e in form["entries"]:
+        if e["kind"] == "answer" and e["section"] not in ("exposition", "counter"):
+            # a local answer is written in the dominant of the group's key
+            # (realise above): the other voices must hear that key too
+            kd, kmin = e["key"]
+            ak = ((kd + 7) % 12, bool(kmin) and kd != 7)
+            for s_ in range(e["start"], min(n, e["start"] + form["subject_steps"])):
+                key_rel[s_] = ak
     p["key"] = np.array([1 + 2 * d + int(mn) for d, mn in key_rel], dtype=np.int16)
     p["next_key"], p["to_key"] = key_lookahead(p["key"])
     keys_abs = [((tonic + d) % 12, bool(mn)) for d, mn in key_rel]

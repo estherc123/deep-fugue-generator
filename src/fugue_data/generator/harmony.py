@@ -37,7 +37,8 @@ ROOT = Path(__file__).resolve().parents[3]
 MODEL = ROOT / "data" / "models" / "harmony.json"
 EMIT_NCT = 0.05          # a fixed note struck on the unit that is not a chord tone
 EMIT_WEAK_NCT = 0.5
-AUG2_CLASH = -3.0      # one struck inside the unit (passing or neighbour tones are normal)
+AUG2_CLASH = -3.0
+CHROM_CLASH = -3.0      # one struck inside the unit (passing or neighbour tones are normal)
 STATES = [(r, q, inv) for r in range(12) for q in QUAL_NAMES for inv in (0, 1)] + [None]
 SIDX = {s: i for i, s in enumerate(STATES)}
 
@@ -159,6 +160,7 @@ def plan_chords(n_units: int, keys: list, fixed_notes: list, allowed: list | Non
     cache = {}
     for u in range(n_units):
         kt, minor = keys[u]
+        ext = {(kt + x) % 12 for x in ((0, 2, 3, 5, 7, 8, 9, 10, 11) if minor else (0, 2, 4, 5, 7, 9, 11))}
         for i, st in enumerate(STATES):
             if st is None:
                 emit[u, i] = -20.0 if fixed_notes[u] else -3.0
@@ -170,9 +172,16 @@ def plan_chords(n_units: int, keys: list, fixed_notes: list, allowed: list | Non
             for pc in fixed_notes[u]:
                 if pc not in pcs:
                     emit[u, i] += np.log(EMIT_NCT)
+                    if pc not in ext and ((pc + 1) % 12 in pcs or (pc - 1) % 12 in pcs):
+                        emit[u, i] += CHROM_CLASH
             for pc in (weak_notes[u] if weak_notes else ()):
                 if pc not in pcs:
                     emit[u, i] += np.log(EMIT_WEAK_NCT)
+                    # an entry note foreign to the key a semitone from a chord
+                    # tone (B natural over B-flat major in G minor, where the
+                    # next entry starts on a pickup)
+                    if pc not in ext and ((pc + 1) % 12 in pcs or (pc - 1) % 12 in pcs):
+                        emit[u, i] += CHROM_CLASH
                     # the leading tone against a chord holding the 6th degree
                     # (F# over E-flat in G minor): an augmented 2nd
                     if minor and (pc - kt) % 12 == 11 and (kt + 8) % 12 in pcs:

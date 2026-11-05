@@ -38,7 +38,7 @@ ROOT = Path(__file__).resolve().parents[3]
 
 DEFAULTS = dict(temperature=0.85, key_bias=1.5, chord_bias=0.75, force_sequences=True,
                 no_crossing=True, repeat_penalty=2.0, melodic_rules=True, bar_select=8,
-                copy_bias=8.0, select_lambda=0.1)
+                copy_bias=8.0, select_lambda=0.1, scale_penalty=3.0, beat_chord_bias=0.75)
 
 
 def audit_grid(g, p, start, fixed=None):

@@ -137,6 +137,7 @@ def build(sets: list[tuple[str, Path]], root: Path | None = None,
             gen = _compact(grid_to_score(g, pid))
             items.append({
                 "key": key, "op": label, "title": f"{label} — generated version {k}",
+                "where": f"{label} · {d.name} · v{k}",
                 "piece": pid, "split": meta["split"], "corpus": corpus_name,
                 "meter": meter_tok.replace("METER_", "").replace("_", "/"),
                 "bars": int(round(length_q / bar_q)), "barQ": bar_q, "startBar": 1,
