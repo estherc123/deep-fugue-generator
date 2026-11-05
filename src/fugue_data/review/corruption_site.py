@@ -170,6 +170,8 @@ _TEMPLATE = r"""<!doctype html>
   .roll { margin-top: 10px; }
   .rollhead { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
   .label { font-weight: 600; min-width: 92px; }
+  .pos { font-family: ui-monospace, monospace; font-size: 12px; opacity: 0.85; }
+  .roll canvas { cursor: col-resize; touch-action: none; }
   .play { min-width: 74px; }
   canvas { width: 100%; height: 170px; display: block; border-radius: 6px;
            background: #07080b; }
@@ -285,19 +287,22 @@ function draw(canvas, item, side, playQ) {
   }
 }
 
-function stopAll() {
+// Stopping leaves the line where the music stopped; drag or click the roll to
+// move it. Play starts from the line. The readout names the piece, version,
+// bar and time, so a screenshot says exactly where.
+function stopAll(reset) {
   if (current) {
-    current.audio.pause(); current.audio.currentTime = 0;
-    current.button.textContent = "▶ Play";
-    draw(current.canvas, current.item, current.side, null);
+    const c = current;
+    c.audio.pause();
     current = null;
+    c.button.textContent = "▶ Play";
+    c.setPos(reset ? null : c.audio.currentTime / QSEC);
   }
 }
 
 function tick() {
   if (!current) return;
-  const q = current.audio.currentTime / QSEC;
-  draw(current.canvas, current.item, current.side, Math.min(q, current.item.lengthQ));
+  current.show(Math.min(current.audio.currentTime / QSEC, current.item.lengthQ));
   if (!current.audio.paused) requestAnimationFrame(tick);
 }
 
@@ -306,17 +311,50 @@ function rollFor(item, side, label) {
   const audio = new Audio(`audio/${item.key}_${side}.wav`);
   audio.preload = "none";
   const button = el("button", { class: "play" }, "▶ Play");
+  const readout = el("span", { class: "pos" });
+  let posQ = null;
+  const fmt = sec => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
+  function show(q) {
+    draw(canvas, item, side, q);
+    if (q === null) { readout.textContent = ""; return; }
+    const bar = Math.floor(q / item.barQ), beat = (q - bar * item.barQ) + 1;
+    readout.textContent = `${item.piece} · ${item.title.split(" — ").pop()} · ${lab.textContent} · ` +
+      `bar ${bar + item.startBar} beat ${beat.toFixed(1)} · ${fmt(q * QSEC)}`;
+  }
+  function setPos(q) { posQ = q; show(q); }
+  const st = { audio, canvas, item, side, button, show, setPos };
+  function seekTo(q) {
+    if (audio.readyState >= 1) audio.currentTime = q * QSEC;
+    else audio.addEventListener("loadedmetadata", () => { audio.currentTime = q * QSEC; }, { once: true });
+  }
   button.addEventListener("click", () => {
     if (current && current.audio === audio) { stopAll(); return; }
     stopAll();
-    current = { audio, canvas, item, side, button };
+    current = st;
     button.textContent = "■ Stop";
+    const from = posQ !== null && posQ < item.lengthQ - 0.05 ? posQ : 0;
+    seekTo(from);
     audio.play(); requestAnimationFrame(tick);
   });
-  audio.addEventListener("ended", () => { if (current && current.audio === audio) stopAll(); });
+  audio.addEventListener("ended", () => { if (current && current.audio === audio) stopAll(true); });
+  function qAt(ev) {
+    const r = canvas.getBoundingClientRect(), pad = 6;
+    const f = (ev.clientX - r.left - pad) / (r.width - 2 * pad);
+    return Math.max(0, Math.min(1, f)) * item.lengthQ;
+  }
+  let dragging = false;
+  function move(ev) {
+    const q = qAt(ev);
+    if (current && current.audio === audio) { seekTo(q); show(q); posQ = q; }
+    else setPos(q);
+  }
+  canvas.addEventListener("pointerdown", ev => { dragging = true; canvas.setPointerCapture(ev.pointerId); move(ev); });
+  canvas.addEventListener("pointermove", ev => { if (dragging) move(ev); });
+  canvas.addEventListener("pointerup", () => { dragging = false; });
+  canvas.addEventListener("pointercancel", () => { dragging = false; });
   const lab = el("span", { class: "label" }, label);
-  const wrap = el("div", { class: "roll" }, el("div", { class: "rollhead" }, button, lab), canvas);
-  wrap._redraw = () => draw(canvas, item, side, null);
+  const wrap = el("div", { class: "roll" }, el("div", { class: "rollhead" }, button, lab, readout), canvas);
+  wrap._redraw = () => show(posQ);
   wrap._label = lab;
   return wrap;
 }
@@ -402,7 +440,7 @@ function applyBlind() {
   applyFilter(); updateScore();
 }
 blindBtn.addEventListener("click", () => { blind = !blind; store.set("cb.blind", blind); applyBlind(); });
-document.getElementById("stop").addEventListener("click", stopAll);
+document.getElementById("stop").addEventListener("click", () => stopAll());
 window.addEventListener("resize", () => cards.forEach(c => { if (c.style.display !== "none") c._layout(); }));
 applyBlind();
 </script>
