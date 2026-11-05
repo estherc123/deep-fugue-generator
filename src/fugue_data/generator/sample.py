@@ -377,7 +377,7 @@ def chord_bias_table(p: dict) -> np.ndarray:
     return out
 
 
-UNISON_PEN = 3.5
+UNISON_PEN = 1.5   # v7 (owner prefers it); 3.5 = v7c, fewer unisons but judged less musical
 _EXT = {0: [0, 2, 4, 5, 7, 9, 11], 1: [0, 2, 3, 5, 7, 8, 9, 10, 11]}   # minor: all three forms
 
 

@@ -334,3 +334,7 @@ neighbouring sounding pairs over 40 fugues, Bach 1.55%. `UNISON_PEN` 1.5 -> 3.5.
 Still open in that passage: the episode jumps to VII at its first bar (sequential episodes pivot
 at their start), and the texture is denser than Bach's (22.5 vs 17.3 notes per bar; inner voices
 rest 9-14% vs 20-32%).
+
+**Owner verdict (2026-11-05):** v7 sounds "much more pleasant and musical" than v7c. `UNISON_PEN`
+back to 1.5 (code reproduces v7). Lesson: a global weight that moves a metric toward Bach can hurt
+the sound; fix the bar-32 shadowing locally instead. Handoff for the next session: `HANDOFF.md`.
